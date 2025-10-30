@@ -78,17 +78,17 @@ const Index = () => {
         </div>
 
         {/* Typewriter text */}
-        <div className="text-center mb-20 space-y-6">
+        <div className="text-center mb-20 space-y-6 w-full max-w-4xl px-4">
           {showTypewriter && (
-            <div className="overflow-hidden border-r-2 border-foreground animate-typewriter inline-block">
-              <h1 className="text-4xl md:text-6xl font-light tracking-wider whitespace-nowrap pr-2">
+            <div className="relative">
+              <h1 className="text-2xl sm:text-4xl md:text-6xl font-light tracking-wider animate-fade-in-slow">
                 Something clean is coming
               </h1>
             </div>
           )}
           
           {showSecondText && (
-            <p className="text-xl md:text-3xl font-extralight tracking-widest animate-fade-in glow">
+            <p className="text-lg sm:text-xl md:text-3xl font-extralight tracking-widest animate-fade-in glow">
               Be the first to know.
             </p>
           )}
