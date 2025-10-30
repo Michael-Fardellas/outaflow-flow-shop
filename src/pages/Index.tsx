@@ -15,6 +15,8 @@ const Index = () => {
   });
   const [mounted, setMounted] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
+  const [lastSubmitTime, setLastSubmitTime] = useState<number>(0);
+  const RATE_LIMIT_COOLDOWN = 60000; // 60 seconds
   const fullText = "Something clean is coming";
   useEffect(() => {
     setMounted(true);
@@ -56,11 +58,33 @@ const Index = () => {
   }, []);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Rate limiting check
+    const now = Date.now();
+    const timeSinceLastSubmit = now - lastSubmitTime;
+    if (timeSinceLastSubmit < RATE_LIMIT_COOLDOWN) {
+      const remainingSeconds = Math.ceil((RATE_LIMIT_COOLDOWN - timeSinceLastSubmit) / 1000);
+      toast.error(`Please wait ${remainingSeconds} seconds before submitting again`);
+      return;
+    }
+    
+    // Input validation
     if (!email) {
       toast.error("Please enter your email");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    
+    // Trim and lowercase email
+    const normalizedEmail = email.trim().toLowerCase();
+    
+    // Email length validation
+    if (normalizedEmail.length > 255) {
+      toast.error("Email address is too long");
+      return;
+    }
+    
+    // Email format validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       toast.error("Please enter a valid email");
       return;
     }
@@ -68,13 +92,12 @@ const Index = () => {
     try {
       const { error } = await supabase
         .from('email_signups')
-        .insert([{ email }]);
+        .insert([{ email: normalizedEmail }]);
 
       if (error) {
         if (error.code === '23505') {
           toast.error("This email is already registered");
         } else {
-          console.error('Error saving email:', error);
           toast.error("Something went wrong. Please try again.");
         }
         return;
@@ -82,8 +105,8 @@ const Index = () => {
 
       toast.success("You're on the list. Welcome to the future.");
       setEmail("");
+      setLastSubmitTime(now);
     } catch (error) {
-      console.error('Unexpected error:', error);
       toast.error("Something went wrong. Please try again.");
     }
   };
