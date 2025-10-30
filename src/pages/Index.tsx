@@ -106,6 +106,14 @@ const Index = () => {
       toast.success("You're on the list. Welcome to the future.");
       setEmail("");
       setLastSubmitTime(now);
+
+      // Send notification email
+      supabase.functions.invoke('send-signup-notification', {
+        body: { email: normalizedEmail }
+      }).catch(err => {
+        // Log error but don't block the user experience
+        console.warn('Failed to send notification email:', err);
+      });
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }
