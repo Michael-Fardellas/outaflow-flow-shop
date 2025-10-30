@@ -6,20 +6,37 @@ import logo from "@/assets/outaflow-logo.png";
 
 const Index = () => {
   const [email, setEmail] = useState("");
-  const [showTypewriter, setShowTypewriter] = useState(false);
+  const [typewriterText, setTypewriterText] = useState("");
   const [showSecondText, setShowSecondText] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+  
+  const fullText = "Something clean is coming";
 
   useEffect(() => {
     setMounted(true);
-    const timer1 = setTimeout(() => setShowTypewriter(true), 2000);
-    const timer2 = setTimeout(() => setShowSecondText(true), 5500);
     
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
+    // Start typewriter after logo appears
+    const startTimer = setTimeout(() => {
+      let currentIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (currentIndex <= fullText.length) {
+          setTypewriterText(fullText.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          clearInterval(typingInterval);
+          setTimeout(() => {
+            setShowCursor(false);
+            setShowSecondText(true);
+          }, 500);
+        }
+      }, 100); // 100ms per character
+      
+      return () => clearInterval(typingInterval);
+    }, 2000);
+    
+    return () => clearTimeout(startTimer);
   }, []);
 
   useEffect(() => {
@@ -79,13 +96,14 @@ const Index = () => {
 
         {/* Typewriter text */}
         <div className="text-center mb-20 space-y-6 w-full max-w-4xl px-4">
-          {showTypewriter && (
-            <div className="relative">
-              <h1 className="text-2xl sm:text-4xl md:text-6xl font-light tracking-wider animate-fade-in-slow">
-                Something clean is coming
-              </h1>
-            </div>
-          )}
+          <div className="relative min-h-[80px] sm:min-h-[120px] flex items-center justify-center">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-light tracking-wider">
+              {typewriterText}
+              {showCursor && (
+                <span className="inline-block w-0.5 h-8 sm:h-12 md:h-16 bg-foreground ml-1 animate-blink" />
+              )}
+            </h1>
+          </div>
           
           {showSecondText && (
             <p className="text-lg sm:text-xl md:text-3xl font-extralight tracking-widest animate-fade-in glow">
