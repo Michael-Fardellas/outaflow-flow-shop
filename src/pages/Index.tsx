@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/outaflow-logo.png";
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -53,7 +54,7 @@ const Index = () => {
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
       toast.error("Please enter your email");
@@ -63,8 +64,28 @@ const Index = () => {
       toast.error("Please enter a valid email");
       return;
     }
-    toast.success("You're on the list. Welcome to the future.");
-    setEmail("");
+
+    try {
+      const { error } = await supabase
+        .from('email_signups')
+        .insert([{ email }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          toast.error("This email is already registered");
+        } else {
+          console.error('Error saving email:', error);
+          toast.error("Something went wrong. Please try again.");
+        }
+        return;
+      }
+
+      toast.success("You're on the list. Welcome to the future.");
+      setEmail("");
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
   return <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
       {/* Cursor glow effect */}
