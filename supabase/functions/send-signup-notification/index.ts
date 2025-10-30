@@ -24,7 +24,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending signup notification for:", email);
 
     const emailResponse = await resend.emails.send({
-      from: "michaelfardellas@gmail.com",
+      from: "onboarding@resend.dev",
       to: ["outaflow0@gmail.com"],
       subject: "Νέο άτομο εγγράφηκε στη λίστα αναμονής",
       html: `
