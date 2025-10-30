@@ -8,6 +8,7 @@ const Index = () => {
   const [email, setEmail] = useState("");
   const [typewriterText, setTypewriterText] = useState("");
   const [showSecondText, setShowSecondText] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
@@ -28,7 +29,12 @@ const Index = () => {
           clearInterval(typingInterval);
           setTimeout(() => {
             setShowCursor(false);
-            setShowSecondText(true);
+            setTimeout(() => {
+              setShowSecondText(true);
+              setTimeout(() => {
+                setShowForm(true);
+              }, 1000);
+            }, 800);
           }, 500);
         }
       }, 100); // 100ms per character
@@ -113,8 +119,8 @@ const Index = () => {
         </div>
 
         {/* Email capture section */}
-        {showSecondText && (
-          <div className="w-full max-w-md animate-fade-in" style={{ animationDelay: "0.5s" }}>
+        {showForm && (
+          <div className="w-full max-w-md animate-fade-in">
             <form onSubmit={handleSubmit} className="space-y-6">
               <Input
                 type="email"
@@ -138,8 +144,8 @@ const Index = () => {
         )}
 
         {/* Instagram link */}
-        {showSecondText && (
-          <div className="absolute bottom-8 animate-fade-in" style={{ animationDelay: "1s" }}>
+        {showForm && (
+          <div className="absolute bottom-8 animate-fade-in">
             <a 
               href="https://instagram.com/outaflow0" 
               target="_blank" 
