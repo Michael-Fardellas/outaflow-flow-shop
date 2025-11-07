@@ -62,10 +62,6 @@ const WaitingPage = () => {
     <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
       <div className="film-grain" />
       
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl animate-smoke" />
-      </div>
-
       <div className="relative z-10 text-center space-y-12 px-4 max-w-md animate-fade-in">
         <img 
           src={logo} 

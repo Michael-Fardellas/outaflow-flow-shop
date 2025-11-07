@@ -586,7 +586,6 @@ const MainPage = () => {
         className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
       >
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl animate-smoke" />
           {visibleSections.outro && <div className="footer-beam" />}
         </div>
         {isIdle && <div className="idle-sweep" />}
