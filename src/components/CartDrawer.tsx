@@ -55,10 +55,14 @@ export const CartDrawer = () => {
       
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className={`relative ${cartPulse ? 'cart-pulse' : ''}`}>
-            <ShoppingCart className="h-5 w-5" />
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className={`relative border-2 border-foreground/80 hover:border-foreground bg-background/10 hover:bg-background/20 backdrop-blur-sm glow transition-all duration-300 ${cartPulse ? 'cart-pulse' : ''}`}
+          >
+            <ShoppingCart className="h-5 w-5 text-foreground" />
             {totalItems > 0 && (
-              <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-background border-2 border-primary text-primary">
+              <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-[10px] font-semibold bg-background border-2 border-foreground text-foreground">
                 {totalItems}
               </Badge>
             )}
