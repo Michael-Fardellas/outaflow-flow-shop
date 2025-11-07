@@ -33,6 +33,8 @@ const Index = () => {
     product3: true,
     outro: true
   });
+  const [isIdle, setIsIdle] = useState(false);
+  const [imageHover, setImageHover] = useState<string | null>(null);
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
@@ -100,15 +102,31 @@ const Index = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
+      setIsIdle(false);
     };
     const handleScroll = () => {
       setScrollY(window.scrollY);
+      setIsIdle(false);
     };
+    
+    let idleTimer: NodeJS.Timeout;
+    const resetIdleTimer = () => {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => setIsIdle(true), 10000);
+    };
+    
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", resetIdleTimer);
+    window.addEventListener("scroll", resetIdleTimer);
+    resetIdleTimer();
+    
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", resetIdleTimer);
+      window.removeEventListener("scroll", resetIdleTimer);
+      clearTimeout(idleTimer);
     };
   }, []);
 
@@ -182,6 +200,9 @@ const Index = () => {
 
   return (
     <div className="bg-background text-foreground relative">
+      {/* Film grain overlay */}
+      <div className="film-grain" />
+      
       {/* Cursor glow effect */}
       {mounted && (
         <div 
@@ -200,22 +221,23 @@ const Index = () => {
         className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
       >
         <div 
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none parallax-bg"
           style={{
             background: `radial-gradient(circle at 50% ${getSpotlightY(heroRef)}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
-            transition: "all 0.3s ease-out"
+            transform: `translateY(${scrollY * -0.15}px)`
           }}
         />
+        {isIdle && <div className="idle-sweep" />}
         
         <div className="relative z-10 text-center space-y-8 px-4">
           <img 
             src={logo} 
             alt="OUTAFLOW" 
-            className={`h-32 w-auto mx-auto transition-all duration-1000 ease-out ${
+            className={`h-32 w-auto mx-auto breathing transition-all duration-1000 ease-out ${
               visibleSections.hero ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           />
-          <h2 className={`text-2xl md:text-4xl font-light tracking-[0.3em] glow transition-all duration-1200 ease-out delay-300 ${
+          <h2 className={`text-2xl md:text-4xl font-light tracking-[0.3em] glow text-reveal transition-all duration-1200 ease-out delay-300 ${
             visibleSections.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             MINIMALISM IN MOTION.
@@ -236,28 +258,38 @@ const Index = () => {
           className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
         >
           <div 
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none parallax-bg"
             style={{
               background: `radial-gradient(circle at 50% ${getSpotlightY(product1Ref)}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
-              transition: "all 0.5s ease-out"
+              transform: `translateY(${scrollY * -0.12}px)`
             }}
           />
+          {isIdle && <div className="idle-sweep" />}
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div className="relative">
+            <div 
+              className="relative overflow-hidden"
+              onMouseEnter={() => setImageHover('product1')}
+              onMouseLeave={() => setImageHover(null)}
+            >
+              <div className="spotlight-sweep" />
               <Link to={`/product/${products[0].node.handle}`}>
                 <img 
                   src={products[0].node.images.edges[0]?.node.url || soronaImg}
                   alt={products[0].node.title}
-                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                  className={`w-full h-auto transition-all duration-700 ease-out ${
                     visibleSections.product1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
+                  style={{
+                    filter: imageHover === 'product1' ? 'brightness(1.15)' : 'brightness(1)',
+                    transition: 'filter 0.6s ease-out'
+                  }}
                 />
               </Link>
             </div>
             
             <div className="space-y-8">
-              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase transition-all duration-1000 ease-out delay-200 ${
+              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
                 visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}>
                 {products[0].node.title}
@@ -333,16 +365,17 @@ const Index = () => {
           className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
         >
           <div 
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none parallax-bg"
             style={{
               background: `radial-gradient(circle at 50% ${getSpotlightY(product2Ref)}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
-              transition: "all 0.5s ease-out"
+              transform: `translateY(${scrollY * -0.1}px)`
             }}
           />
+          {isIdle && <div className="idle-sweep" />}
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div className="space-y-8 order-2 lg:order-1">
-              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase transition-all duration-1000 ease-out delay-200 ${
+              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
                 visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}>
                 {products[1].node.title}
@@ -407,14 +440,23 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="relative order-1 lg:order-2">
+            <div 
+              className="relative order-1 lg:order-2 overflow-hidden"
+              onMouseEnter={() => setImageHover('product2')}
+              onMouseLeave={() => setImageHover(null)}
+            >
+              <div className="spotlight-sweep" style={{ animationDelay: '4s' }} />
               <Link to={`/product/${products[1].node.handle}`}>
                 <img 
                   src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
                   alt={products[1].node.title}
-                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                  className={`w-full h-auto transition-all duration-700 ease-out ${
                     visibleSections.product2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
+                  style={{
+                    filter: imageHover === 'product2' ? 'brightness(1.15)' : 'brightness(1)',
+                    transition: 'filter 0.6s ease-out'
+                  }}
                 />
               </Link>
             </div>
@@ -430,28 +472,38 @@ const Index = () => {
           className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
         >
           <div 
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none parallax-bg"
             style={{
               background: `radial-gradient(circle at 50% ${getSpotlightY(product3Ref)}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
-              transition: "all 0.5s ease-out"
+              transform: `translateY(${scrollY * -0.08}px)`
             }}
           />
+          {isIdle && <div className="idle-sweep" />}
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div className="relative">
+            <div 
+              className="relative overflow-hidden"
+              onMouseEnter={() => setImageHover('product3')}
+              onMouseLeave={() => setImageHover(null)}
+            >
+              <div className="spotlight-sweep" style={{ animationDelay: '8s' }} />
               <Link to={`/product/${products[2].node.handle}`}>
                 <img 
                   src={products[2].node.images.edges[0]?.node.url || oversizedImg}
                   alt={products[2].node.title}
-                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                  className={`w-full h-auto transition-all duration-700 ease-out ${
                     visibleSections.product3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
+                  style={{
+                    filter: imageHover === 'product3' ? 'brightness(1.15)' : 'brightness(1)',
+                    transition: 'filter 0.6s ease-out'
+                  }}
                 />
               </Link>
             </div>
             
             <div className="space-y-8">
-              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase transition-all duration-1000 ease-out delay-200 ${
+              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
                 visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}>
                 {products[2].node.title}
@@ -532,10 +584,12 @@ const Index = () => {
       >
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl animate-smoke" />
+          {visibleSections.outro && <div className="footer-beam" />}
         </div>
+        {isIdle && <div className="idle-sweep" />}
         
         <div className="relative z-10 text-center space-y-12 px-4 max-w-md">
-          <h2 className={`text-3xl md:text-5xl font-light tracking-[0.3em] glow transition-all duration-1200 ease-out ${
+          <h2 className={`text-3xl md:text-5xl font-light tracking-[0.3em] glow breathing transition-all duration-1200 ease-out ${
             visibleSections.outro ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
           }`}>
             OUTAFLOW
