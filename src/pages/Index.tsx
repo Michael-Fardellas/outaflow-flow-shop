@@ -246,9 +246,6 @@ const Index = () => {
                   className={`w-full h-auto transition-all duration-1000 ease-out ${
                     visibleSections.product1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
-                  style={{
-                    transform: `translateY(${scrollY * 0.08}px)`
-                  }}
                 />
               </Link>
             </div>
@@ -412,9 +409,6 @@ const Index = () => {
                   className={`w-full h-auto transition-all duration-1000 ease-out ${
                     visibleSections.product2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
-                  style={{
-                    transform: `translateY(${scrollY * 0.06}px)`
-                  }}
                 />
               </Link>
             </div>
@@ -446,9 +440,6 @@ const Index = () => {
                   className={`w-full h-auto transition-all duration-1000 ease-out ${
                     visibleSections.product3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
-                  style={{
-                    transform: `translateY(${scrollY * 0.1}px)`
-                  }}
                 />
               </Link>
             </div>
