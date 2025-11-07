@@ -57,7 +57,7 @@ export const CartDrawer = () => {
             aria-label="Open cart"
             variant="outline" 
             size="icon" 
-            className={`absolute top-4 right-4 z-[10] pointer-events-auto relative border-2 border-foreground/80 hover:border-foreground bg-background/10 hover:bg-background/20 backdrop-blur-sm glow transition-all duration-300 ${cartPulse ? 'cart-pulse' : ''}`}
+            className={`relative ml-auto border-2 border-foreground/80 hover:border-foreground bg-background/10 hover:bg-background/20 backdrop-blur-sm glow transition-all duration-300 ${cartPulse ? 'cart-pulse' : ''}`}
           >
             <ShoppingCart className="h-5 w-5 text-foreground" />
             {totalItems > 0 && (
@@ -68,7 +68,7 @@ export const CartDrawer = () => {
           </Button>
         </SheetTrigger>
       
-      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full bg-background border-l border-border/40">
+      <SheetContent hideOverlay className="w-full sm:max-w-lg flex flex-col h-full bg-background border-l border-border/40">
         <SheetHeader className="flex-shrink-0 border-b border-border/20 pb-4">
           <SheetTitle className="text-xl tracking-wide uppercase">Cart</SheetTitle>
           <SheetDescription>

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { CartDrawer } from "./CartDrawer";
 import { Instagram } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 
@@ -21,7 +20,7 @@ export const Header = () => {
           >
             <Instagram className="h-5 w-5" />
           </a>
-          <CartDrawer />
+          
         </nav>
       </div>
     </header>

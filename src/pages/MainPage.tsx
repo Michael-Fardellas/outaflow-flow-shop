@@ -209,7 +209,12 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground relative">
-      <CartDrawer />
+      {/* Floating cart that scrolls with content */}
+      <div className="sticky top-4 z-40 px-4">
+        <div className="flex justify-end">
+          <CartDrawer />
+        </div>
+      </div>
       {/* Scroll progress bar */}
       <div 
         className="scroll-progress" 
