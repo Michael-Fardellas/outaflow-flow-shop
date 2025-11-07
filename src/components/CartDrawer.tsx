@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +14,7 @@ import { useCartStore } from "@/stores/cartStore";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartPulse, setCartPulse] = useState(false);
   const { 
     items, 
     isLoading, 
@@ -24,6 +25,15 @@ export const CartDrawer = () => {
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
+
+  // Pulse cart icon when items change
+  useEffect(() => {
+    if (totalItems > 0) {
+      setCartPulse(true);
+      const timer = setTimeout(() => setCartPulse(false), 400);
+      return () => clearTimeout(timer);
+    }
+  }, [totalItems]);
 
   const handleCheckout = async () => {
     try {
@@ -39,21 +49,25 @@ export const CartDrawer = () => {
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
-          <ShoppingCart className="h-5 w-5" />
-          {totalItems > 0 && (
-            <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
-              {totalItems}
-            </Badge>
-          )}
-        </Button>
-      </SheetTrigger>
+    <>
+      {/* Backdrop overlay */}
+      {isOpen && <div className="cart-backdrop" onClick={() => setIsOpen(false)} />}
       
-      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full">
-        <SheetHeader className="flex-shrink-0">
-          <SheetTitle>Shopping Cart</SheetTitle>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className={`relative ${cartPulse ? 'cart-pulse' : ''}`}>
+            <ShoppingCart className="h-5 w-5" />
+            {totalItems > 0 && (
+              <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-background border-2 border-primary text-primary">
+                {totalItems}
+              </Badge>
+            )}
+          </Button>
+        </SheetTrigger>
+      
+      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full bg-background border-l border-border/40">
+        <SheetHeader className="flex-shrink-0 border-b border-border/20 pb-4">
+          <SheetTitle className="text-xl tracking-wide uppercase">Cart</SheetTitle>
           <SheetDescription>
             {totalItems === 0 ? "Your cart is empty" : `${totalItems} item${totalItems !== 1 ? 's' : ''} in your cart`}
           </SheetDescription>
@@ -70,10 +84,10 @@ export const CartDrawer = () => {
           ) : (
             <>
               <div className="flex-1 overflow-y-auto pr-2 min-h-0">
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {items.map((item) => (
-                    <div key={item.variantId} className="flex gap-4 p-2">
-                      <div className="w-16 h-16 bg-secondary rounded-md overflow-hidden flex-shrink-0">
+                    <div key={item.variantId} className="flex gap-4 pb-4 border-b border-border/10 last:border-0">
+                      <div className="w-20 h-20 bg-secondary/30 overflow-hidden flex-shrink-0">
                         {item.product.node.images?.edges?.[0]?.node && (
                           <img
                             src={item.product.node.images.edges[0].node.url}
@@ -84,12 +98,12 @@ export const CartDrawer = () => {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium truncate">{item.product.node.title}</h4>
-                        <p className="text-sm text-muted-foreground">
+                        <h4 className="font-medium text-sm tracking-wide uppercase mb-1">{item.product.node.title}</h4>
+                        <p className="text-xs text-muted-foreground mb-2">
                           {item.selectedOptions.map(option => option.value).join(' • ')}
                         </p>
-                        <p className="font-semibold">
-                          {item.price.currencyCode} ${parseFloat(item.price.amount).toFixed(2)}
+                        <p className="text-sm font-light">
+                          ${parseFloat(item.price.amount).toFixed(2)}
                         </p>
                       </div>
                       
@@ -128,17 +142,17 @@ export const CartDrawer = () => {
                 </div>
               </div>
               
-              <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
-                <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total</span>
-                  <span className="text-xl font-bold">
+              <div className="flex-shrink-0 space-y-4 pt-6 border-t border-border/20 bg-background">
+                <div className="flex justify-between items-center pb-2">
+                  <span className="text-sm uppercase tracking-wider text-muted-foreground">Total</span>
+                  <span className="text-2xl font-light tracking-wide">
                     ${totalPrice.toFixed(2)}
                   </span>
                 </div>
                 
                 <Button 
                   onClick={handleCheckout}
-                  className="w-full" 
+                  className="w-full glow-button bg-background hover:bg-background text-foreground" 
                   size="lg"
                   disabled={items.length === 0 || isLoading}
                 >
@@ -149,8 +163,8 @@ export const CartDrawer = () => {
                     </>
                   ) : (
                     <>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout
+                      Proceed to Checkout
+                      <ExternalLink className="w-4 h-4 ml-2" />
                     </>
                   )}
                 </Button>
@@ -160,5 +174,6 @@ export const CartDrawer = () => {
         </div>
       </SheetContent>
     </Sheet>
+    </>
   );
 };

@@ -22,6 +22,7 @@ const MainPage = () => {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
@@ -104,6 +105,13 @@ const MainPage = () => {
     };
     const handleScroll = () => {
       setScrollY(window.scrollY);
+      
+      // Calculate scroll progress
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+      const progress = (scrollTop / (documentHeight - windowHeight)) * 100;
+      setScrollProgress(progress);
     };
     
     window.addEventListener("mousemove", handleMouseMove);
@@ -115,9 +123,18 @@ const MainPage = () => {
     };
   }, []);
 
-  const handleAddToCart = (product: ShopifyProduct) => {
+  const handleAddToCart = (product: ShopifyProduct, productId: string) => {
     const variantIndex = selectedSizes[product.node.id] || 0;
     const variant = product.node.variants.edges[variantIndex].node;
+    
+    // Add glow effect to product
+    const productElement = document.getElementById(productId);
+    if (productElement) {
+      productElement.classList.add('product-glow');
+      setTimeout(() => {
+        productElement.classList.remove('product-glow');
+      }, 600);
+    }
     
     const cartItem = {
       product,
@@ -129,8 +146,14 @@ const MainPage = () => {
     };
     
     addItem(cartItem);
-    toast.success("Added to cart", {
-      style: { background: "black", color: "white", border: "1px solid white" }
+    toast.success(`Added to Cart — ${product.node.title}`, {
+      duration: 2000,
+      position: "top-center",
+      style: {
+        background: 'rgba(0, 0, 0, 0.95)',
+        color: 'white',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+      }
     });
   };
 
@@ -185,12 +208,18 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground relative">
+      {/* Scroll progress bar */}
+      <div 
+        className="scroll-progress" 
+        style={{ width: `${scrollProgress}%` }}
+      />
+      
       {mounted && (
         <div 
           className="cursor-glow" 
-          style={{
-            left: `${cursorPos.x}px`,
-            top: `${cursorPos.y}px`
+          style={{ 
+            left: `${cursorPos.x}px`, 
+            top: `${cursorPos.y}px` 
           }} 
         />
       )}
@@ -247,7 +276,8 @@ const MainPage = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className="relative overflow-hidden"
+              className="relative overflow-hidden product-hover-container ambient-shadow"
+              id="product-1"
               onMouseEnter={() => setImageHover('product1')}
               onMouseLeave={() => setImageHover(null)}
             >
@@ -257,7 +287,7 @@ const MainPage = () => {
                 <img 
                   src={products[0].node.images.edges[0]?.node.url || soronaImg}
                   alt={products[0].node.title}
-                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                  className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
                     visibleSections.product1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
                   style={{
@@ -266,6 +296,7 @@ const MainPage = () => {
                   }}
                 />
               </Link>
+              <div className="floating-label">Quick Dry</div>
             </div>
             
             <div className="space-y-8">
@@ -313,9 +344,9 @@ const MainPage = () => {
                     <button
                       key={variant.node.id}
                       onClick={() => setSelectedSizes(prev => ({ ...prev, [products[0].node.id]: idx }))}
-                      className={`px-6 py-2 border transition-all duration-300 ${
+                      className={`size-button px-6 py-2 border transition-all duration-300 ${
                         selectedSizes[products[0].node.id] === idx
-                          ? 'bg-foreground text-background'
+                          ? 'bg-foreground text-background active'
                           : 'bg-transparent text-foreground hover:bg-foreground/10'
                       }`}
                     >
@@ -325,7 +356,7 @@ const MainPage = () => {
                 </div>
 
                 <Button
-                  onClick={() => handleAddToCart(products[0])}
+                  onClick={() => handleAddToCart(products[0], 'product-1')}
                   size="lg"
                   className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
                 >
@@ -398,9 +429,9 @@ const MainPage = () => {
                     <button
                       key={variant.node.id}
                       onClick={() => setSelectedSizes(prev => ({ ...prev, [products[1].node.id]: idx }))}
-                      className={`px-6 py-2 border transition-all duration-300 ${
+                      className={`size-button px-6 py-2 border transition-all duration-300 ${
                         selectedSizes[products[1].node.id] === idx
-                          ? 'bg-foreground text-background'
+                          ? 'bg-foreground text-background active'
                           : 'bg-transparent text-foreground hover:bg-foreground/10'
                       }`}
                     >
@@ -410,7 +441,7 @@ const MainPage = () => {
                 </div>
 
                 <Button
-                  onClick={() => handleAddToCart(products[1])}
+                  onClick={() => handleAddToCart(products[1], 'product-2')}
                   size="lg"
                   className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
                 >
@@ -420,7 +451,8 @@ const MainPage = () => {
             </div>
 
             <div 
-              className="relative order-1 lg:order-2 overflow-hidden"
+              className="relative order-1 lg:order-2 overflow-hidden product-hover-container ambient-shadow"
+              id="product-2"
               onMouseEnter={() => setImageHover('product2')}
               onMouseLeave={() => setImageHover(null)}
             >
@@ -430,7 +462,7 @@ const MainPage = () => {
                 <img 
                   src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
                   alt={products[1].node.title}
-                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                  className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
                     visibleSections.product2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
                   style={{
@@ -439,6 +471,7 @@ const MainPage = () => {
                   }}
                 />
               </Link>
+              <div className="floating-label">Heavyweight</div>
             </div>
           </div>
         </section>
@@ -461,7 +494,8 @@ const MainPage = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className="relative overflow-hidden"
+              className="relative overflow-hidden product-hover-container ambient-shadow"
+              id="product-3"
               onMouseEnter={() => setImageHover('product3')}
               onMouseLeave={() => setImageHover(null)}
             >
@@ -471,7 +505,7 @@ const MainPage = () => {
                 <img 
                   src={products[2].node.images.edges[0]?.node.url || oversizedImg}
                   alt={products[2].node.title}
-                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                  className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
                     visibleSections.product3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
                   style={{
@@ -480,6 +514,7 @@ const MainPage = () => {
                   }}
                 />
               </Link>
+              <div className="floating-label">Oversized</div>
             </div>
             
             <div className="space-y-8">
@@ -532,9 +567,9 @@ const MainPage = () => {
                     <button
                       key={variant.node.id}
                       onClick={() => setSelectedSizes(prev => ({ ...prev, [products[2].node.id]: idx }))}
-                      className={`px-6 py-2 border transition-all duration-300 ${
+                      className={`size-button px-6 py-2 border transition-all duration-300 ${
                         selectedSizes[products[2].node.id] === idx
-                          ? 'bg-foreground text-background'
+                          ? 'bg-foreground text-background active'
                           : 'bg-transparent text-foreground hover:bg-foreground/10'
                       }`}
                     >
@@ -544,7 +579,7 @@ const MainPage = () => {
                 </div>
 
                 <Button
-                  onClick={() => handleAddToCart(products[2])}
+                  onClick={() => handleAddToCart(products[2], 'product-3')}
                   size="lg"
                   className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
                 >
