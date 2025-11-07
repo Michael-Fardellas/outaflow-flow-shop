@@ -41,8 +41,8 @@ const Index = () => {
 
     // Setup intersection observer for animations
     const observerOptions = {
-      threshold: 0.2,
-      rootMargin: '0px'
+      threshold: 0.15,
+      rootMargin: '-10% 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -201,15 +201,17 @@ const Index = () => {
           }}
         />
         
-        <div className={`relative z-10 text-center space-y-8 px-4 transition-all duration-1000 ${
-          visibleSections.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-        }`}>
+        <div className="relative z-10 text-center space-y-8 px-4">
           <img 
             src={logo} 
             alt="OUTAFLOW" 
-            className="h-32 w-auto mx-auto animate-pulse-glow" 
+            className={`h-32 w-auto mx-auto transition-all duration-1000 ease-out ${
+              visibleSections.hero ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            }`}
           />
-          <h2 className="text-2xl md:text-4xl font-light tracking-[0.3em] glow">
+          <h2 className={`text-2xl md:text-4xl font-light tracking-[0.3em] glow transition-all duration-1200 ease-out delay-300 ${
+            visibleSections.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
             MINIMALISM IN MOTION.
           </h2>
         </div>
@@ -236,41 +238,37 @@ const Index = () => {
           />
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div 
-              className={`relative transition-opacity duration-1000 ${
-                visibleSections.product1 ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                transform: `translateY(${scrollY * 0.1}px)`,
-                transition: "transform 0.1s ease-out"
-              }}
-            >
+            <div className="relative">
               <Link to={`/product/${products[0].node.handle}`}>
                 <img 
                   src={products[0].node.images.edges[0]?.node.url || soronaImg}
                   alt={products[0].node.title}
-                  className="w-full h-auto"
+                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                    visibleSections.product1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                  style={{
+                    transform: `translateY(${scrollY * 0.08}px)`
+                  }}
                 />
               </Link>
             </div>
             
-            <div 
-              className={`space-y-8 transition-opacity duration-1000 delay-300 ${
-                visibleSections.product1 ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                transform: `translateY(${scrollY * 0.05}px)`,
-                transition: "transform 0.1s ease-out"
-              }}
-            >
-              <h3 className="text-4xl md:text-5xl font-light tracking-wider uppercase">
+            <div className="space-y-8">
+              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase transition-all duration-1000 ease-out delay-200 ${
+                visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 {products[0].node.title}
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
+                visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 {products[0].node.description}
               </p>
 
-              <Collapsible 
+              <div className={`transition-all duration-1000 ease-out delay-500 ${
+                visibleSections.product1 ? 'opacity-100' : 'opacity-0'
+              }`}>
+              <Collapsible
                 open={fabricOpen[products[0].node.id]} 
                 onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[0].node.id]: !prev[products[0].node.id] }))}
               >
@@ -286,7 +284,11 @@ const Index = () => {
                 </CollapsibleContent>
               </Collapsible>
 
-              <div className="space-y-4">
+              </div>
+
+              <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
+                visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 <p className="text-3xl font-light tracking-wider">
                   ${parseFloat(products[0].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[0].node.priceRange.minVariantPrice.currencyCode}
                 </p>
@@ -336,23 +338,22 @@ const Index = () => {
           />
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div 
-              className={`space-y-8 order-2 lg:order-1 transition-opacity duration-1000 ${
-                visibleSections.product2 ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                transform: `translateX(${scrollY * 0.02}px)`,
-                transition: "transform 0.1s ease-out"
-              }}
-            >
-              <h3 className="text-4xl md:text-5xl font-light tracking-wider uppercase">
+            <div className="space-y-8 order-2 lg:order-1">
+              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase transition-all duration-1000 ease-out delay-200 ${
+                visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 {products[1].node.title}
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
+                visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 {products[1].node.description}
               </p>
 
-              <Collapsible 
+              <div className={`transition-all duration-1000 ease-out delay-500 ${
+                visibleSections.product2 ? 'opacity-100' : 'opacity-0'
+              }`}>
+              <Collapsible
                 open={fabricOpen[products[1].node.id]} 
                 onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[1].node.id]: !prev[products[1].node.id] }))}
               >
@@ -368,7 +369,11 @@ const Index = () => {
                 </CollapsibleContent>
               </Collapsible>
 
-              <div className="space-y-4">
+              </div>
+
+              <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
+                visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 <p className="text-3xl font-light tracking-wider">
                   ${parseFloat(products[1].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[1].node.priceRange.minVariantPrice.currencyCode}
                 </p>
@@ -399,20 +404,17 @@ const Index = () => {
               </div>
             </div>
 
-            <div 
-              className={`relative order-1 lg:order-2 transition-opacity duration-1000 delay-300 ${
-                visibleSections.product2 ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                transform: `translateY(${scrollY * 0.08}px)`,
-                transition: "transform 0.1s ease-out"
-              }}
-            >
+            <div className="relative order-1 lg:order-2">
               <Link to={`/product/${products[1].node.handle}`}>
                 <img 
                   src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
                   alt={products[1].node.title}
-                  className="w-full h-auto"
+                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                    visibleSections.product2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                  style={{
+                    transform: `translateY(${scrollY * 0.06}px)`
+                  }}
                 />
               </Link>
             </div>
@@ -436,44 +438,42 @@ const Index = () => {
           />
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div 
-              className={`relative transition-opacity duration-1000 ${
-                visibleSections.product3 ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                transform: `translateY(${scrollY * 0.12}px)`,
-                transition: "transform 0.1s ease-out"
-              }}
-            >
+            <div className="relative">
               <Link to={`/product/${products[2].node.handle}`}>
                 <img 
                   src={products[2].node.images.edges[0]?.node.url || oversizedImg}
                   alt={products[2].node.title}
-                  className="w-full h-auto"
+                  className={`w-full h-auto transition-all duration-1000 ease-out ${
+                    visibleSections.product3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                  style={{
+                    transform: `translateY(${scrollY * 0.1}px)`
+                  }}
                 />
               </Link>
             </div>
             
-            <div 
-              className={`space-y-8 transition-opacity duration-1000 delay-300 ${
-                visibleSections.product3 ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                transform: `translateY(${scrollY * 0.06}px)`,
-                transition: "transform 0.1s ease-out"
-              }}
-            >
-              <h3 className="text-4xl md:text-5xl font-light tracking-wider uppercase">
+            <div className="space-y-8">
+              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase transition-all duration-1000 ease-out delay-200 ${
+                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 {products[2].node.title}
               </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
+                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 Engineered for those who move with purpose.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className={`text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-500 ${
+                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 {products[2].node.description}
               </p>
 
-              <Collapsible 
+              <div className={`transition-all duration-1000 ease-out delay-600 ${
+                visibleSections.product3 ? 'opacity-100' : 'opacity-0'
+              }`}>
+              <Collapsible
                 open={fabricOpen[products[2].node.id]} 
                 onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[2].node.id]: !prev[products[2].node.id] }))}
               >
@@ -489,7 +489,11 @@ const Index = () => {
                 </CollapsibleContent>
               </Collapsible>
 
-              <div className="space-y-4">
+              </div>
+
+              <div className={`space-y-4 transition-all duration-1000 ease-out delay-800 ${
+                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}>
                 <p className="text-3xl font-light tracking-wider">
                   ${parseFloat(products[2].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[2].node.priceRange.minVariantPrice.currencyCode}
                 </p>
@@ -533,17 +537,21 @@ const Index = () => {
           <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl animate-smoke" />
         </div>
         
-        <div className={`relative z-10 text-center space-y-12 px-4 max-w-md transition-all duration-1000 ${
-          visibleSections.outro ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-        }`}>
-          <h2 className="text-3xl md:text-5xl font-light tracking-[0.3em] glow">
+        <div className="relative z-10 text-center space-y-12 px-4 max-w-md">
+          <h2 className={`text-3xl md:text-5xl font-light tracking-[0.3em] glow transition-all duration-1200 ease-out ${
+            visibleSections.outro ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+          }`}>
             OUTAFLOW
           </h2>
-          <p className="text-lg tracking-widest text-muted-foreground">
+          <p className={`text-lg tracking-widest text-muted-foreground transition-all duration-1000 ease-out delay-300 ${
+            visibleSections.outro ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
             Designed for Movement.
           </p>
           
-          <form onSubmit={handleSubmit} className="space-y-6 w-full">
+          <form onSubmit={handleSubmit} className={`space-y-6 w-full transition-all duration-1000 ease-out delay-500 ${
+            visibleSections.outro ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}>
             <Input 
               type="email" 
               placeholder="Get notified on next drops" 
@@ -564,7 +572,9 @@ const Index = () => {
             href="https://instagram.com/outaflow0" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-block text-sm tracking-widest hover:glow transition-all duration-300 uppercase"
+            className={`inline-block text-sm tracking-widest hover:glow transition-all duration-1000 ease-out delay-700 uppercase ${
+              visibleSections.outro ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
           >
             @outaflow0
           </a>
