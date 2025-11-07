@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -7,6 +7,22 @@ import logo from "@/assets/outaflow-logo.png";
 
 const WaitingPage = () => {
   const [email, setEmail] = useState("");
+  const [displayText, setDisplayText] = useState("");
+  const fullText = "MINIMALISM IN MOTION.";
+  
+  useEffect(() => {
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 100);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,8 +77,9 @@ const WaitingPage = () => {
           <h1 className="text-4xl md:text-6xl font-light tracking-[0.3em] glow">
             COMING SOON
           </h1>
-          <p className="text-lg tracking-widest text-muted-foreground">
-            Minimalism in Motion.
+          <p className="text-lg tracking-widest text-muted-foreground min-h-[2rem]">
+            {displayText}
+            <span className="animate-pulse">|</span>
           </p>
         </div>
 
