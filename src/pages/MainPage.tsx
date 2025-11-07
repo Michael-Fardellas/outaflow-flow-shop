@@ -33,7 +33,6 @@ const MainPage = () => {
     product3: true,
     outro: true
   });
-  const [isIdle, setIsIdle] = useState(false);
   const [imageHover, setImageHover] = useState<string | null>(null);
   const addItem = useCartStore(state => state.addItem);
   
@@ -102,31 +101,17 @@ const MainPage = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
-      setIsIdle(false);
     };
     const handleScroll = () => {
       setScrollY(window.scrollY);
-      setIsIdle(false);
-    };
-    
-    let idleTimer: NodeJS.Timeout;
-    const resetIdleTimer = () => {
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => setIsIdle(true), 10000);
     };
     
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("mousemove", resetIdleTimer);
-    window.addEventListener("scroll", resetIdleTimer);
-    resetIdleTimer();
     
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", resetIdleTimer);
-      window.removeEventListener("scroll", resetIdleTimer);
-      clearTimeout(idleTimer);
     };
   }, []);
 
@@ -227,7 +212,6 @@ const MainPage = () => {
             transform: `translateY(${scrollY * -0.15}px)`
           }}
         />
-        {isIdle && <div className="idle-sweep" />}
         
         <div className="relative z-10 text-center space-y-8 px-4">
           <img 
@@ -264,7 +248,6 @@ const MainPage = () => {
               transform: `translateY(${scrollY * -0.12}px)`
             }}
           />
-          {isIdle && <div className="idle-sweep" />}
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
@@ -372,7 +355,6 @@ const MainPage = () => {
               transform: `translateY(${scrollY * -0.1}px)`
             }}
           />
-          {isIdle && <div className="idle-sweep" />}
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div className="space-y-8 order-2 lg:order-1">
@@ -480,7 +462,6 @@ const MainPage = () => {
               transform: `translateY(${scrollY * -0.08}px)`
             }}
           />
-          {isIdle && <div className="idle-sweep" />}
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
@@ -588,7 +569,6 @@ const MainPage = () => {
         <div className="absolute inset-0 pointer-events-none">
           {visibleSections.outro && <div className="footer-beam" />}
         </div>
-        {isIdle && <div className="idle-sweep" />}
         
         <div className="relative z-10 text-center space-y-12 px-4 max-w-md">
           <h2 className={`text-3xl md:text-5xl font-light tracking-[0.3em] glow breathing transition-all duration-1200 ease-out ${
