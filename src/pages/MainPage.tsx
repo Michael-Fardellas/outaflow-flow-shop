@@ -16,6 +16,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { CartDrawer } from "@/components/CartDrawer";
 
 const MainPage = () => {
   const [email, setEmail] = useState("");
@@ -208,6 +209,7 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground relative">
+      <CartDrawer />
       {/* Scroll progress bar */}
       <div 
         className="scroll-progress" 
