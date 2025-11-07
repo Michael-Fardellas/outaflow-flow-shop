@@ -1,89 +1,104 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useCartStore } from "@/stores/cartStore";
+import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from "@/lib/shopify";
+import { Loader2, ChevronDown } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
+import soronaImg from "@/assets/sorona-quickdry.png";
+import earthtoneImg from "@/assets/earthtone-heavyweight.png";
+import oversizedImg from "@/assets/oversized-stitched.png";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
 const Index = () => {
   const [email, setEmail] = useState("");
-  const [typewriterText, setTypewriterText] = useState("");
-  const [showSecondText, setShowSecondText] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [cursorPos, setCursorPos] = useState({
-    x: 0,
-    y: 0
-  });
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
-  const [lastSubmitTime, setLastSubmitTime] = useState<number>(0);
-  const RATE_LIMIT_COOLDOWN = 60000; // 60 seconds
-  const fullText = "Something clean is coming";
+  const [scrollY, setScrollY] = useState(0);
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
+  const [fabricOpen, setFabricOpen] = useState<{ [key: string]: boolean }>({});
+  const addItem = useCartStore(state => state.addItem);
+  
+  const heroRef = useRef<HTMLDivElement>(null);
+  const product1Ref = useRef<HTMLDivElement>(null);
+  const product2Ref = useRef<HTMLDivElement>(null);
+  const product3Ref = useRef<HTMLDivElement>(null);
+  const outroRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setMounted(true);
-
-    // Start typewriter after logo appears
-    const startTimer = setTimeout(() => {
-      let currentIndex = 0;
-      const typingInterval = setInterval(() => {
-        if (currentIndex <= fullText.length) {
-          setTypewriterText(fullText.slice(0, currentIndex));
-          currentIndex++;
-        } else {
-          clearInterval(typingInterval);
-          setTimeout(() => {
-            setShowCursor(false);
-            setTimeout(() => {
-              setShowSecondText(true);
-              setTimeout(() => {
-                setShowForm(true);
-              }, 1000);
-            }, 800);
-          }, 500);
-        }
-      }, 100); // 100ms per character
-
-      return () => clearInterval(typingInterval);
-    }, 2000);
-    return () => clearTimeout(startTimer);
+    fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const data = await storefrontApiRequest(STOREFRONT_PRODUCTS_QUERY, { first: 10 });
+      if (data.data.products.edges) {
+        setProducts(data.data.products.edges);
+        const initialSizes: { [key: string]: number } = {};
+        data.data.products.edges.forEach((product: ShopifyProduct) => {
+          initialSizes[product.node.id] = 0;
+        });
+        setSelectedSizes(initialSizes);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({
-        x: e.clientX,
-        y: e.clientY
-      });
+      setCursorPos({ x: e.clientX, y: e.clientY });
+    };
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
     };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
+
+  const handleAddToCart = (product: ShopifyProduct) => {
+    const variantIndex = selectedSizes[product.node.id] || 0;
+    const variant = product.node.variants.edges[variantIndex].node;
+    
+    const cartItem = {
+      product,
+      variantId: variant.id,
+      variantTitle: variant.title,
+      price: variant.price,
+      quantity: 1,
+      selectedOptions: variant.selectedOptions || []
+    };
+    
+    addItem(cartItem);
+    toast.success("Added to cart", {
+      style: { background: "black", color: "white", border: "1px solid white" }
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Rate limiting check
-    const now = Date.now();
-    const timeSinceLastSubmit = now - lastSubmitTime;
-    if (timeSinceLastSubmit < RATE_LIMIT_COOLDOWN) {
-      const remainingSeconds = Math.ceil((RATE_LIMIT_COOLDOWN - timeSinceLastSubmit) / 1000);
-      toast.error(`Please wait ${remainingSeconds} seconds before submitting again`);
-      return;
-    }
-    
-    // Input validation
     if (!email) {
       toast.error("Please enter your email");
       return;
     }
-    
-    // Trim and lowercase email
+
     const normalizedEmail = email.trim().toLowerCase();
-    
-    // Email length validation
-    if (normalizedEmail.length > 255) {
-      toast.error("Email address is too long");
-      return;
-    }
-    
-    // Email format validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       toast.error("Please enter a valid email");
       return;
@@ -105,80 +120,405 @@ const Index = () => {
 
       toast.success("You're on the list. Welcome to the future.");
       setEmail("");
-      setLastSubmitTime(now);
-
-      // Send notification email
-      supabase.functions.invoke('send-signup-notification', {
-        body: { email: normalizedEmail }
-      }).catch(err => {
-        // Log error but don't block the user experience
-        console.warn('Failed to send notification email:', err);
-      });
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     }
   };
-  return <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
-      {/* Cursor glow effect */}
-      {mounted && <div className="cursor-glow" style={{
-      left: `${cursorPos.x}px`,
-      top: `${cursorPos.y}px`
-    }} />}
 
-      {/* Subtle smoke/shadow background effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl -top-48 -left-48 animate-smoke" />
-        <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl top-1/2 right-0 animate-smoke" style={{
-        animationDelay: "2s"
-      }} />
-        <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl bottom-0 left-1/3 animate-smoke" style={{
-        animationDelay: "4s"
-      }} />
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-foreground" />
       </div>
+    );
+  }
 
-      {/* Main content */}
-      <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-        {/* Logo with fade and pulse */}
-        <div className="mb-16 animate-fade-in-slow">
-          <img src={logo} alt="Outaflow" className="h-32 w-auto animate-pulse-glow animate-glitch" style={{
-          animationDelay: "3s",
-          filter: "brightness(1.1)"
-        }} />
+  const getSpotlightY = (ref: React.RefObject<HTMLDivElement>) => {
+    if (!ref.current) return 0;
+    const rect = ref.current.getBoundingClientRect();
+    const center = rect.top + rect.height / 2;
+    return Math.max(0, Math.min(100, ((window.innerHeight / 2 - center) / window.innerHeight) * 100 + 50));
+  };
+
+  return (
+    <div className="bg-background text-foreground relative">
+      {/* Cursor glow effect */}
+      {mounted && (
+        <div 
+          className="cursor-glow" 
+          style={{
+            left: `${cursorPos.x}px`,
+            top: `${cursorPos.y}px`
+          }} 
+        />
+      )}
+
+      {/* Section 1: Hero Intro */}
+      <section 
+        ref={heroRef}
+        className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      >
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at 50% ${getSpotlightY(heroRef)}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
+            transition: "all 0.3s ease-out"
+          }}
+        />
+        
+        <div className="relative z-10 text-center space-y-8 animate-fade-in-slow px-4">
+          <img 
+            src={logo} 
+            alt="OUTAFLOW" 
+            className="h-32 w-auto mx-auto animate-pulse-glow" 
+          />
+          <h2 className="text-2xl md:text-4xl font-light tracking-[0.3em] glow">
+            MINIMALISM IN MOTION.
+          </h2>
         </div>
+        
+        <div className="absolute bottom-12 animate-bounce">
+          <p className="text-xs tracking-widest uppercase text-muted-foreground">Scroll to Discover</p>
+          <ChevronDown className="h-6 w-6 mx-auto mt-2 text-muted-foreground" />
+        </div>
+      </section>
 
-        {/* Typewriter text */}
-        <div className="text-center mb-20 space-y-6 w-full max-w-4xl px-4">
-          <div className="relative min-h-[80px] sm:min-h-[120px] flex items-center justify-center">
-            <h1 className="text-2xl sm:text-4xl md:text-6xl font-light tracking-wider">
-              {typewriterText}
-              {showCursor && <span className="inline-block w-0.5 h-8 sm:h-12 md:h-16 bg-foreground ml-1 animate-blink" />}
-            </h1>
-          </div>
+      {/* Section 2: Product 1 - Sorona Quick Dry */}
+      {products[0] && (
+        <section 
+          ref={product1Ref}
+          className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
+        >
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at 50% ${getSpotlightY(product1Ref)}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
+              transition: "all 0.5s ease-out"
+            }}
+          />
           
-          {showSecondText && <p className="text-lg sm:text-xl md:text-3xl font-extralight tracking-widest animate-fade-in glow">
-              Be the first to know.
-            </p>}
-        </div>
-
-        {/* Email capture section */}
-        {showForm && <div className="w-full max-w-md animate-fade-in">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Input type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} className="w-full h-14 bg-transparent border-2 border-foreground text-foreground placeholder:text-muted-foreground text-center text-lg tracking-wider glow-input focus:border-foreground focus:ring-0 focus:ring-offset-0" />
-              <Button type="submit" className="w-full h-14 bg-foreground text-background hover:bg-background hover:text-foreground border-2 border-foreground transition-all duration-300 text-lg tracking-widest font-light">
-                NOTIFY ME
-              </Button>
-            </form>
+          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div 
+              className="relative"
+              style={{
+                transform: `translateY(${scrollY * 0.1}px)`,
+                transition: "transform 0.1s ease-out"
+              }}
+            >
+              <Link to={`/product/${products[0].node.handle}`}>
+                <img 
+                  src={products[0].node.images.edges[0]?.node.url || soronaImg}
+                  alt={products[0].node.title}
+                  className="w-full h-auto animate-float"
+                />
+              </Link>
+            </div>
             
-            <p className="text-center text-xs tracking-widest mt-6 text-muted-foreground uppercase">Early access</p>
-          </div>}
+            <div 
+              className="space-y-8"
+              style={{
+                transform: `translateY(${scrollY * 0.05}px)`,
+                transition: "transform 0.1s ease-out"
+              }}
+            >
+              <h3 className="text-4xl md:text-5xl font-light tracking-wider uppercase">
+                {products[0].node.title}
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {products[0].node.description}
+              </p>
 
-        {/* Instagram link */}
-        {showForm && <div className="absolute bottom-8 animate-fade-in">
-            <a href="https://instagram.com/outaflow0" target="_blank" rel="noopener noreferrer" className="text-sm tracking-widest hover:glow transition-all duration-300 uppercase">
-              @outaflow0
-            </a>
-          </div>}
-      </main>
-    </div>;
+              <Collapsible 
+                open={fabricOpen[products[0].node.id]} 
+                onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[0].node.id]: !prev[products[0].node.id] }))}
+              >
+                <CollapsibleTrigger className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-accent transition-colors">
+                  Fabric Details
+                  <ChevronDown className={`h-4 w-4 transition-transform ${fabricOpen[products[0].node.id] ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4 space-y-2 text-sm text-muted-foreground border-l-2 border-muted pl-4">
+                  <p>• Material: 73.31% cotton, 26.69% Sorona</p>
+                  <p>• Fabric Weight: 240 gsm (7.1 oz)</p>
+                  <p>• Thickness: Moderate</p>
+                  <p>• Breathability: High</p>
+                </CollapsibleContent>
+              </Collapsible>
+
+              <div className="space-y-4">
+                <p className="text-3xl font-light tracking-wider">
+                  ${parseFloat(products[0].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[0].node.priceRange.minVariantPrice.currencyCode}
+                </p>
+                
+                <div className="flex gap-2 flex-wrap">
+                  {products[0].node.variants.edges.map((variant, idx) => (
+                    <button
+                      key={variant.node.id}
+                      onClick={() => setSelectedSizes(prev => ({ ...prev, [products[0].node.id]: idx }))}
+                      className={`px-6 py-2 border transition-all duration-300 ${
+                        selectedSizes[products[0].node.id] === idx
+                          ? 'bg-foreground text-background'
+                          : 'bg-transparent text-foreground hover:bg-foreground/10'
+                      }`}
+                    >
+                      {variant.node.title}
+                    </button>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={() => handleAddToCart(products[0])}
+                  size="lg"
+                  className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                >
+                  ADD TO CART
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Section 3: Product 2 - Earthtone Heavyweight */}
+      {products[1] && (
+        <section 
+          ref={product2Ref}
+          className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
+        >
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at 50% ${getSpotlightY(product2Ref)}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
+              transition: "all 0.5s ease-out"
+            }}
+          />
+          
+          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div 
+              className="space-y-8 order-2 lg:order-1"
+              style={{
+                transform: `translateX(${scrollY * 0.02}px)`,
+                transition: "transform 0.1s ease-out"
+              }}
+            >
+              <h3 className="text-4xl md:text-5xl font-light tracking-wider uppercase">
+                {products[1].node.title}
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {products[1].node.description}
+              </p>
+
+              <Collapsible 
+                open={fabricOpen[products[1].node.id]} 
+                onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[1].node.id]: !prev[products[1].node.id] }))}
+              >
+                <CollapsibleTrigger className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-accent transition-colors">
+                  Fabric Details
+                  <ChevronDown className={`h-4 w-4 transition-transform ${fabricOpen[products[1].node.id] ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4 space-y-2 text-sm text-muted-foreground border-l-2 border-muted pl-4">
+                  <p>• 100% Premium Cotton</p>
+                  <p>• Heavyweight Construction</p>
+                  <p>• Earthtone Dyed</p>
+                  <p>• Durable & Long-lasting</p>
+                </CollapsibleContent>
+              </Collapsible>
+
+              <div className="space-y-4">
+                <p className="text-3xl font-light tracking-wider">
+                  ${parseFloat(products[1].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[1].node.priceRange.minVariantPrice.currencyCode}
+                </p>
+                
+                <div className="flex gap-2 flex-wrap">
+                  {products[1].node.variants.edges.map((variant, idx) => (
+                    <button
+                      key={variant.node.id}
+                      onClick={() => setSelectedSizes(prev => ({ ...prev, [products[1].node.id]: idx }))}
+                      className={`px-6 py-2 border transition-all duration-300 ${
+                        selectedSizes[products[1].node.id] === idx
+                          ? 'bg-foreground text-background'
+                          : 'bg-transparent text-foreground hover:bg-foreground/10'
+                      }`}
+                    >
+                      {variant.node.title}
+                    </button>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={() => handleAddToCart(products[1])}
+                  size="lg"
+                  className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                >
+                  ADD TO CART
+                </Button>
+              </div>
+            </div>
+
+            <div 
+              className="relative order-1 lg:order-2"
+              style={{
+                transform: `translateY(${scrollY * 0.08}px)`,
+                transition: "transform 0.1s ease-out"
+              }}
+            >
+              <Link to={`/product/${products[1].node.handle}`}>
+                <img 
+                  src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
+                  alt={products[1].node.title}
+                  className="w-full h-auto animate-float"
+                  style={{ animationDelay: '1s' }}
+                />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Section 4: Product 3 - Oversized Stitched */}
+      {products[2] && (
+        <section 
+          ref={product3Ref}
+          className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
+        >
+          <div 
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at 50% ${getSpotlightY(product3Ref)}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
+              transition: "all 0.5s ease-out"
+            }}
+          />
+          
+          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            <div 
+              className="relative"
+              style={{
+                transform: `translateY(${scrollY * 0.12}px)`,
+                transition: "transform 0.1s ease-out"
+              }}
+            >
+              <Link to={`/product/${products[2].node.handle}`}>
+                <img 
+                  src={products[2].node.images.edges[0]?.node.url || oversizedImg}
+                  alt={products[2].node.title}
+                  className="w-full h-auto animate-float"
+                  style={{ animationDelay: '2s' }}
+                />
+              </Link>
+            </div>
+            
+            <div 
+              className="space-y-8"
+              style={{
+                transform: `translateY(${scrollY * 0.06}px)`,
+                transition: "transform 0.1s ease-out"
+              }}
+            >
+              <h3 className="text-4xl md:text-5xl font-light tracking-wider uppercase">
+                {products[2].node.title}
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Engineered for those who move with purpose.
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                {products[2].node.description}
+              </p>
+
+              <Collapsible 
+                open={fabricOpen[products[2].node.id]} 
+                onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[2].node.id]: !prev[products[2].node.id] }))}
+              >
+                <CollapsibleTrigger className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-accent transition-colors">
+                  Fabric Details
+                  <ChevronDown className={`h-4 w-4 transition-transform ${fabricOpen[products[2].node.id] ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4 space-y-2 text-sm text-muted-foreground border-l-2 border-muted pl-4">
+                  <p>• Oversized Fit</p>
+                  <p>• Premium Stitching Detail</p>
+                  <p>• High-Quality Cotton Blend</p>
+                  <p>• Statement Design</p>
+                </CollapsibleContent>
+              </Collapsible>
+
+              <div className="space-y-4">
+                <p className="text-3xl font-light tracking-wider">
+                  ${parseFloat(products[2].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[2].node.priceRange.minVariantPrice.currencyCode}
+                </p>
+                
+                <div className="flex gap-2 flex-wrap">
+                  {products[2].node.variants.edges.map((variant, idx) => (
+                    <button
+                      key={variant.node.id}
+                      onClick={() => setSelectedSizes(prev => ({ ...prev, [products[2].node.id]: idx }))}
+                      className={`px-6 py-2 border transition-all duration-300 ${
+                        selectedSizes[products[2].node.id] === idx
+                          ? 'bg-foreground text-background'
+                          : 'bg-transparent text-foreground hover:bg-foreground/10'
+                      }`}
+                    >
+                      {variant.node.title}
+                    </button>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={() => handleAddToCart(products[2])}
+                  size="lg"
+                  className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                >
+                  ADD TO CART
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Section 5: Brand Outro */}
+      <section 
+        ref={outroRef}
+        className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl animate-smoke" />
+        </div>
+        
+        <div className="relative z-10 text-center space-y-12 px-4 max-w-md animate-fade-in-slow">
+          <h2 className="text-3xl md:text-5xl font-light tracking-[0.3em] glow">
+            OUTAFLOW
+          </h2>
+          <p className="text-lg tracking-widest text-muted-foreground">
+            Designed for Movement.
+          </p>
+          
+          <form onSubmit={handleSubmit} className="space-y-6 w-full">
+            <Input 
+              type="email" 
+              placeholder="Get notified on next drops" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              className="w-full h-14 bg-transparent border-2 border-foreground text-foreground placeholder:text-muted-foreground text-center text-base tracking-wider glow-input"
+            />
+            <Button 
+              type="submit"
+              size="lg"
+              className="w-full bg-foreground text-background hover:bg-background hover:text-foreground border-2 border-foreground transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+            >
+              NOTIFY ME
+            </Button>
+          </form>
+
+          <a 
+            href="https://instagram.com/outaflow0" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block text-sm tracking-widest hover:glow transition-all duration-300 uppercase"
+          >
+            @outaflow0
+          </a>
+        </div>
+      </section>
+    </div>
+  );
 };
+
 export default Index;
