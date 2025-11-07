@@ -26,7 +26,13 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
   const [fabricOpen, setFabricOpen] = useState<{ [key: string]: boolean }>({});
-  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({ hero: true });
+  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({ 
+    hero: true,
+    product1: true,
+    product2: true,
+    product3: true,
+    outro: true
+  });
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
