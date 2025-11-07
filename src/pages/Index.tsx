@@ -26,7 +26,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
   const [fabricOpen, setFabricOpen] = useState<{ [key: string]: boolean }>({});
-  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({});
+  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({ hero: true });
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
@@ -237,8 +237,8 @@ const Index = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className={`relative transition-all duration-1000 ${
-                visibleSections.product1 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+              className={`relative transition-opacity duration-1000 ${
+                visibleSections.product1 ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
                 transform: `translateY(${scrollY * 0.1}px)`,
@@ -255,8 +255,8 @@ const Index = () => {
             </div>
             
             <div 
-              className={`space-y-8 transition-all duration-1000 delay-300 ${
-                visibleSections.product1 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+              className={`space-y-8 transition-opacity duration-1000 delay-300 ${
+                visibleSections.product1 ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
                 transform: `translateY(${scrollY * 0.05}px)`,
@@ -337,8 +337,8 @@ const Index = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className={`space-y-8 order-2 lg:order-1 transition-all duration-1000 ${
-                visibleSections.product2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+              className={`space-y-8 order-2 lg:order-1 transition-opacity duration-1000 ${
+                visibleSections.product2 ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
                 transform: `translateX(${scrollY * 0.02}px)`,
@@ -400,8 +400,8 @@ const Index = () => {
             </div>
 
             <div 
-              className={`relative order-1 lg:order-2 transition-all duration-1000 delay-300 ${
-                visibleSections.product2 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+              className={`relative order-1 lg:order-2 transition-opacity duration-1000 delay-300 ${
+                visibleSections.product2 ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
                 transform: `translateY(${scrollY * 0.08}px)`,
@@ -437,8 +437,8 @@ const Index = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className={`relative transition-all duration-1000 ${
-                visibleSections.product3 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+              className={`relative transition-opacity duration-1000 ${
+                visibleSections.product3 ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
                 transform: `translateY(${scrollY * 0.12}px)`,
@@ -455,8 +455,8 @@ const Index = () => {
             </div>
             
             <div 
-              className={`space-y-8 transition-all duration-1000 delay-300 ${
-                visibleSections.product3 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+              className={`space-y-8 transition-opacity duration-1000 delay-300 ${
+                visibleSections.product3 ? 'opacity-100' : 'opacity-0'
               }`}
               style={{
                 transform: `translateY(${scrollY * 0.06}px)`,
