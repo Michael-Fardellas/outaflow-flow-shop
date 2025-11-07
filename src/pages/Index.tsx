@@ -26,6 +26,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
   const [fabricOpen, setFabricOpen] = useState<{ [key: string]: boolean }>({});
+  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({});
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
@@ -37,6 +38,39 @@ const Index = () => {
   useEffect(() => {
     setMounted(true);
     fetchProducts();
+
+    // Setup intersection observer for animations
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setVisibleSections(prev => ({
+            ...prev,
+            [entry.target.id]: true
+          }));
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    const sections = [heroRef, product1Ref, product2Ref, product3Ref, outroRef];
+    sections.forEach(ref => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      sections.forEach(ref => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
   }, []);
 
   const fetchProducts = async () => {
@@ -155,6 +189,7 @@ const Index = () => {
 
       {/* Section 1: Hero Intro */}
       <section 
+        id="hero"
         ref={heroRef}
         className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
       >
@@ -166,7 +201,9 @@ const Index = () => {
           }}
         />
         
-        <div className="relative z-10 text-center space-y-8 animate-fade-in-slow px-4">
+        <div className={`relative z-10 text-center space-y-8 px-4 transition-all duration-1000 ${
+          visibleSections.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`}>
           <img 
             src={logo} 
             alt="OUTAFLOW" 
@@ -186,6 +223,7 @@ const Index = () => {
       {/* Section 2: Product 1 - Sorona Quick Dry */}
       {products[0] && (
         <section 
+          id="product1"
           ref={product1Ref}
           className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
         >
@@ -199,7 +237,9 @@ const Index = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className="relative"
+              className={`relative transition-all duration-1000 ${
+                visibleSections.product1 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+              }`}
               style={{
                 transform: `translateY(${scrollY * 0.1}px)`,
                 transition: "transform 0.1s ease-out"
@@ -209,13 +249,15 @@ const Index = () => {
                 <img 
                   src={products[0].node.images.edges[0]?.node.url || soronaImg}
                   alt={products[0].node.title}
-                  className="w-full h-auto animate-float"
+                  className="w-full h-auto"
                 />
               </Link>
             </div>
             
             <div 
-              className="space-y-8"
+              className={`space-y-8 transition-all duration-1000 delay-300 ${
+                visibleSections.product1 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+              }`}
               style={{
                 transform: `translateY(${scrollY * 0.05}px)`,
                 transition: "transform 0.1s ease-out"
@@ -281,6 +323,7 @@ const Index = () => {
       {/* Section 3: Product 2 - Earthtone Heavyweight */}
       {products[1] && (
         <section 
+          id="product2"
           ref={product2Ref}
           className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
         >
@@ -294,7 +337,9 @@ const Index = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className="space-y-8 order-2 lg:order-1"
+              className={`space-y-8 order-2 lg:order-1 transition-all duration-1000 ${
+                visibleSections.product2 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+              }`}
               style={{
                 transform: `translateX(${scrollY * 0.02}px)`,
                 transition: "transform 0.1s ease-out"
@@ -355,7 +400,9 @@ const Index = () => {
             </div>
 
             <div 
-              className="relative order-1 lg:order-2"
+              className={`relative order-1 lg:order-2 transition-all duration-1000 delay-300 ${
+                visibleSections.product2 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+              }`}
               style={{
                 transform: `translateY(${scrollY * 0.08}px)`,
                 transition: "transform 0.1s ease-out"
@@ -365,8 +412,7 @@ const Index = () => {
                 <img 
                   src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
                   alt={products[1].node.title}
-                  className="w-full h-auto animate-float"
-                  style={{ animationDelay: '1s' }}
+                  className="w-full h-auto"
                 />
               </Link>
             </div>
@@ -377,6 +423,7 @@ const Index = () => {
       {/* Section 4: Product 3 - Oversized Stitched */}
       {products[2] && (
         <section 
+          id="product3"
           ref={product3Ref}
           className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
         >
@@ -390,7 +437,9 @@ const Index = () => {
           
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
             <div 
-              className="relative"
+              className={`relative transition-all duration-1000 ${
+                visibleSections.product3 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+              }`}
               style={{
                 transform: `translateY(${scrollY * 0.12}px)`,
                 transition: "transform 0.1s ease-out"
@@ -400,14 +449,15 @@ const Index = () => {
                 <img 
                   src={products[2].node.images.edges[0]?.node.url || oversizedImg}
                   alt={products[2].node.title}
-                  className="w-full h-auto animate-float"
-                  style={{ animationDelay: '2s' }}
+                  className="w-full h-auto"
                 />
               </Link>
             </div>
             
             <div 
-              className="space-y-8"
+              className={`space-y-8 transition-all duration-1000 delay-300 ${
+                visibleSections.product3 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+              }`}
               style={{
                 transform: `translateY(${scrollY * 0.06}px)`,
                 transition: "transform 0.1s ease-out"
@@ -475,6 +525,7 @@ const Index = () => {
 
       {/* Section 5: Brand Outro */}
       <section 
+        id="outro"
         ref={outroRef}
         className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
       >
@@ -482,7 +533,9 @@ const Index = () => {
           <div className="absolute w-96 h-96 bg-muted/5 rounded-full blur-3xl animate-smoke" />
         </div>
         
-        <div className="relative z-10 text-center space-y-12 px-4 max-w-md animate-fade-in-slow">
+        <div className={`relative z-10 text-center space-y-12 px-4 max-w-md transition-all duration-1000 ${
+          visibleSections.outro ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+        }`}>
           <h2 className="text-3xl md:text-5xl font-light tracking-[0.3em] glow">
             OUTAFLOW
           </h2>
