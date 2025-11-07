@@ -272,17 +272,18 @@ const Index = () => {
               onMouseEnter={() => setImageHover('product1')}
               onMouseLeave={() => setImageHover(null)}
             >
-              <div className="spotlight-sweep" />
+              <div className="spotlight-sweep" style={{ animationDelay: '0s' }} />
+              <div className="spotlight-diagonal" style={{ animationDelay: '6s' }} />
               <Link to={`/product/${products[0].node.handle}`}>
                 <img 
                   src={products[0].node.images.edges[0]?.node.url || soronaImg}
                   alt={products[0].node.title}
-                  className={`w-full h-auto transition-all duration-700 ease-out ${
+                  className={`w-full h-auto transition-all duration-1000 ease-out ${
                     visibleSections.product1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
                   style={{
-                    filter: imageHover === 'product1' ? 'brightness(1.15)' : 'brightness(1)',
-                    transition: 'filter 0.6s ease-out'
+                    filter: imageHover === 'product1' ? 'brightness(1.12)' : 'brightness(1)',
+                    transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                 />
               </Link>
@@ -445,17 +446,18 @@ const Index = () => {
               onMouseEnter={() => setImageHover('product2')}
               onMouseLeave={() => setImageHover(null)}
             >
-              <div className="spotlight-sweep" style={{ animationDelay: '4s' }} />
+              <div className="spotlight-vertical" style={{ animationDelay: '4s' }} />
+              <div className="spotlight-diagonal" style={{ animationDelay: '10s' }} />
               <Link to={`/product/${products[1].node.handle}`}>
                 <img 
                   src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
                   alt={products[1].node.title}
-                  className={`w-full h-auto transition-all duration-700 ease-out ${
+                  className={`w-full h-auto transition-all duration-1000 ease-out ${
                     visibleSections.product2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
                   style={{
-                    filter: imageHover === 'product2' ? 'brightness(1.15)' : 'brightness(1)',
-                    transition: 'filter 0.6s ease-out'
+                    filter: imageHover === 'product2' ? 'brightness(1.12)' : 'brightness(1)',
+                    transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                 />
               </Link>
@@ -487,16 +489,17 @@ const Index = () => {
               onMouseLeave={() => setImageHover(null)}
             >
               <div className="spotlight-sweep" style={{ animationDelay: '8s' }} />
+              <div className="spotlight-diagonal" style={{ animationDelay: '14s' }} />
               <Link to={`/product/${products[2].node.handle}`}>
                 <img 
                   src={products[2].node.images.edges[0]?.node.url || oversizedImg}
                   alt={products[2].node.title}
-                  className={`w-full h-auto transition-all duration-700 ease-out ${
+                  className={`w-full h-auto transition-all duration-1000 ease-out ${
                     visibleSections.product3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                   }`}
                   style={{
-                    filter: imageHover === 'product3' ? 'brightness(1.15)' : 'brightness(1)',
-                    transition: 'filter 0.6s ease-out'
+                    filter: imageHover === 'product3' ? 'brightness(1.12)' : 'brightness(1)',
+                    transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                 />
               </Link>
