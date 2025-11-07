@@ -185,10 +185,6 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground relative">
-      {/* Film grain overlay */}
-      <div className="film-grain" />
-      
-      {/* Cursor glow effect */}
       {mounted && (
         <div 
           className="cursor-glow" 
