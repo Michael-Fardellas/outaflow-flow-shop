@@ -8,14 +8,6 @@ import { useCartStore } from "@/stores/cartStore";
 import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from "@/lib/shopify";
 import { Loader2, ChevronDown } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
-import soronaImg from "@/assets/sorona-quickdry.png";
-import earthtoneImg from "@/assets/earthtone-heavyweight.png";
-import oversizedImg from "@/assets/oversized-stitched.png";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { CartDrawer } from "@/components/CartDrawer";
 
 const MainPage = () => {
@@ -27,27 +19,20 @@ const MainPage = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
-  const [fabricOpen, setFabricOpen] = useState<{ [key: string]: boolean }>({});
-  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({ 
-    hero: true,
-    product1: true,
-    product2: true,
-    product3: true,
-    outro: true
-  });
+  const [visibleSections, setVisibleSections] = useState<{ [key: string]: boolean }>({});
   const [imageHover, setImageHover] = useState<string | null>(null);
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
-  const product1Ref = useRef<HTMLDivElement>(null);
-  const product2Ref = useRef<HTMLDivElement>(null);
-  const product3Ref = useRef<HTMLDivElement>(null);
+  const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const outroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
     fetchProducts();
+  }, []);
 
+  useEffect(() => {
     // Setup intersection observer for animations
     const observerOptions = {
       threshold: 0.15,
@@ -66,21 +51,22 @@ const MainPage = () => {
     }, observerOptions);
 
     // Observe all sections
-    const sections = [heroRef, product1Ref, product2Ref, product3Ref, outroRef];
+    const sections = [
+      heroRef.current,
+      ...productRefs.current,
+      outroRef.current
+    ].filter((ref): ref is HTMLDivElement => ref !== null);
+    
     sections.forEach(ref => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
+      observer.observe(ref);
     });
 
     return () => {
       sections.forEach(ref => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
-        }
+        observer.unobserve(ref);
       });
     };
-  }, []);
+  }, [products.length]);
 
   const fetchProducts = async () => {
     try {
@@ -200,13 +186,6 @@ const MainPage = () => {
     );
   }
 
-  const getSpotlightY = (ref: React.RefObject<HTMLDivElement>) => {
-    if (!ref.current) return 0;
-    const rect = ref.current.getBoundingClientRect();
-    const center = rect.top + rect.height / 2;
-    return Math.max(0, Math.min(100, ((window.innerHeight / 2 - center) / window.innerHeight) * 100 + 50));
-  };
-
   return (
     <div className="bg-background text-foreground relative">
       {/* Floating cart that scrolls with content */}
@@ -240,7 +219,7 @@ const MainPage = () => {
         <div 
           className="absolute inset-0 pointer-events-none parallax-bg"
           style={{
-            background: `radial-gradient(circle at 50% ${getSpotlightY(heroRef)}%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
+            background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 60%)`,
             transform: `translateY(${scrollY * -0.15}px)`
           }}
         />
@@ -266,337 +245,102 @@ const MainPage = () => {
         </div>
       </section>
 
-      {/* Section 2: Product 1 - Sorona Quick Dry */}
-      {products[0] && (
-        <section 
-          id="product1"
-          ref={product1Ref}
-          className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-        >
-          <div 
-            className="absolute inset-0 pointer-events-none parallax-bg"
-            style={{
-              background: `radial-gradient(circle at 50% ${getSpotlightY(product1Ref)}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
-              transform: `translateY(${scrollY * -0.12}px)`
+      {/* Product Sections - Dynamically rendered */}
+      {products.map((product, index) => {
+        const isEven = index % 2 === 0;
+        const productId = `product${index + 1}`;
+        
+        return (
+          <section 
+            key={product.node.id}
+            id={productId}
+            ref={(el) => {
+              if (el) productRefs.current[index] = el as HTMLDivElement;
             }}
-          />
-          
-          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+            className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
+          >
             <div 
-              className="relative overflow-hidden product-hover-container ambient-shadow"
-              id="product-1"
-              onMouseEnter={() => setImageHover('product1')}
-              onMouseLeave={() => setImageHover(null)}
-            >
-              <div className="spotlight-sweep" style={{ animationDelay: '0s' }} />
-              <div className="spotlight-diagonal" style={{ animationDelay: '6s' }} />
-              <Link to={`/product/${products[0].node.handle}`}>
-                <img 
-                  src={products[0].node.images.edges[0]?.node.url || soronaImg}
-                  alt={products[0].node.title}
-                  className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
-                    visibleSections.product1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                  }`}
-                  style={{
-                    filter: imageHover === 'product1' ? 'brightness(1.12)' : 'brightness(1)',
-                    transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                />
-              </Link>
-              <div className="floating-label">Quick Dry</div>
-            </div>
+              className="absolute inset-0 pointer-events-none parallax-bg"
+              style={{
+                background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
+                transform: `translateY(${scrollY * -(0.12 - index * 0.01)}px)`
+              }}
+            />
             
-            <div className="space-y-8">
-              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
-                visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                {products[0].node.title}
-              </h3>
-              <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
-                visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                {products[0].node.description}
-              </p>
-
-              <div className={`transition-all duration-1000 ease-out delay-500 ${
-                visibleSections.product1 ? 'opacity-100' : 'opacity-0'
-              }`}>
-              <Collapsible
-                open={fabricOpen[products[0].node.id]} 
-                onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[0].node.id]: !prev[products[0].node.id] }))}
+            <div className={`container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10`}>
+              {/* Image Section */}
+              <div 
+                className={`relative overflow-hidden product-hover-container ambient-shadow ${!isEven ? 'order-2 lg:order-2' : 'order-1'}`}
+                id={`product-${index + 1}`}
+                onMouseEnter={() => setImageHover(productId)}
+                onMouseLeave={() => setImageHover(null)}
               >
-                <CollapsibleTrigger className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-accent transition-colors">
-                  Fabric Details
-                  <ChevronDown className={`h-4 w-4 transition-transform ${fabricOpen[products[0].node.id] ? 'rotate-180' : ''}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="mt-4 space-y-2 text-sm text-muted-foreground border-l-2 border-muted pl-4">
-                  <p>• Material: 73.31% cotton, 26.69% Sorona</p>
-                  <p>• Fabric Weight: 240 gsm (7.1 oz)</p>
-                  <p>• Thickness: Moderate</p>
-                  <p>• Breathability: High</p>
-                </CollapsibleContent>
-              </Collapsible>
-
+                <div className="spotlight-sweep" style={{ animationDelay: `${index * 2}s` }} />
+                <div className="spotlight-diagonal" style={{ animationDelay: `${6 + index * 2}s` }} />
+                <Link to={`/product/${product.node.handle}`}>
+                  <img 
+                    src={product.node.images.edges[0]?.node.url}
+                    alt={product.node.title}
+                    className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
+                      visibleSections[productId] ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                    }`}
+                    style={{
+                      filter: imageHover === productId ? 'brightness(1.12)' : 'brightness(1)',
+                      transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+                </Link>
               </div>
-
-              <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
-                visibleSections.product1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                <p className="text-3xl font-light tracking-wider">
-                  ${parseFloat(products[0].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[0].node.priceRange.minVariantPrice.currencyCode}
+              
+              {/* Content Section */}
+              <div className={`space-y-8 ${!isEven ? 'order-1 lg:order-1' : 'order-2'}`}>
+                <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
+                  visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                }`}>
+                  {product.node.title}
+                </h3>
+                <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
+                  visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                }`}>
+                  {product.node.description}
                 </p>
-                
-                <div className="flex gap-2 flex-wrap">
-                  {products[0].node.variants.edges.map((variant, idx) => (
-                    <button
-                      key={variant.node.id}
-                      onClick={() => setSelectedSizes(prev => ({ ...prev, [products[0].node.id]: idx }))}
-                      className={`size-button px-6 py-2 border transition-all duration-300 ${
-                        selectedSizes[products[0].node.id] === idx
-                          ? 'bg-foreground text-background active'
-                          : 'bg-transparent text-foreground hover:bg-foreground/10'
-                      }`}
-                    >
-                      {variant.node.title}
-                    </button>
-                  ))}
+
+                <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
+                  visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                }`}>
+                  <p className="text-3xl font-light tracking-wider">
+                    ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)} {product.node.priceRange.minVariantPrice.currencyCode}
+                  </p>
+                  
+                  <div className="flex gap-2 flex-wrap">
+                    {product.node.variants.edges.map((variant, idx) => (
+                      <button
+                        key={variant.node.id}
+                        onClick={() => setSelectedSizes(prev => ({ ...prev, [product.node.id]: idx }))}
+                        className={`size-button px-6 py-2 border transition-all duration-300 ${
+                          selectedSizes[product.node.id] === idx
+                            ? 'bg-foreground text-background active'
+                            : 'bg-transparent text-foreground hover:bg-foreground/10'
+                        }`}
+                      >
+                        {variant.node.title}
+                      </button>
+                    ))}
+                  </div>
+
+                  <Button
+                    onClick={() => handleAddToCart(product, `product-${index + 1}`)}
+                    size="lg"
+                    className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                  >
+                    ADD TO CART
+                  </Button>
                 </div>
-
-                <Button
-                  onClick={() => handleAddToCart(products[0], 'product-1')}
-                  size="lg"
-                  className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                >
-                  ADD TO CART
-                </Button>
               </div>
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* Section 3: Product 2 - Earthtone Heavyweight */}
-      {products[1] && (
-        <section 
-          id="product2"
-          ref={product2Ref}
-          className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-        >
-          <div 
-            className="absolute inset-0 pointer-events-none parallax-bg"
-            style={{
-              background: `radial-gradient(circle at 50% ${getSpotlightY(product2Ref)}%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
-              transform: `translateY(${scrollY * -0.1}px)`
-            }}
-          />
-          
-          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div className="space-y-8 order-2 lg:order-1">
-              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
-                visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                {products[1].node.title}
-              </h3>
-              <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
-                visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                {products[1].node.description}
-              </p>
-
-              <div className={`transition-all duration-1000 ease-out delay-500 ${
-                visibleSections.product2 ? 'opacity-100' : 'opacity-0'
-              }`}>
-              <Collapsible
-                open={fabricOpen[products[1].node.id]} 
-                onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[1].node.id]: !prev[products[1].node.id] }))}
-              >
-                <CollapsibleTrigger className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-accent transition-colors">
-                  Fabric Details
-                  <ChevronDown className={`h-4 w-4 transition-transform ${fabricOpen[products[1].node.id] ? 'rotate-180' : ''}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="mt-4 space-y-2 text-sm text-muted-foreground border-l-2 border-muted pl-4">
-                  <p>• 100% Premium Cotton</p>
-                  <p>• Heavyweight Construction</p>
-                  <p>• Earthtone Dyed</p>
-                  <p>• Durable & Long-lasting</p>
-                </CollapsibleContent>
-              </Collapsible>
-
-              </div>
-
-              <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
-                visibleSections.product2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                <p className="text-3xl font-light tracking-wider">
-                  ${parseFloat(products[1].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[1].node.priceRange.minVariantPrice.currencyCode}
-                </p>
-                
-                <div className="flex gap-2 flex-wrap">
-                  {products[1].node.variants.edges.map((variant, idx) => (
-                    <button
-                      key={variant.node.id}
-                      onClick={() => setSelectedSizes(prev => ({ ...prev, [products[1].node.id]: idx }))}
-                      className={`size-button px-6 py-2 border transition-all duration-300 ${
-                        selectedSizes[products[1].node.id] === idx
-                          ? 'bg-foreground text-background active'
-                          : 'bg-transparent text-foreground hover:bg-foreground/10'
-                      }`}
-                    >
-                      {variant.node.title}
-                    </button>
-                  ))}
-                </div>
-
-                <Button
-                  onClick={() => handleAddToCart(products[1], 'product-2')}
-                  size="lg"
-                  className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                >
-                  ADD TO CART
-                </Button>
-              </div>
-            </div>
-
-            <div 
-              className="relative order-1 lg:order-2 overflow-hidden product-hover-container ambient-shadow"
-              id="product-2"
-              onMouseEnter={() => setImageHover('product2')}
-              onMouseLeave={() => setImageHover(null)}
-            >
-              <div className="spotlight-vertical" style={{ animationDelay: '4s' }} />
-              <div className="spotlight-diagonal" style={{ animationDelay: '10s' }} />
-              <Link to={`/product/${products[1].node.handle}`}>
-                <img 
-                  src={products[1].node.images.edges[0]?.node.url || earthtoneImg}
-                  alt={products[1].node.title}
-                  className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
-                    visibleSections.product2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                  }`}
-                  style={{
-                    filter: imageHover === 'product2' ? 'brightness(1.12)' : 'brightness(1)',
-                    transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                />
-              </Link>
-              <div className="floating-label">Heavyweight</div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Section 4: Product 3 - Oversized Stitched */}
-      {products[2] && (
-        <section 
-          id="product3"
-          ref={product3Ref}
-          className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-        >
-          <div 
-            className="absolute inset-0 pointer-events-none parallax-bg"
-            style={{
-              background: `radial-gradient(circle at 50% ${getSpotlightY(product3Ref)}%, rgba(255,255,255,0.15) 0%, transparent 60%)`,
-              transform: `translateY(${scrollY * -0.08}px)`
-            }}
-          />
-          
-          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-            <div 
-              className="relative overflow-hidden product-hover-container ambient-shadow"
-              id="product-3"
-              onMouseEnter={() => setImageHover('product3')}
-              onMouseLeave={() => setImageHover(null)}
-            >
-              <div className="spotlight-sweep" style={{ animationDelay: '8s' }} />
-              <div className="spotlight-diagonal" style={{ animationDelay: '14s' }} />
-              <Link to={`/product/${products[2].node.handle}`}>
-                <img 
-                  src={products[2].node.images.edges[0]?.node.url || oversizedImg}
-                  alt={products[2].node.title}
-                  className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
-                    visibleSections.product3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                  }`}
-                  style={{
-                    filter: imageHover === 'product3' ? 'brightness(1.12)' : 'brightness(1)',
-                    transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
-                  }}
-                />
-              </Link>
-              <div className="floating-label">Oversized</div>
-            </div>
-            
-            <div className="space-y-8">
-              <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
-                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                {products[2].node.title}
-              </h3>
-              <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
-                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                Engineered for those who move with purpose.
-              </p>
-              <p className={`text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-500 ${
-                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                {products[2].node.description}
-              </p>
-
-              <div className={`transition-all duration-1000 ease-out delay-600 ${
-                visibleSections.product3 ? 'opacity-100' : 'opacity-0'
-              }`}>
-              <Collapsible
-                open={fabricOpen[products[2].node.id]} 
-                onOpenChange={() => setFabricOpen(prev => ({ ...prev, [products[2].node.id]: !prev[products[2].node.id] }))}
-              >
-                <CollapsibleTrigger className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-accent transition-colors">
-                  Fabric Details
-                  <ChevronDown className={`h-4 w-4 transition-transform ${fabricOpen[products[2].node.id] ? 'rotate-180' : ''}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="mt-4 space-y-2 text-sm text-muted-foreground border-l-2 border-muted pl-4">
-                  <p>• Oversized Fit</p>
-                  <p>• Premium Stitching Detail</p>
-                  <p>• High-Quality Cotton Blend</p>
-                  <p>• Statement Design</p>
-                </CollapsibleContent>
-              </Collapsible>
-
-              </div>
-
-              <div className={`space-y-4 transition-all duration-1000 ease-out delay-800 ${
-                visibleSections.product3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-              }`}>
-                <p className="text-3xl font-light tracking-wider">
-                  ${parseFloat(products[2].node.priceRange.minVariantPrice.amount).toFixed(2)} {products[2].node.priceRange.minVariantPrice.currencyCode}
-                </p>
-                
-                <div className="flex gap-2 flex-wrap">
-                  {products[2].node.variants.edges.map((variant, idx) => (
-                    <button
-                      key={variant.node.id}
-                      onClick={() => setSelectedSizes(prev => ({ ...prev, [products[2].node.id]: idx }))}
-                      className={`size-button px-6 py-2 border transition-all duration-300 ${
-                        selectedSizes[products[2].node.id] === idx
-                          ? 'bg-foreground text-background active'
-                          : 'bg-transparent text-foreground hover:bg-foreground/10'
-                      }`}
-                    >
-                      {variant.node.title}
-                    </button>
-                  ))}
-                </div>
-
-                <Button
-                  onClick={() => handleAddToCart(products[2], 'product-3')}
-                  size="lg"
-                  className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-                >
-                  ADD TO CART
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+          </section>
+        );
+      })}
 
       {/* Section 5: Brand Outro */}
       <section 
