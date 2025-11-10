@@ -109,7 +109,7 @@ export default function Product() {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 animate-fade-in">
-          {/* Images */}
+          {/* Images & Add to Cart */}
           <div className="space-y-6">
             {node.images.edges.map((image, idx) => (
               <div 
@@ -123,6 +123,14 @@ export default function Product() {
                 />
               </div>
             ))}
+            
+            <Button
+              onClick={handleAddToCart}
+              size="lg"
+              className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+            >
+              ADD TO CART
+            </Button>
           </div>
 
           {/* Product Details */}
@@ -164,14 +172,6 @@ export default function Product() {
                 </div>
               </div>
             )}
-
-            <Button
-              onClick={handleAddToCart}
-              size="lg"
-              className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
-            >
-              ADD TO CART
-            </Button>
 
             <div className="border-t border-foreground/20 pt-8 space-y-3 text-sm text-muted-foreground tracking-wide">
               <p>• 100% Cotton</p>
