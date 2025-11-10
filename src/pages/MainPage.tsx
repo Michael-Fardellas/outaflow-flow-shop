@@ -267,10 +267,10 @@ const MainPage = () => {
               }}
             />
             
-            <div className={`container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10`}>
+            <div className="container mx-auto px-4 max-w-4xl relative z-10">
               {/* Image Section */}
               <div 
-                className={`relative overflow-hidden product-hover-container ambient-shadow ${!isEven ? 'order-2 lg:order-2' : 'order-1'}`}
+                className="relative overflow-hidden product-hover-container ambient-shadow mb-8"
                 id={`product-${index + 1}`}
                 onMouseEnter={() => setImageHover(productId)}
                 onMouseLeave={() => setImageHover(null)}
@@ -293,7 +293,7 @@ const MainPage = () => {
               </div>
               
               {/* Content Section */}
-              <div className={`space-y-8 ${!isEven ? 'order-1 lg:order-1' : 'order-2'}`}>
+              <div className="space-y-8">
                 <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
                   visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                 }`}>
