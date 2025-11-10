@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { storefrontApiRequest, STOREFRONT_PRODUCT_BY_HANDLE_QUERY, ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { ArrowLeft, Loader2 } from "lucide-react";
+import { CartDrawer } from "@/components/CartDrawer";
 
 export default function Product() {
   const { handle } = useParams();
@@ -49,36 +49,41 @@ export default function Product() {
     };
     
     addItem(cartItem);
-    toast.success("Added to cart");
+    toast.success(`Added to Cart — ${product.node.title}`, {
+      duration: 2000,
+      position: "top-center",
+      style: {
+        background: 'rgba(0, 0, 0, 0.95)',
+        color: 'white',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+      }
+    });
   };
 
   if (loading) {
     return (
-      <>
-        <Header />
-        <div className="min-h-screen flex items-center justify-center pt-20">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-      </>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-foreground" />
+      </div>
     );
   }
 
   if (!product) {
     return (
-      <>
-        <Header />
-        <div className="min-h-screen flex items-center justify-center pt-20">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Product not found</h1>
-            <Link to="/">
-              <Button variant="outline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Shop
-              </Button>
-            </Link>
-          </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-6">
+          <h1 className="text-3xl font-light tracking-wider uppercase text-foreground">Product not found</h1>
+          <Link to="/mainpage">
+            <Button 
+              variant="outline"
+              className="border-foreground text-foreground hover:bg-foreground hover:text-background"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Shop
+            </Button>
+          </Link>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -86,77 +91,96 @@ export default function Product() {
   const price = parseFloat(node.variants.edges[selectedVariant].node.price.amount);
 
   return (
-    <>
-      <Header />
-      <main className="min-h-screen pt-20 pb-12">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center mb-8 hover:text-accent transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Link>
+    <div className="bg-background text-foreground min-h-screen">
+      {/* Floating cart */}
+      <div className="sticky top-4 z-40 px-4">
+        <div className="flex justify-end">
+          <CartDrawer />
+        </div>
+      </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-fade-in">
-            <div className="space-y-4">
-              {node.images.edges.map((image, idx) => (
-                <div key={idx} className="aspect-square bg-secondary overflow-hidden">
-                  <img
-                    src={image.node.url}
-                    alt={image.node.altText || node.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
+      <main className="container mx-auto px-4 py-12">
+        <Link 
+          to="/mainpage" 
+          className="inline-flex items-center mb-12 text-foreground hover:text-accent transition-all duration-300 tracking-wide"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          BACK
+        </Link>
 
-            <div className="space-y-6">
-              <h1 className="text-4xl font-bold uppercase tracking-wide">{node.title}</h1>
-              
-              <p className="text-2xl font-semibold">
-                ${price.toFixed(2)} {node.variants.edges[selectedVariant].node.price.currencyCode}
-              </p>
-
-              {node.description && (
-                <div className="prose prose-sm">
-                  <p className="text-muted-foreground">{node.description}</p>
-                </div>
-              )}
-
-              {node.options.length > 0 && node.options[0].values.length > 1 && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">
-                    {node.options[0].name}
-                  </label>
-                  <div className="flex gap-2 flex-wrap">
-                    {node.variants.edges.map((variant, idx) => (
-                      <Button
-                        key={variant.node.id}
-                        variant={selectedVariant === idx ? "default" : "outline"}
-                        onClick={() => setSelectedVariant(idx)}
-                      >
-                        {variant.node.title}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <Button
-                onClick={handleAddToCart}
-                size="lg"
-                className="w-full"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 animate-fade-in">
+          {/* Images */}
+          <div className="space-y-6">
+            {node.images.edges.map((image, idx) => (
+              <div 
+                key={idx} 
+                className="aspect-square bg-secondary/10 overflow-hidden relative group"
               >
-                Add to Cart
-              </Button>
-
-              <div className="border-t pt-6 space-y-2 text-sm text-muted-foreground">
-                <p>• 100% Cotton</p>
-                <p>• Baggy Fit</p>
-                <p>• High Quality Premium Fabric</p>
+                <img
+                  src={image.node.url}
+                  alt={image.node.altText || node.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
+            ))}
+          </div>
+
+          {/* Product Details */}
+          <div className="space-y-8">
+            <h1 className="text-5xl font-light uppercase tracking-wider text-reveal">
+              {node.title}
+            </h1>
+            
+            <p className="text-3xl font-light tracking-wider">
+              ${price.toFixed(2)} {node.variants.edges[selectedVariant].node.price.currencyCode}
+            </p>
+
+            {node.description && (
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {node.description}
+              </p>
+            )}
+
+            {/* Size Selection */}
+            {node.options.length > 0 && node.options[0].values.length > 1 && (
+              <div className="space-y-4">
+                <label className="text-sm uppercase tracking-widest text-muted-foreground">
+                  {node.options[0].name}
+                </label>
+                <div className="flex gap-2 flex-wrap">
+                  {node.variants.edges.map((variant, idx) => (
+                    <button
+                      key={variant.node.id}
+                      onClick={() => setSelectedVariant(idx)}
+                      className={`size-button px-6 py-2 border transition-all duration-300 ${
+                        selectedVariant === idx
+                          ? 'bg-foreground text-background active'
+                          : 'bg-transparent text-foreground hover:bg-foreground/10'
+                      }`}
+                    >
+                      {variant.node.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <Button
+              onClick={handleAddToCart}
+              size="lg"
+              className="w-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-500 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+            >
+              ADD TO CART
+            </Button>
+
+            <div className="border-t border-foreground/20 pt-8 space-y-3 text-sm text-muted-foreground tracking-wide">
+              <p>• 100% Cotton</p>
+              <p>• Baggy Fit</p>
+              <p>• High Quality Premium Fabric</p>
             </div>
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }
