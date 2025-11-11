@@ -16,6 +16,7 @@ const MainPage = () => {
   const [mounted, setMounted] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [progressBarColor, setProgressBarColor] = useState("white");
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
@@ -102,6 +103,31 @@ const MainPage = () => {
       const scrollTop = window.scrollY;
       const progress = (scrollTop / (documentHeight - windowHeight)) * 100;
       setScrollProgress(progress);
+      
+      // Determine which section we're in and set progress bar color
+      const sections = productRefs.current.filter(ref => ref !== null);
+      const viewportCenter = scrollTop + windowHeight / 2;
+      
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          const sectionTop = scrollTop + rect.top;
+          const sectionBottom = sectionTop + rect.height;
+          
+          if (viewportCenter >= sectionTop && viewportCenter < sectionBottom) {
+            const handle = products[i]?.node.handle || "";
+            if (handle.includes('butterfly')) {
+              setProgressBarColor('white');
+            } else if (handle.includes('helmet')) {
+              setProgressBarColor('gray');
+            } else if (handle.includes('fire') || handle.includes('love')) {
+              setProgressBarColor('blue');
+            }
+            break;
+          }
+        }
+      }
     };
     
     window.addEventListener("mousemove", handleMouseMove);
@@ -111,7 +137,7 @@ const MainPage = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [products]);
 
   const handleAddToCart = (product: ShopifyProduct, productId: string) => {
     const variantIndex = selectedSizes[product.node.id] || 0;
@@ -201,7 +227,20 @@ const MainPage = () => {
       <div className="scroll-progress-container">
         <div 
           className="scroll-progress-gradient" 
-          style={{ width: `${scrollProgress}%` }}
+          style={{ 
+            width: `${scrollProgress}%`,
+            background: progressBarColor === 'white' 
+              ? 'rgba(255,255,255,0.9)'
+              : progressBarColor === 'gray'
+                ? 'rgba(140,140,140,0.9)'
+                : 'rgba(70,130,200,0.9)',
+            transition: 'width 0.1s ease-out, background 0.6s ease-in-out',
+            boxShadow: progressBarColor === 'white'
+              ? '0 0 10px rgba(255,255,255,0.5)'
+              : progressBarColor === 'gray'
+                ? '0 0 10px rgba(140,140,140,0.5)'
+                : '0 0 10px rgba(70,130,200,0.5)'
+          }}
         />
       </div>
       
@@ -297,33 +336,52 @@ const MainPage = () => {
                 
                 {/* Floating butterfly silhouettes */}
                 <div className="absolute left-[10%] top-[15%] opacity-[0.15]">
-                  <svg width="60" height="60" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
-                    <ellipse cx="35" cy="30" rx="18" ry="25" transform="rotate(-20 35 30)" />
-                    <ellipse cx="65" cy="30" rx="18" ry="25" transform="rotate(20 65 30)" />
-                    <ellipse cx="30" cy="65" rx="15" ry="20" transform="rotate(-30 30 65)" />
-                    <ellipse cx="70" cy="65" rx="15" ry="20" transform="rotate(30 70 65)" />
-                    <rect x="48" y="20" width="4" height="60" rx="2" />
-                    <circle cx="50" cy="18" r="4" />
+                  <svg width="60" height="60" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
+                    {/* Left upper wing */}
+                    <path d="M 60 50 Q 30 20, 20 35 Q 15 45, 25 50 Q 35 52, 60 50 Z" />
+                    {/* Right upper wing */}
+                    <path d="M 60 50 Q 90 20, 100 35 Q 105 45, 95 50 Q 85 52, 60 50 Z" />
+                    {/* Left lower wing */}
+                    <path d="M 60 50 Q 35 70, 30 80 Q 28 88, 38 85 Q 48 80, 60 50 Z" />
+                    {/* Right lower wing */}
+                    <path d="M 60 50 Q 85 70, 90 80 Q 92 88, 82 85 Q 72 80, 60 50 Z" />
+                    {/* Body */}
+                    <ellipse cx="60" cy="50" rx="3" ry="30" fill="white" />
+                    {/* Head */}
+                    <circle cx="60" cy="35" r="4" fill="white" />
+                    {/* Antennae */}
+                    <path d="M 60 35 Q 56 25, 54 20" stroke="white" strokeWidth="1" fill="none" />
+                    <path d="M 60 35 Q 64 25, 66 20" stroke="white" strokeWidth="1" fill="none" />
+                    <circle cx="54" cy="20" r="1.5" fill="white" />
+                    <circle cx="66" cy="20" r="1.5" fill="white" />
                   </svg>
                 </div>
                 <div className="absolute right-[15%] top-[50%] opacity-[0.12]">
-                  <svg width="45" height="45" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
-                    <ellipse cx="35" cy="30" rx="18" ry="25" transform="rotate(-20 35 30)" />
-                    <ellipse cx="65" cy="30" rx="18" ry="25" transform="rotate(20 65 30)" />
-                    <ellipse cx="30" cy="65" rx="15" ry="20" transform="rotate(-30 30 65)" />
-                    <ellipse cx="70" cy="65" rx="15" ry="20" transform="rotate(30 70 65)" />
-                    <rect x="48" y="20" width="4" height="60" rx="2" />
-                    <circle cx="50" cy="18" r="4" />
+                  <svg width="45" height="45" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
+                    <path d="M 60 50 Q 30 20, 20 35 Q 15 45, 25 50 Q 35 52, 60 50 Z" />
+                    <path d="M 60 50 Q 90 20, 100 35 Q 105 45, 95 50 Q 85 52, 60 50 Z" />
+                    <path d="M 60 50 Q 35 70, 30 80 Q 28 88, 38 85 Q 48 80, 60 50 Z" />
+                    <path d="M 60 50 Q 85 70, 90 80 Q 92 88, 82 85 Q 72 80, 60 50 Z" />
+                    <ellipse cx="60" cy="50" rx="3" ry="30" fill="white" />
+                    <circle cx="60" cy="35" r="4" fill="white" />
+                    <path d="M 60 35 Q 56 25, 54 20" stroke="white" strokeWidth="1" fill="none" />
+                    <path d="M 60 35 Q 64 25, 66 20" stroke="white" strokeWidth="1" fill="none" />
+                    <circle cx="54" cy="20" r="1.5" fill="white" />
+                    <circle cx="66" cy="20" r="1.5" fill="white" />
                   </svg>
                 </div>
                 <div className="absolute left-[70%] top-[70%] opacity-[0.10]">
-                  <svg width="50" height="50" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
-                    <ellipse cx="35" cy="30" rx="18" ry="25" transform="rotate(-20 35 30)" />
-                    <ellipse cx="65" cy="30" rx="18" ry="25" transform="rotate(20 65 30)" />
-                    <ellipse cx="30" cy="65" rx="15" ry="20" transform="rotate(-30 30 65)" />
-                    <ellipse cx="70" cy="65" rx="15" ry="20" transform="rotate(30 70 65)" />
-                    <rect x="48" y="20" width="4" height="60" rx="2" />
-                    <circle cx="50" cy="18" r="4" />
+                  <svg width="50" height="50" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
+                    <path d="M 60 50 Q 30 20, 20 35 Q 15 45, 25 50 Q 35 52, 60 50 Z" />
+                    <path d="M 60 50 Q 90 20, 100 35 Q 105 45, 95 50 Q 85 52, 60 50 Z" />
+                    <path d="M 60 50 Q 35 70, 30 80 Q 28 88, 38 85 Q 48 80, 60 50 Z" />
+                    <path d="M 60 50 Q 85 70, 90 80 Q 92 88, 82 85 Q 72 80, 60 50 Z" />
+                    <ellipse cx="60" cy="50" rx="3" ry="30" fill="white" />
+                    <circle cx="60" cy="35" r="4" fill="white" />
+                    <path d="M 60 35 Q 56 25, 54 20" stroke="white" strokeWidth="1" fill="none" />
+                    <path d="M 60 35 Q 64 25, 66 20" stroke="white" strokeWidth="1" fill="none" />
+                    <circle cx="54" cy="20" r="1.5" fill="white" />
+                    <circle cx="66" cy="20" r="1.5" fill="white" />
                   </svg>
                 </div>
               </>
