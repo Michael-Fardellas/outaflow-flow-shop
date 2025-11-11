@@ -234,7 +234,7 @@ const MainPage = () => {
               : progressBarColor === 'gray'
                 ? 'rgba(140,140,140,0.95)'
                 : 'rgba(70,130,200,0.95)',
-            transition: 'width 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transition: 'width 0.6s linear, background 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             boxShadow: progressBarColor === 'white'
               ? '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4), 0 0 60px rgba(255,255,255,0.2)'
               : progressBarColor === 'gray'
