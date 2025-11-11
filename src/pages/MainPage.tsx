@@ -268,32 +268,31 @@ const MainPage = () => {
             {/* Background effects per product */}
             {isButterfly && (
               <>
-                {/* Gallery plinth - refined positioning */}
+                {/* Soft vertical light beam - no solid panel */}
                 <div 
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] max-w-3xl aspect-[3/4]"
+                  className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-full opacity-[0.08]"
                   style={{
-                    background: 'linear-gradient(180deg, hsl(0, 0%, 98%) 0%, hsl(0, 0%, 96%) 100%)',
-                    boxShadow: '0 30px 90px rgba(0, 0, 0, 0.5), 0 10px 40px rgba(0, 0, 0, 0.3)',
-                    zIndex: 1
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)',
+                    filter: 'blur(60px)',
                   }}
                 />
                 
-                {/* Subtle floral shadows - very faint */}
+                {/* Floating particle accents */}
                 <div 
-                  className="absolute left-[5%] top-1/2 -translate-y-1/2 w-32 h-48 opacity-[0.03]"
+                  className="absolute left-[15%] top-[20%] w-24 h-32 opacity-[0.04]"
                   style={{
-                    background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 60%)',
-                    filter: 'blur(30px)',
-                    animation: 'float-vertical 18s ease-in-out infinite'
+                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 60%)',
+                    filter: 'blur(20px)',
+                    animation: 'float-vertical 20s ease-in-out infinite'
                   }}
                 />
                 <div 
-                  className="absolute right-[5%] top-1/2 -translate-y-1/2 w-32 h-48 opacity-[0.03]"
+                  className="absolute right-[15%] top-[60%] w-24 h-32 opacity-[0.04]"
                   style={{
-                    background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 60%)',
-                    filter: 'blur(30px)',
-                    animation: 'float-vertical 18s ease-in-out infinite',
-                    animationDelay: '-9s'
+                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 60%)',
+                    filter: 'blur(20px)',
+                    animation: 'float-vertical 20s ease-in-out infinite',
+                    animationDelay: '-10s'
                   }}
                 />
               </>
@@ -344,7 +343,7 @@ const MainPage = () => {
                     boxShadow: imageHover === productId && isButterfly ? `0 0 40px rgba(255,255,255,0.4)` : undefined,
                     transition: 'box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
                     position: 'relative',
-                    zIndex: isButterfly ? 10 : 1
+                    zIndex: 1
                   }}
                 >
                   {isButterfly && (
