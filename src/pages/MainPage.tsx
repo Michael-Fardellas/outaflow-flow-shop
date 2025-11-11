@@ -355,6 +355,13 @@ const MainPage = () => {
                   }}
                 />
                 <div className="diagonal-beam" />
+                {/* Gradient fade to black at bottom */}
+                <div 
+                  className="absolute bottom-0 left-0 right-0 h-[40vh] pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,1) 100%)'
+                  }}
+                />
               </>
             )}
             
