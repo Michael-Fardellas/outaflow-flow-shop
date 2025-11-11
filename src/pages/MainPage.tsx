@@ -307,10 +307,20 @@ const MainPage = () => {
             
             {isLovesGone && (
               <>
+                {/* Stronger blue radial glow */}
                 <div 
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(30, 60, 100, 0.1) 0%, transparent 70%)'
+                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(70, 130, 200, 0.18) 0%, transparent 70%)',
+                    filter: 'blur(40px)'
+                  }}
+                />
+                {/* Pulsing blue background layer */}
+                <div 
+                  className="absolute inset-0 pointer-events-none opacity-60"
+                  style={{
+                    background: 'radial-gradient(circle at 50% 50%, rgba(70, 130, 200, 0.15) 0%, rgba(30, 60, 100, 0.08) 50%, transparent 80%)',
+                    animation: 'blue-glow-pulse 10s ease-in-out infinite'
                   }}
                 />
                 <div className="diagonal-beam" />
@@ -340,7 +350,11 @@ const MainPage = () => {
                     }
                   }}
                   style={{
-                    boxShadow: imageHover === productId && isButterfly ? `0 0 40px rgba(255,255,255,0.4)` : undefined,
+                    boxShadow: imageHover === productId && isButterfly 
+                      ? `0 0 40px rgba(255,255,255,0.4)` 
+                      : isLovesGone 
+                        ? `0 20px 60px rgba(70, 130, 200, 0.5), 0 0 80px rgba(70, 130, 200, 0.3)`
+                        : undefined,
                     transition: 'box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
                     position: 'relative',
                     zIndex: 1
