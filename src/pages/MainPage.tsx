@@ -293,24 +293,22 @@ const MainPage = () => {
                   }}
                 />
                 
-                {/* Floating particle accents */}
-                <div 
-                  className="absolute left-[15%] top-[20%] w-24 h-32 opacity-[0.06]"
-                  style={{
-                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 60%)',
-                    filter: 'blur(20px)',
-                    animation: 'float-vertical 20s ease-in-out infinite'
-                  }}
-                />
-                <div 
-                  className="absolute right-[15%] top-[60%] w-24 h-32 opacity-[0.06]"
-                  style={{
-                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 60%)',
-                    filter: 'blur(20px)',
-                    animation: 'float-vertical 20s ease-in-out infinite',
-                    animationDelay: '-10s'
-                  }}
-                />
+                {/* Floating butterfly silhouettes */}
+                <div className="absolute left-[10%] top-[15%] opacity-[0.04]">
+                  <svg width="60" height="60" viewBox="0 0 60 60" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
+                    <path d="M30,25 Q35,15 40,20 Q45,25 40,30 Q35,32 30,30 M30,25 Q25,15 20,20 Q15,25 20,30 Q25,32 30,30 M30,30 Q35,40 40,45 Q45,50 40,52 Q35,50 30,45 M30,30 Q25,40 20,45 Q15,50 20,52 Q25,50 30,45" />
+                  </svg>
+                </div>
+                <div className="absolute right-[15%] top-[50%] opacity-[0.03]">
+                  <svg width="45" height="45" viewBox="0 0 60 60" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
+                    <path d="M30,25 Q35,15 40,20 Q45,25 40,30 Q35,32 30,30 M30,25 Q25,15 20,20 Q15,25 20,30 Q25,32 30,30 M30,30 Q35,40 40,45 Q45,50 40,52 Q35,50 30,45 M30,30 Q25,40 20,45 Q15,50 20,52 Q25,50 30,45" />
+                  </svg>
+                </div>
+                <div className="absolute left-[70%] top-[70%] opacity-[0.03]">
+                  <svg width="50" height="50" viewBox="0 0 60 60" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
+                    <path d="M30,25 Q35,15 40,20 Q45,25 40,30 Q35,32 30,30 M30,25 Q25,15 20,20 Q15,25 20,30 Q25,32 30,30 M30,30 Q35,40 40,45 Q45,50 40,52 Q35,50 30,45 M30,30 Q25,40 20,45 Q15,50 20,52 Q25,50 30,45" />
+                  </svg>
+                </div>
               </>
             )}
             
@@ -333,6 +331,35 @@ const MainPage = () => {
                 />
                 <div className="tunnel-light" />
                 <div className="smoke-band" />
+                
+                {/* Floating flower petals */}
+                <div className="absolute right-[12%] top-[20%] opacity-[0.05]">
+                  <svg width="35" height="35" viewBox="0 0 50 50" fill="white" style={{ animation: 'float 14s ease-in-out infinite', filter: 'blur(0.5px)' }}>
+                    <circle cx="25" cy="15" r="6" />
+                    <circle cx="35" cy="25" r="6" />
+                    <circle cx="25" cy="35" r="6" />
+                    <circle cx="15" cy="25" r="6" />
+                    <circle cx="25" cy="25" r="4" />
+                  </svg>
+                </div>
+                <div className="absolute left-[18%] top-[65%] opacity-[0.04]">
+                  <svg width="30" height="30" viewBox="0 0 50 50" fill="white" style={{ animation: 'float 16s ease-in-out infinite', animationDelay: '-7s', filter: 'blur(0.5px)' }}>
+                    <circle cx="25" cy="15" r="6" />
+                    <circle cx="35" cy="25" r="6" />
+                    <circle cx="25" cy="35" r="6" />
+                    <circle cx="15" cy="25" r="6" />
+                    <circle cx="25" cy="25" r="4" />
+                  </svg>
+                </div>
+                <div className="absolute right-[75%] top-[40%] opacity-[0.03]">
+                  <svg width="40" height="40" viewBox="0 0 50 50" fill="white" style={{ animation: 'float 20s ease-in-out infinite', animationDelay: '-12s', filter: 'blur(0.5px)' }}>
+                    <circle cx="25" cy="15" r="6" />
+                    <circle cx="35" cy="25" r="6" />
+                    <circle cx="25" cy="35" r="6" />
+                    <circle cx="15" cy="25" r="6" />
+                    <circle cx="25" cy="25" r="4" />
+                  </svg>
+                </div>
               </>
             )}
             
@@ -362,6 +389,26 @@ const MainPage = () => {
                     background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,1) 100%)'
                   }}
                 />
+                
+                {/* Broken heart elements */}
+                <div className="absolute left-[15%] top-[25%] opacity-[0.06]">
+                  <svg width="50" height="50" viewBox="0 0 60 60" fill="rgb(70,130,200)" style={{ animation: 'float 13s ease-in-out infinite' }}>
+                    <path d="M30,50 L18,35 Q10,25 15,15 Q20,10 25,15 L30,20" />
+                    <path d="M30,20 L35,15 Q40,10 45,15 Q50,25 42,35 L30,50" style={{ transform: 'translateX(3px)', opacity: 0.7 }} />
+                  </svg>
+                </div>
+                <div className="absolute right-[10%] top-[60%] opacity-[0.05]">
+                  <svg width="40" height="40" viewBox="0 0 60 60" fill="rgb(70,130,200)" style={{ animation: 'float 17s ease-in-out infinite', animationDelay: '-8s' }}>
+                    <path d="M30,50 L18,35 Q10,25 15,15 Q20,10 25,15 L30,20" />
+                    <path d="M30,20 L35,15 Q40,10 45,15 Q50,25 42,35 L30,50" style={{ transform: 'translateX(3px)', opacity: 0.7 }} />
+                  </svg>
+                </div>
+                <div className="absolute left-[75%] top-[40%] opacity-[0.04]">
+                  <svg width="35" height="35" viewBox="0 0 60 60" fill="rgb(70,130,200)" style={{ animation: 'float 20s ease-in-out infinite', animationDelay: '-15s' }}>
+                    <path d="M30,50 L18,35 Q10,25 15,15 Q20,10 25,15 L30,20" />
+                    <path d="M30,20 L35,15 Q40,10 45,15 Q50,25 42,35 L30,50" style={{ transform: 'translateX(3px)', opacity: 0.7 }} />
+                  </svg>
+                </div>
               </>
             )}
             
