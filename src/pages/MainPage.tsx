@@ -268,28 +268,44 @@ const MainPage = () => {
             {/* Background effects per product */}
             {isButterfly && (
               <>
-                {/* Soft vertical light beam - no solid panel */}
+                {/* Enhanced white radial glow */}
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 70%)',
+                    filter: 'blur(50px)'
+                  }}
+                />
+                {/* Pulsing white background layer */}
+                <div 
+                  className="absolute inset-0 pointer-events-none opacity-50"
+                  style={{
+                    background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, rgba(200,200,200,0.05) 50%, transparent 80%)',
+                    animation: 'breathe 8s ease-in-out infinite'
+                  }}
+                />
+                {/* Soft vertical light beam */}
                 <div 
                   className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-full opacity-[0.08]"
                   style={{
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, transparent 100%)',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.08) 50%, transparent 100%)',
                     filter: 'blur(60px)',
                   }}
                 />
                 
                 {/* Floating particle accents */}
                 <div 
-                  className="absolute left-[15%] top-[20%] w-24 h-32 opacity-[0.04]"
+                  className="absolute left-[15%] top-[20%] w-24 h-32 opacity-[0.06]"
                   style={{
-                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 60%)',
+                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 60%)',
                     filter: 'blur(20px)',
                     animation: 'float-vertical 20s ease-in-out infinite'
                   }}
                 />
                 <div 
-                  className="absolute right-[15%] top-[60%] w-24 h-32 opacity-[0.04]"
+                  className="absolute right-[15%] top-[60%] w-24 h-32 opacity-[0.06]"
                   style={{
-                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.5) 0%, transparent 60%)',
+                    background: 'radial-gradient(ellipse, rgba(255,255,255,0.6) 0%, transparent 60%)',
                     filter: 'blur(20px)',
                     animation: 'float-vertical 20s ease-in-out infinite',
                     animationDelay: '-10s'
@@ -300,6 +316,21 @@ const MainPage = () => {
             
             {isHelmet && (
               <>
+                {/* Gray atmospheric glow matching helmet graphic */}
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(140,140,140,0.12) 0%, transparent 70%)',
+                    filter: 'blur(50px)'
+                  }}
+                />
+                {/* Cold gray layer */}
+                <div 
+                  className="absolute inset-0 pointer-events-none opacity-40"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(80,80,80,0.15) 0%, rgba(40,40,40,0.08) 50%, transparent 100%)',
+                  }}
+                />
                 <div className="tunnel-light" />
                 <div className="smoke-band" />
               </>
@@ -351,7 +382,9 @@ const MainPage = () => {
                   }}
                   style={{
                     boxShadow: imageHover === productId && isButterfly 
-                      ? `0 0 40px rgba(255,255,255,0.4)` 
+                      ? `0 0 60px rgba(255,255,255,0.5), 0 20px 80px rgba(255,255,255,0.3)` 
+                      : isHelmet
+                        ? `0 20px 60px rgba(140,140,140,0.4), 0 0 80px rgba(100,100,100,0.25)`
                       : isLovesGone 
                         ? `0 20px 60px rgba(70, 130, 200, 0.5), 0 0 80px rgba(70, 130, 200, 0.3)`
                         : undefined,
