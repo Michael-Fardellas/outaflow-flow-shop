@@ -197,11 +197,13 @@ const MainPage = () => {
           <CartDrawer />
         </div>
       </div>
-      {/* Scroll progress bar */}
-      <div 
-        className="scroll-progress" 
-        style={{ width: `${scrollProgress}%` }}
-      />
+      {/* Scroll progress bar with gradient */}
+      <div className="scroll-progress-container">
+        <div 
+          className="scroll-progress-gradient" 
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
       
       {mounted && (
         <div 
@@ -295,18 +297,33 @@ const MainPage = () => {
                 
                 {/* Floating butterfly silhouettes */}
                 <div className="absolute left-[10%] top-[15%] opacity-[0.15]">
-                  <svg width="60" height="60" viewBox="0 0 60 60" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
-                    <path d="M30,25 Q35,15 40,20 Q45,25 40,30 Q35,32 30,30 M30,25 Q25,15 20,20 Q15,25 20,30 Q25,32 30,30 M30,30 Q35,40 40,45 Q45,50 40,52 Q35,50 30,45 M30,30 Q25,40 20,45 Q15,50 20,52 Q25,50 30,45" />
+                  <svg width="60" height="60" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
+                    <ellipse cx="35" cy="30" rx="18" ry="25" transform="rotate(-20 35 30)" />
+                    <ellipse cx="65" cy="30" rx="18" ry="25" transform="rotate(20 65 30)" />
+                    <ellipse cx="30" cy="65" rx="15" ry="20" transform="rotate(-30 30 65)" />
+                    <ellipse cx="70" cy="65" rx="15" ry="20" transform="rotate(30 70 65)" />
+                    <rect x="48" y="20" width="4" height="60" rx="2" />
+                    <circle cx="50" cy="18" r="4" />
                   </svg>
                 </div>
                 <div className="absolute right-[15%] top-[50%] opacity-[0.12]">
-                  <svg width="45" height="45" viewBox="0 0 60 60" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
-                    <path d="M30,25 Q35,15 40,20 Q45,25 40,30 Q35,32 30,30 M30,25 Q25,15 20,20 Q15,25 20,30 Q25,32 30,30 M30,30 Q35,40 40,45 Q45,50 40,52 Q35,50 30,45 M30,30 Q25,40 20,45 Q15,50 20,52 Q25,50 30,45" />
+                  <svg width="45" height="45" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
+                    <ellipse cx="35" cy="30" rx="18" ry="25" transform="rotate(-20 35 30)" />
+                    <ellipse cx="65" cy="30" rx="18" ry="25" transform="rotate(20 65 30)" />
+                    <ellipse cx="30" cy="65" rx="15" ry="20" transform="rotate(-30 30 65)" />
+                    <ellipse cx="70" cy="65" rx="15" ry="20" transform="rotate(30 70 65)" />
+                    <rect x="48" y="20" width="4" height="60" rx="2" />
+                    <circle cx="50" cy="18" r="4" />
                   </svg>
                 </div>
                 <div className="absolute left-[70%] top-[70%] opacity-[0.10]">
-                  <svg width="50" height="50" viewBox="0 0 60 60" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
-                    <path d="M30,25 Q35,15 40,20 Q45,25 40,30 Q35,32 30,30 M30,25 Q25,15 20,20 Q15,25 20,30 Q25,32 30,30 M30,30 Q35,40 40,45 Q45,50 40,52 Q35,50 30,45 M30,30 Q25,40 20,45 Q15,50 20,52 Q25,50 30,45" />
+                  <svg width="50" height="50" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
+                    <ellipse cx="35" cy="30" rx="18" ry="25" transform="rotate(-20 35 30)" />
+                    <ellipse cx="65" cy="30" rx="18" ry="25" transform="rotate(20 65 30)" />
+                    <ellipse cx="30" cy="65" rx="15" ry="20" transform="rotate(-30 30 65)" />
+                    <ellipse cx="70" cy="65" rx="15" ry="20" transform="rotate(30 70 65)" />
+                    <rect x="48" y="20" width="4" height="60" rx="2" />
+                    <circle cx="50" cy="18" r="4" />
                   </svg>
                 </div>
               </>
@@ -334,30 +351,33 @@ const MainPage = () => {
                 
                 {/* Floating flower petals */}
                 <div className="absolute right-[12%] top-[20%] opacity-[0.18]">
-                  <svg width="35" height="35" viewBox="0 0 50 50" fill="white" style={{ animation: 'float 14s ease-in-out infinite', filter: 'blur(0.5px)' }}>
-                    <circle cx="25" cy="15" r="6" />
-                    <circle cx="35" cy="25" r="6" />
-                    <circle cx="25" cy="35" r="6" />
-                    <circle cx="15" cy="25" r="6" />
-                    <circle cx="25" cy="25" r="4" />
+                  <svg width="35" height="35" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 14s ease-in-out infinite', filter: 'blur(0.5px)' }}>
+                    <ellipse cx="50" cy="20" rx="12" ry="18" />
+                    <ellipse cx="75" cy="40" rx="12" ry="18" transform="rotate(72 75 40)" />
+                    <ellipse cx="65" cy="72" rx="12" ry="18" transform="rotate(144 65 72)" />
+                    <ellipse cx="35" cy="72" rx="12" ry="18" transform="rotate(216 35 72)" />
+                    <ellipse cx="25" cy="40" rx="12" ry="18" transform="rotate(288 25 40)" />
+                    <circle cx="50" cy="50" r="10" fill="rgba(255,255,255,0.8)" />
                   </svg>
                 </div>
                 <div className="absolute left-[18%] top-[65%] opacity-[0.15]">
-                  <svg width="30" height="30" viewBox="0 0 50 50" fill="white" style={{ animation: 'float 16s ease-in-out infinite', animationDelay: '-7s', filter: 'blur(0.5px)' }}>
-                    <circle cx="25" cy="15" r="6" />
-                    <circle cx="35" cy="25" r="6" />
-                    <circle cx="25" cy="35" r="6" />
-                    <circle cx="15" cy="25" r="6" />
-                    <circle cx="25" cy="25" r="4" />
+                  <svg width="30" height="30" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 16s ease-in-out infinite', animationDelay: '-7s', filter: 'blur(0.5px)' }}>
+                    <ellipse cx="50" cy="20" rx="12" ry="18" />
+                    <ellipse cx="75" cy="40" rx="12" ry="18" transform="rotate(72 75 40)" />
+                    <ellipse cx="65" cy="72" rx="12" ry="18" transform="rotate(144 65 72)" />
+                    <ellipse cx="35" cy="72" rx="12" ry="18" transform="rotate(216 35 72)" />
+                    <ellipse cx="25" cy="40" rx="12" ry="18" transform="rotate(288 25 40)" />
+                    <circle cx="50" cy="50" r="10" fill="rgba(255,255,255,0.8)" />
                   </svg>
                 </div>
                 <div className="absolute right-[75%] top-[40%] opacity-[0.12]">
-                  <svg width="40" height="40" viewBox="0 0 50 50" fill="white" style={{ animation: 'float 20s ease-in-out infinite', animationDelay: '-12s', filter: 'blur(0.5px)' }}>
-                    <circle cx="25" cy="15" r="6" />
-                    <circle cx="35" cy="25" r="6" />
-                    <circle cx="25" cy="35" r="6" />
-                    <circle cx="15" cy="25" r="6" />
-                    <circle cx="25" cy="25" r="4" />
+                  <svg width="40" height="40" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 20s ease-in-out infinite', animationDelay: '-12s', filter: 'blur(0.5px)' }}>
+                    <ellipse cx="50" cy="20" rx="12" ry="18" />
+                    <ellipse cx="75" cy="40" rx="12" ry="18" transform="rotate(72 75 40)" />
+                    <ellipse cx="65" cy="72" rx="12" ry="18" transform="rotate(144 65 72)" />
+                    <ellipse cx="35" cy="72" rx="12" ry="18" transform="rotate(216 35 72)" />
+                    <ellipse cx="25" cy="40" rx="12" ry="18" transform="rotate(288 25 40)" />
+                    <circle cx="50" cy="50" r="10" fill="rgba(255,255,255,0.8)" />
                   </svg>
                 </div>
               </>
