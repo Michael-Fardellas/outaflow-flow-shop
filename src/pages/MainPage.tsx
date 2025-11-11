@@ -230,16 +230,16 @@ const MainPage = () => {
           style={{ 
             width: `${scrollProgress}%`,
             background: progressBarColor === 'white' 
-              ? 'rgba(255,255,255,0.9)'
+              ? 'rgba(255,255,255,0.95)'
               : progressBarColor === 'gray'
-                ? 'rgba(140,140,140,0.9)'
-                : 'rgba(70,130,200,0.9)',
-            transition: 'width 0.1s ease-out, background 0.6s ease-in-out',
+                ? 'rgba(140,140,140,0.95)'
+                : 'rgba(70,130,200,0.95)',
+            transition: 'width 0.05s cubic-bezier(0.4, 0, 0.2, 1), background 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
             boxShadow: progressBarColor === 'white'
-              ? '0 0 10px rgba(255,255,255,0.5)'
+              ? '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4), 0 0 60px rgba(255,255,255,0.2)'
               : progressBarColor === 'gray'
-                ? '0 0 10px rgba(140,140,140,0.5)'
-                : '0 0 10px rgba(70,130,200,0.5)'
+                ? '0 0 20px rgba(140,140,140,0.8), 0 0 40px rgba(140,140,140,0.4), 0 0 60px rgba(140,140,140,0.2)'
+                : '0 0 20px rgba(70,130,200,0.9), 0 0 40px rgba(70,130,200,0.5), 0 0 60px rgba(70,130,200,0.3)'
           }}
         />
       </div>
