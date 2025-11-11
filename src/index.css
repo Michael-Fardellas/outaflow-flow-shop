@@ -356,6 +356,22 @@ All colors MUST be HSL.
     animation: product-glow 0.6s ease-out;
   }
 
+  /* Blue glow pulse for Love's Gone section */
+  @keyframes blue-glow-pulse {
+    0%, 100% { 
+      box-shadow: 0 0 0 rgba(70, 130, 200, 0);
+      filter: brightness(1);
+    }
+    50% { 
+      box-shadow: 0 0 40px rgba(70, 130, 200, 0.25);
+      filter: brightness(1.05);
+    }
+  }
+
+  .blue-glow-pulse {
+    animation: blue-glow-pulse 10s ease-in-out infinite;
+  }
+
   /* Ambient shadows */
   .ambient-shadow {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 10px 30px rgba(0, 0, 0, 0.6);

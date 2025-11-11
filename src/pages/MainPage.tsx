@@ -247,8 +247,42 @@ const MainPage = () => {
 
       {/* Product Sections - Dynamically rendered */}
       {products.map((product, index) => {
-        const isEven = index % 2 === 0;
         const productId = `product${index + 1}`;
+        const handle = product.node.handle;
+        
+        // Define taglines and visual themes per product
+        const getProductTheme = () => {
+          if (handle.includes('butterfly')) {
+            return {
+              tagline: "Rebellion in Bloom.",
+              bgGradient: 'radial-gradient(ellipse 40% 80% at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)',
+              glowColor: 'rgba(255,255,255,0.4)',
+              spotlightDelay: index * 2
+            };
+          } else if (handle.includes('helmet')) {
+            return {
+              tagline: "Built for Momentum.",
+              bgGradient: 'linear-gradient(180deg, rgba(40,40,40,0.3) 0%, rgba(0,0,0,0) 100%)',
+              glowColor: 'rgba(200,200,200,0.3)',
+              spotlightDelay: index * 2
+            };
+          } else if (handle.includes('fire') || handle.includes('love')) {
+            return {
+              tagline: "Love fades. Style stays.",
+              bgGradient: 'radial-gradient(ellipse 50% 70% at 50% 50%, rgba(30,60,100,0.08) 0%, transparent 70%)',
+              glowColor: 'rgba(70,130,200,0.25)',
+              spotlightDelay: index * 2
+            };
+          }
+          return {
+            tagline: "",
+            bgGradient: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 70%)',
+            glowColor: 'rgba(255,255,255,0.3)',
+            spotlightDelay: index * 2
+          };
+        };
+
+        const theme = getProductTheme();
         
         return (
           <section 
@@ -262,7 +296,7 @@ const MainPage = () => {
             <div 
               className="absolute inset-0 pointer-events-none parallax-bg"
               style={{
-                background: `radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 70%)`,
+                background: theme.bgGradient,
                 transform: `translateY(${scrollY * -(0.12 - index * 0.01)}px)`
               }}
             />
@@ -270,13 +304,19 @@ const MainPage = () => {
             <div className="container mx-auto px-4 max-w-4xl relative z-10">
               {/* Image Section */}
               <div 
-                className="relative overflow-hidden product-hover-container ambient-shadow mb-8"
+                className={`relative overflow-hidden product-hover-container ambient-shadow mb-8 ${
+                  handle.includes('fire') || handle.includes('love') ? 'blue-glow-pulse' : ''
+                }`}
                 id={`product-${index + 1}`}
                 onMouseEnter={() => setImageHover(productId)}
                 onMouseLeave={() => setImageHover(null)}
+                style={{
+                  boxShadow: imageHover === productId ? `0 0 40px ${theme.glowColor}` : undefined,
+                  transition: 'box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
               >
-                <div className="spotlight-sweep" style={{ animationDelay: `${index * 2}s` }} />
-                <div className="spotlight-diagonal" style={{ animationDelay: `${6 + index * 2}s` }} />
+                <div className="spotlight-sweep" style={{ animationDelay: `${theme.spotlightDelay}s` }} />
+                <div className="spotlight-diagonal" style={{ animationDelay: `${6 + theme.spotlightDelay}s` }} />
                 <Link to={`/product/${product.node.handle}`}>
                   <img 
                     src={product.node.images.edges[0]?.node.url}
@@ -294,11 +334,20 @@ const MainPage = () => {
               
               {/* Content Section */}
               <div className="space-y-8">
-                <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
-                  visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-                }`}>
-                  {product.node.title}
-                </h3>
+                <div>
+                  <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
+                    visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                  }`}>
+                    {product.node.title}
+                  </h3>
+                  {theme.tagline && (
+                    <p className={`text-sm tracking-widest text-muted-foreground mt-2 italic transition-all duration-1000 ease-out delay-300 ${
+                      visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                    }`}>
+                      {theme.tagline}
+                    </p>
+                  )}
+                </div>
                 <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
                   visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                 }`}>
