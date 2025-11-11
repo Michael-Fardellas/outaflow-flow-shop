@@ -337,51 +337,51 @@ const MainPage = () => {
                 {/* Floating butterfly silhouettes */}
                 <div className="absolute left-[10%] top-[15%] opacity-[0.15]">
                   <svg width="60" height="60" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
-                    {/* Left upper wing */}
-                    <path d="M 60 50 Q 30 20, 20 35 Q 15 45, 25 50 Q 35 52, 60 50 Z" />
-                    {/* Right upper wing */}
-                    <path d="M 60 50 Q 90 20, 100 35 Q 105 45, 95 50 Q 85 52, 60 50 Z" />
-                    {/* Left lower wing */}
-                    <path d="M 60 50 Q 35 70, 30 80 Q 28 88, 38 85 Q 48 80, 60 50 Z" />
-                    {/* Right lower wing */}
-                    <path d="M 60 50 Q 85 70, 90 80 Q 92 88, 82 85 Q 72 80, 60 50 Z" />
+                    {/* Left upper wing - thicker */}
+                    <path d="M 60 50 Q 25 15, 12 35 Q 8 50, 20 55 Q 38 58, 60 50 Z" />
+                    {/* Right upper wing - thicker */}
+                    <path d="M 60 50 Q 95 15, 108 35 Q 112 50, 100 55 Q 82 58, 60 50 Z" />
+                    {/* Left lower wing - thicker */}
+                    <path d="M 60 50 Q 30 68, 22 82 Q 18 92, 32 90 Q 50 85, 60 50 Z" />
+                    {/* Right lower wing - thicker */}
+                    <path d="M 60 50 Q 90 68, 98 82 Q 102 92, 88 90 Q 70 85, 60 50 Z" />
                     {/* Body */}
-                    <ellipse cx="60" cy="50" rx="3" ry="30" fill="white" />
+                    <ellipse cx="60" cy="50" rx="4" ry="32" fill="white" />
                     {/* Head */}
-                    <circle cx="60" cy="35" r="4" fill="white" />
+                    <circle cx="60" cy="32" r="5" fill="white" />
                     {/* Antennae */}
-                    <path d="M 60 35 Q 56 25, 54 20" stroke="white" strokeWidth="1" fill="none" />
-                    <path d="M 60 35 Q 64 25, 66 20" stroke="white" strokeWidth="1" fill="none" />
-                    <circle cx="54" cy="20" r="1.5" fill="white" />
-                    <circle cx="66" cy="20" r="1.5" fill="white" />
+                    <path d="M 60 32 Q 55 22, 52 16" stroke="white" strokeWidth="1.5" fill="none" />
+                    <path d="M 60 32 Q 65 22, 68 16" stroke="white" strokeWidth="1.5" fill="none" />
+                    <circle cx="52" cy="16" r="2" fill="white" />
+                    <circle cx="68" cy="16" r="2" fill="white" />
                   </svg>
                 </div>
                 <div className="absolute right-[15%] top-[50%] opacity-[0.12]">
                   <svg width="45" height="45" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
-                    <path d="M 60 50 Q 30 20, 20 35 Q 15 45, 25 50 Q 35 52, 60 50 Z" />
-                    <path d="M 60 50 Q 90 20, 100 35 Q 105 45, 95 50 Q 85 52, 60 50 Z" />
-                    <path d="M 60 50 Q 35 70, 30 80 Q 28 88, 38 85 Q 48 80, 60 50 Z" />
-                    <path d="M 60 50 Q 85 70, 90 80 Q 92 88, 82 85 Q 72 80, 60 50 Z" />
-                    <ellipse cx="60" cy="50" rx="3" ry="30" fill="white" />
-                    <circle cx="60" cy="35" r="4" fill="white" />
-                    <path d="M 60 35 Q 56 25, 54 20" stroke="white" strokeWidth="1" fill="none" />
-                    <path d="M 60 35 Q 64 25, 66 20" stroke="white" strokeWidth="1" fill="none" />
-                    <circle cx="54" cy="20" r="1.5" fill="white" />
-                    <circle cx="66" cy="20" r="1.5" fill="white" />
+                    <path d="M 60 50 Q 25 15, 12 35 Q 8 50, 20 55 Q 38 58, 60 50 Z" />
+                    <path d="M 60 50 Q 95 15, 108 35 Q 112 50, 100 55 Q 82 58, 60 50 Z" />
+                    <path d="M 60 50 Q 30 68, 22 82 Q 18 92, 32 90 Q 50 85, 60 50 Z" />
+                    <path d="M 60 50 Q 90 68, 98 82 Q 102 92, 88 90 Q 70 85, 60 50 Z" />
+                    <ellipse cx="60" cy="50" rx="4" ry="32" fill="white" />
+                    <circle cx="60" cy="32" r="5" fill="white" />
+                    <path d="M 60 32 Q 55 22, 52 16" stroke="white" strokeWidth="1.5" fill="none" />
+                    <path d="M 60 32 Q 65 22, 68 16" stroke="white" strokeWidth="1.5" fill="none" />
+                    <circle cx="52" cy="16" r="2" fill="white" />
+                    <circle cx="68" cy="16" r="2" fill="white" />
                   </svg>
                 </div>
                 <div className="absolute left-[70%] top-[70%] opacity-[0.10]">
                   <svg width="50" height="50" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
-                    <path d="M 60 50 Q 30 20, 20 35 Q 15 45, 25 50 Q 35 52, 60 50 Z" />
-                    <path d="M 60 50 Q 90 20, 100 35 Q 105 45, 95 50 Q 85 52, 60 50 Z" />
-                    <path d="M 60 50 Q 35 70, 30 80 Q 28 88, 38 85 Q 48 80, 60 50 Z" />
-                    <path d="M 60 50 Q 85 70, 90 80 Q 92 88, 82 85 Q 72 80, 60 50 Z" />
-                    <ellipse cx="60" cy="50" rx="3" ry="30" fill="white" />
-                    <circle cx="60" cy="35" r="4" fill="white" />
-                    <path d="M 60 35 Q 56 25, 54 20" stroke="white" strokeWidth="1" fill="none" />
-                    <path d="M 60 35 Q 64 25, 66 20" stroke="white" strokeWidth="1" fill="none" />
-                    <circle cx="54" cy="20" r="1.5" fill="white" />
-                    <circle cx="66" cy="20" r="1.5" fill="white" />
+                    <path d="M 60 50 Q 25 15, 12 35 Q 8 50, 20 55 Q 38 58, 60 50 Z" />
+                    <path d="M 60 50 Q 95 15, 108 35 Q 112 50, 100 55 Q 82 58, 60 50 Z" />
+                    <path d="M 60 50 Q 30 68, 22 82 Q 18 92, 32 90 Q 50 85, 60 50 Z" />
+                    <path d="M 60 50 Q 90 68, 98 82 Q 102 92, 88 90 Q 70 85, 60 50 Z" />
+                    <ellipse cx="60" cy="50" rx="4" ry="32" fill="white" />
+                    <circle cx="60" cy="32" r="5" fill="white" />
+                    <path d="M 60 32 Q 55 22, 52 16" stroke="white" strokeWidth="1.5" fill="none" />
+                    <path d="M 60 32 Q 65 22, 68 16" stroke="white" strokeWidth="1.5" fill="none" />
+                    <circle cx="52" cy="16" r="2" fill="white" />
+                    <circle cx="68" cy="16" r="2" fill="white" />
                   </svg>
                 </div>
               </>
