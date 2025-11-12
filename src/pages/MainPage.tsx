@@ -236,7 +236,9 @@ const MainPage = () => {
         <div 
           className="scroll-progress-gradient" 
           style={{ 
-            width: `${scrollProgress}%`,
+            transform: `scaleX(${scrollProgress / 100})`,
+            transformOrigin: 'left',
+            willChange: 'transform',
             background: progressBarColor === 'white' 
               ? 'rgba(255,255,255,0.95)'
               : progressBarColor === 'gray'
