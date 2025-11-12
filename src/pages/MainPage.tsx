@@ -94,45 +94,53 @@ const MainPage = () => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
     };
+
+    let ticking = false;
     const handleScroll = () => {
-      setScrollY(window.scrollY);
-      
-      // Calculate scroll progress
+      const scrollTop = window.scrollY;
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
       const progress = (scrollTop / (documentHeight - windowHeight)) * 100;
-      setScrollProgress(progress);
-      
-      // Determine which section we're in and set progress bar color
-      const sections = productRefs.current.filter(ref => ref !== null);
-      const viewportCenter = scrollTop + windowHeight / 2;
-      
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          const sectionTop = scrollTop + rect.top;
-          const sectionBottom = sectionTop + rect.height;
-          
-          if (viewportCenter >= sectionTop && viewportCenter < sectionBottom) {
-            const handle = products[i]?.node.handle || "";
-            if (handle.includes('butterfly')) {
-              setProgressBarColor('white');
-            } else if (handle.includes('helmet')) {
-              setProgressBarColor('gray');
-            } else if (handle.includes('fire') || handle.includes('love')) {
-              setProgressBarColor('blue');
+
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setScrollY(scrollTop);
+          setScrollProgress(progress);
+
+          // Determine which section we're in and set progress bar color
+          const sections = productRefs.current.filter(ref => ref !== null);
+          const viewportCenter = scrollTop + windowHeight / 2;
+          for (let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            if (section) {
+              const rect = section.getBoundingClientRect();
+              const sectionTop = scrollTop + rect.top;
+              const sectionBottom = sectionTop + rect.height;
+              if (viewportCenter >= sectionTop && viewportCenter < sectionBottom) {
+                const handle = products[i]?.node.handle || "";
+                if (handle.includes('butterfly')) {
+                  setProgressBarColor('white');
+                } else if (handle.includes('helmet')) {
+                  setProgressBarColor('gray');
+                } else if (handle.includes('fire') || handle.includes('love')) {
+                  setProgressBarColor('blue');
+                }
+                break;
+              }
             }
-            break;
           }
-        }
+
+          ticking = false;
+        });
       }
     };
-    
+
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    
+    // Initial call to sync progress bar on load
+    handleScroll();
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("scroll", handleScroll);
@@ -234,7 +242,7 @@ const MainPage = () => {
               : progressBarColor === 'gray'
                 ? 'rgba(140,140,140,0.95)'
                 : 'rgba(70,130,200,0.95)',
-            transition: 'width 0.6s linear, background 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transition: 'background 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             boxShadow: progressBarColor === 'white'
               ? '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.4), 0 0 60px rgba(255,255,255,0.2)'
               : progressBarColor === 'gray'
