@@ -23,7 +23,99 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sending signup notification for:", email);
 
-    const emailResponse = await resend.emails.send({
+    // Send confirmation email to the subscriber
+    const confirmationEmail = await resend.emails.send({
+      from: "Outaflow <notifications@outaflow0.com>",
+      to: [email],
+      subject: "🎯 Ευχαριστούμε για την εγγραφή σου!",
+      html: `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+            </style>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); padding: 40px 20px;">
+              <tr>
+                <td align="center">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+                    
+                    <!-- Header with gradient -->
+                    <tr>
+                      <td style="background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); padding: 40px 40px 30px; text-align: center;">
+                        <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">OUTAFLOW</h1>
+                        <p style="margin: 10px 0 0; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Minimalism in Motion</p>
+                      </td>
+                    </tr>
+                    
+                    <!-- Main content -->
+                    <tr>
+                      <td style="padding: 50px 40px;">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                          <div style="display: inline-block; background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                            <span style="font-size: 40px;">✨</span>
+                          </div>
+                        </div>
+                        
+                        <h2 style="margin: 0 0 20px; color: #000000; font-size: 28px; font-weight: 700; text-align: center; letter-spacing: -0.5px;">Καλώς ήρθες στο Outaflow!</h2>
+                        
+                        <p style="margin: 0 0 20px; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
+                          Ευχαριστούμε που εγγράφηκες στη λίστα αναμονής μας!
+                        </p>
+                        
+                        <p style="margin: 0 0 30px; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
+                          Θα λάβεις προτεραιότητα στο launch και θα είσαι από τους πρώτους που θα ενημερωθούν για τη νέα μας συλλογή.
+                        </p>
+                        
+                        <!-- Info box -->
+                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #000000; padding: 25px; border-radius: 8px; margin: 30px 0;">
+                          <p style="margin: 0 0 15px; color: #000000; font-size: 16px; font-weight: 600; text-align: center;">Τι να περιμένεις:</p>
+                          <ul style="margin: 0; padding: 0; list-style: none; color: #666666; font-size: 14px; line-height: 2;">
+                            <li style="padding-left: 25px; position: relative;">
+                              <span style="position: absolute; left: 0;">✓</span> Exclusive early access
+                            </li>
+                            <li style="padding-left: 25px; position: relative;">
+                              <span style="position: absolute; left: 0;">✓</span> Special launch προσφορές
+                            </li>
+                            <li style="padding-left: 25px; position: relative;">
+                              <span style="position: absolute; left: 0;">✓</span> Behind-the-scenes content
+                            </li>
+                          </ul>
+                        </div>
+                        
+                        <p style="margin: 30px 0 0; color: #999999; font-size: 14px; line-height: 1.6; text-align: center; font-style: italic;">
+                          "Minimalism in Motion" - Γιατί η απλότητα είναι το απόλυτο στυλ.
+                        </p>
+                      </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                      <td style="background: #f8f9fa; padding: 30px 40px; text-align: center; border-top: 1px solid #e9ecef;">
+                        <p style="margin: 0 0 10px; color: #000000; font-size: 14px; font-weight: 600;">OUTAFLOW</p>
+                        <p style="margin: 0; color: #999999; font-size: 12px; line-height: 1.6;">
+                          Θα επικοινωνήσουμε μαζί σου σύντομα!<br>
+                          © ${new Date().getFullYear()} Outaflow. All rights reserved.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+        </html>
+      `,
+    });
+
+    console.log("Confirmation email sent to subscriber:", confirmationEmail);
+
+    // Send notification email to admin
+    const notificationEmail = await resend.emails.send({
       from: "Outaflow <notifications@outaflow0.com>",
       to: ["outaflow0@gmail.com"],
       subject: "🎯 Νέα Εγγραφή στη Λίστα Αναμονής",
@@ -75,7 +167,7 @@ const handler = async (req: Request): Promise<Response> => {
                         <!-- Stats or info -->
                         <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 30px 0;">
                           <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.6; text-align: center;">
-                            Μην ξεχάσεις να ενημερώσεις τον subscriber για το επερχόμενο launch!
+                            Ο subscriber έλαβε ένα confirmation email αυτόματα!
                           </p>
                         </div>
                       </td>
@@ -100,9 +192,12 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Notification email sent to admin:", notificationEmail);
 
-    return new Response(JSON.stringify(emailResponse), {
+    return new Response(JSON.stringify({ 
+      confirmation: confirmationEmail, 
+      notification: notificationEmail 
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
