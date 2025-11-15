@@ -84,7 +84,7 @@ export const useCartStore = create<CartStore>()(
           }
         } catch (error) {
           console.error('Failed to create checkout:', error);
-          throw error;
+          // Do not rethrow to avoid breaking UI flows; toast will handle errors upstream
         } finally {
           setLoading(false);
         }
