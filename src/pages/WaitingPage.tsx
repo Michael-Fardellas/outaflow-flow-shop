@@ -114,14 +114,15 @@ const WaitingPage = () => {
         </a>
       </div>
       
-      <div className="absolute bottom-4 right-4 text-xs tracking-wide text-muted-foreground/40 hover:text-muted-foreground/60 transition-all duration-300">
+      <div className="absolute bottom-6 right-6 text-[10px] tracking-[0.2em] uppercase">
         <a 
           href="https://instagram.com/mixalis_fardellas" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1"
+          className="inline-flex items-center gap-2 text-muted-foreground/30 hover:text-muted-foreground/70 transition-all duration-500 group"
         >
-          Made by @mixalis_fardellas
+          <span className="w-8 h-[1px] bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-all duration-500"></span>
+          <span className="font-light">Made by @mixalis_fardellas</span>
         </a>
       </div>
     </div>
