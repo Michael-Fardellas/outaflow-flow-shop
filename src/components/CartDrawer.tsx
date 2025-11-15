@@ -37,13 +37,17 @@ export const CartDrawer = () => {
   }, [totalItems]);
 
   const handleCheckout = async () => {
+    // Open window immediately to avoid popup blocker
+    const checkoutWindow = window.open('about:blank', '_blank');
+    
     try {
       await createCheckout();
       const checkoutUrl = useCartStore.getState().checkoutUrl;
-      if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
+      if (checkoutUrl && checkoutWindow) {
+        checkoutWindow.location.href = checkoutUrl;
         setIsOpen(false);
       } else {
+        checkoutWindow?.close();
         toast.error('Unable to create checkout', {
           description: 'Please try again or contact support if the issue persists.',
           position: 'top-center',
@@ -51,6 +55,7 @@ export const CartDrawer = () => {
       }
     } catch (error) {
       console.error('Checkout failed:', error);
+      checkoutWindow?.close();
       toast.error('Checkout failed', {
         description: 'Please try again or contact support.',
         position: 'top-center',
