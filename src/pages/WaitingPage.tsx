@@ -113,6 +113,17 @@ const WaitingPage = () => {
           @outaflow0
         </a>
       </div>
+      
+      <div className="absolute bottom-4 right-4 text-xs tracking-wide text-muted-foreground/40 hover:text-muted-foreground/60 transition-all duration-300">
+        <a 
+          href="https://instagram.com/mixalis_fardellas" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1"
+        >
+          Made by @mixalis_fardellas
+        </a>
+      </div>
     </div>
   );
 };
