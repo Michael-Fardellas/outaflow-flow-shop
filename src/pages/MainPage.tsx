@@ -734,6 +734,19 @@ const MainPage = () => {
           </a>
         </div>
       </section>
+
+      {/* Watermark */}
+      <div className="fixed bottom-6 right-6 text-[10px] tracking-[0.2em] uppercase z-50">
+        <a 
+          href="https://instagram.com/mixalis_fardellas" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-muted-foreground/30 hover:text-muted-foreground/70 transition-all duration-500 group"
+        >
+          <span className="w-8 h-[1px] bg-muted-foreground/20 group-hover:bg-muted-foreground/50 transition-all duration-500"></span>
+          <span className="font-light">Made by @mixalis_fardellas</span>
+        </a>
+      </div>
     </div>
   );
 };
