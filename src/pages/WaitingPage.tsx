@@ -51,6 +51,16 @@ const WaitingPage = () => {
         return;
       }
 
+      // Call edge function to send emails
+      try {
+        await supabase.functions.invoke('send-signup-notification', {
+          body: { email: normalizedEmail }
+        });
+      } catch (emailError) {
+        console.error('Error sending notification emails:', emailError);
+        // Don't show error to user since signup was successful
+      }
+
       toast.success("You're on the list. Welcome to the future.");
       setEmail("");
     } catch (error) {
