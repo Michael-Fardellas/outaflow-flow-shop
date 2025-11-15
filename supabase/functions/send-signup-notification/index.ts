@@ -57,7 +57,7 @@ function buildHtml({
               <tr>
                 <td class="header">
                   <h1 class="brand">OUTAFLOW</h1>
-                  <p class="tagline">MINIMALISM IN MOTION</p>
+                  <p class="tagline">MADE WITH PURPOSE</p>
                 </td>
               </tr>
               <tr>
@@ -107,7 +107,7 @@ const handler = async (req: Request): Promise<Response> => {
       heading: "Καλώς ήρθες στο Outaflow!",
       intro: "Ευχαριστούμε για την εγγραφή σου στη λίστα αναμονής. Θα ενημερωθείς πρώτο/η για το launch.",
       details: "Τι να περιμένεις: early access, ειδικές προσφορές και behind‑the‑scenes περιεχόμενο.",
-      extraNote: '"Minimalism in Motion" – Η απλότητα είναι το απόλυτο στυλ.',
+      extraNote: '"Made with Purpose" – Κάθε κομμάτι σχεδιασμένο με σκοπό.',
     });
 
     const confirmation = await resend.emails.send({
