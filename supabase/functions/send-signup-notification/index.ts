@@ -12,6 +12,76 @@ interface SignupNotificationRequest {
   email: string;
 }
 
+// Basic light-themed email template to avoid dark-mode inversion issues across clients
+function buildHtml({
+  title,
+  heading,
+  intro,
+  details,
+  extraNote,
+}: {
+  title: string;
+  heading: string;
+  intro: string;
+  details?: string;
+  extraNote?: string;
+}) {
+  return `
+  <!DOCTYPE html>
+  <html lang="el">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="color-scheme" content="light">
+      <meta name="supported-color-schemes" content="light">
+      <title>${title}</title>
+      <style>
+        /* Use system fonts for deliverability */
+        .container { max-width: 640px; margin: 0 auto; background-color: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
+        .header { background-color: #111827; padding: 32px 36px; text-align: center; }
+        .brand { margin: 0; color: #ffffff !important; font-size: 24px; font-weight: 800; letter-spacing: 0.08em; }
+        .tagline { margin: 8px 0 0; color: #d1d5db !important; font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; }
+        .body { padding: 40px 36px; }
+        .h1 { margin: 0 0 14px; color: #111827 !important; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; text-align: center; }
+        .p { margin: 0 0 12px; color: #374151 !important; font-size: 15px; line-height: 1.7; text-align: center; }
+        .card { background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px 20px; margin: 22px 0; }
+        .foot { background-color: #f9fafb; padding: 22px 36px; text-align: center; border-top: 1px solid #f1f5f9; }
+        .footp { margin: 0; color: #6b7280 !important; font-size: 12px; line-height: 1.6; }
+      </style>
+    </head>
+    <body style="margin:0; padding:0; background-color:#f4f4f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';">
+      <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f4f4f7" style="background-color:#f4f4f7; padding: 28px 16px;">
+        <tr>
+          <td align="center">
+            <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" class="container">
+              <tr>
+                <td class="header">
+                  <h1 class="brand">OUTAFLOW</h1>
+                  <p class="tagline">MINIMALISM IN MOTION</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="body">
+                  <h2 class="h1">${heading}</h2>
+                  <p class="p">${intro}</p>
+                  ${details ? `<div class="card"><p class="p" style="margin:0; text-align:left;">${details}</p></div>` : ""}
+                  ${extraNote ? `<p class="p" style="font-style:italic; color:#6b7280 !important;">${extraNote}</p>` : ""}
+                </td>
+              </tr>
+              <tr>
+                <td class="foot">
+                  <p class="footp">© ${new Date().getFullYear()} Outaflow. All rights reserved.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+  `;
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -21,197 +91,64 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { email }: SignupNotificationRequest = await req.json();
 
-    console.log("Sending signup notification for:", email);
+    if (!email || typeof email !== "string") {
+      return new Response(JSON.stringify({ error: "Email is required" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
-    // Send confirmation email to the subscriber
-    const confirmationEmail = await resend.emails.send({
-      from: "Outaflow <notifications@outaflow0.com>",
-      to: [email],
-      subject: "🎯 Ευχαριστούμε για την εγγραφή σου!",
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-            </style>
-          </head>
-          <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); padding: 40px 20px;">
-              <tr>
-                <td align="center">
-                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
-                    
-                    <!-- Header with gradient -->
-                    <tr>
-                      <td style="background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); padding: 40px 40px 30px; text-align: center;">
-                        <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">OUTAFLOW</h1>
-                        <p style="margin: 10px 0 0; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Minimalism in Motion</p>
-                      </td>
-                    </tr>
-                    
-                    <!-- Main content -->
-                    <tr>
-                      <td style="padding: 50px 40px;">
-                        <div style="text-align: center; margin-bottom: 30px;">
-                          <div style="display: inline-block; background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                            <span style="font-size: 40px;">✨</span>
-                          </div>
-                        </div>
-                        
-                        <h2 style="margin: 0 0 20px; color: #000000; font-size: 28px; font-weight: 700; text-align: center; letter-spacing: -0.5px;">Καλώς ήρθες στο Outaflow!</h2>
-                        
-                        <p style="margin: 0 0 20px; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                          Ευχαριστούμε που εγγράφηκες στη λίστα αναμονής μας!
-                        </p>
-                        
-                        <p style="margin: 0 0 30px; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                          Θα λάβεις προτεραιότητα στο launch και θα είσαι από τους πρώτους που θα ενημερωθούν για τη νέα μας συλλογή.
-                        </p>
-                        
-                        <!-- Info box -->
-                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #000000; padding: 25px; border-radius: 8px; margin: 30px 0;">
-                          <p style="margin: 0 0 15px; color: #000000; font-size: 16px; font-weight: 600; text-align: center;">Τι να περιμένεις:</p>
-                          <ul style="margin: 0; padding: 0; list-style: none; color: #666666; font-size: 14px; line-height: 2;">
-                            <li style="padding-left: 25px; position: relative;">
-                              <span style="position: absolute; left: 0;">✓</span> Exclusive early access
-                            </li>
-                            <li style="padding-left: 25px; position: relative;">
-                              <span style="position: absolute; left: 0;">✓</span> Special launch προσφορές
-                            </li>
-                            <li style="padding-left: 25px; position: relative;">
-                              <span style="position: absolute; left: 0;">✓</span> Behind-the-scenes content
-                            </li>
-                          </ul>
-                        </div>
-                        
-                        <p style="margin: 30px 0 0; color: #999999; font-size: 14px; line-height: 1.6; text-align: center; font-style: italic;">
-                          "Minimalism in Motion" - Γιατί η απλότητα είναι το απόλυτο στυλ.
-                        </p>
-                      </td>
-                    </tr>
-                    
-                    <!-- Footer -->
-                    <tr>
-                      <td style="background: #f8f9fa; padding: 30px 40px; text-align: center; border-top: 1px solid #e9ecef;">
-                        <p style="margin: 0 0 10px; color: #000000; font-size: 14px; font-weight: 600;">OUTAFLOW</p>
-                        <p style="margin: 0; color: #999999; font-size: 12px; line-height: 1.6;">
-                          Θα επικοινωνήσουμε μαζί σου σύντομα!<br>
-                          © ${new Date().getFullYear()} Outaflow. All rights reserved.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </body>
-        </html>
-      `,
+    const normalizedEmail = email.trim().toLowerCase();
+    console.log("Sending signup emails for:", normalizedEmail);
+
+    // 1) Confirmation email to subscriber
+    const confirmationHtml = buildHtml({
+      title: "Ευχαριστούμε για την εγγραφή σου",
+      heading: "Καλώς ήρθες στο Outaflow!",
+      intro: "Ευχαριστούμε για την εγγραφή σου στη λίστα αναμονής. Θα ενημερωθείς πρώτο/η για το launch.",
+      details: "Τι να περιμένεις: early access, ειδικές προσφορές και behind‑the‑scenes περιεχόμενο.",
+      extraNote: '"Minimalism in Motion" – Η απλότητα είναι το απόλυτο στυλ.',
     });
 
-    console.log("Confirmation email sent to subscriber:", confirmationEmail);
+    const confirmation = await resend.emails.send({
+      from: "Outaflow <notifications@outaflow0.com>",
+      to: [normalizedEmail],
+      subject: "Ευχαριστούμε για την εγγραφή σου",
+      text: "Ευχαριστούμε για την εγγραφή σου στο Outaflow. Θα σε ενημερώσουμε πρώτο/η στο launch.",
+      html: confirmationHtml,
+      replyTo: "notifications@outaflow0.com",
+    });
 
-    // Send notification email to admin
-    const notificationEmail = await resend.emails.send({
+    console.log("Confirmation email result:", confirmation);
+
+    // 2) Notification email to admin
+    const adminHtml = buildHtml({
+      title: "Νέα εγγραφή στη λίστα αναμονής",
+      heading: "Νέα Εγγραφή",
+      intro: "Ένα νέο άτομο μόλις εγγράφηκε στη λίστα αναμονής.",
+      details: `<strong style=\"color:#111827\">Email:</strong> ${normalizedEmail}`,
+    });
+
+    const notification = await resend.emails.send({
       from: "Outaflow <notifications@outaflow0.com>",
       to: ["outaflow0@gmail.com"],
-      subject: "🎯 Νέα Εγγραφή στη Λίστα Αναμονής",
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-            </style>
-          </head>
-          <body style="margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%); padding: 40px 20px;">
-              <tr>
-                <td align="center">
-                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
-                    
-                    <!-- Header with gradient -->
-                    <tr>
-                      <td style="background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); padding: 40px 40px 30px; text-align: center;">
-                        <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">OUTAFLOW</h1>
-                        <p style="margin: 10px 0 0; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase;">Minimalism in Motion</p>
-                      </td>
-                    </tr>
-                    
-                    <!-- Main content -->
-                    <tr>
-                      <td style="padding: 50px 40px;">
-                        <div style="text-align: center; margin-bottom: 30px;">
-                          <div style="display: inline-block; background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                            <span style="font-size: 40px;">🎯</span>
-                          </div>
-                        </div>
-                        
-                        <h2 style="margin: 0 0 20px; color: #000000; font-size: 28px; font-weight: 700; text-align: center; letter-spacing: -0.5px;">Νέα Εγγραφή!</h2>
-                        
-                        <p style="margin: 0 0 30px; color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                          Ένα νέο άτομο μόλις εγγράφηκε στη λίστα αναμονής
-                        </p>
-                        
-                        <!-- Email box -->
-                        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid #000000; padding: 20px 25px; border-radius: 8px; margin: 30px 0;">
-                          <p style="margin: 0 0 8px; color: #666666; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Email Address</p>
-                          <p style="margin: 0; color: #000000; font-size: 18px; font-weight: 600; word-break: break-all;">${email}</p>
-                        </div>
-                        
-                        <!-- Stats or info -->
-                        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 30px 0;">
-                          <p style="margin: 0; color: #666666; font-size: 14px; line-height: 1.6; text-align: center;">
-                            Ο subscriber έλαβε ένα confirmation email αυτόματα!
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                    
-                    <!-- Footer -->
-                    <tr>
-                      <td style="background: #f8f9fa; padding: 30px 40px; text-align: center; border-top: 1px solid #e9ecef;">
-                        <p style="margin: 0 0 10px; color: #000000; font-size: 14px; font-weight: 600;">OUTAFLOW</p>
-                        <p style="margin: 0; color: #999999; font-size: 12px; line-height: 1.6;">
-                          Αυτό είναι ένα αυτοματοποιημένο μήνυμα από το σύστημα εγγραφών.<br>
-                          © ${new Date().getFullYear()} Outaflow. All rights reserved.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </body>
-        </html>
-      `,
+      subject: "Νέα εγγραφή στη λίστα αναμονής",
+      text: `Νέα εγγραφή στη λίστα αναμονής: ${normalizedEmail}`,
+      html: adminHtml,
+      replyTo: "notifications@outaflow0.com",
     });
 
-    console.log("Notification email sent to admin:", notificationEmail);
+    console.log("Admin notification result:", notification);
 
-    return new Response(JSON.stringify({ 
-      confirmation: confirmationEmail, 
-      notification: notificationEmail 
-    }), {
+    return new Response(JSON.stringify({ confirmation, notification }), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
+      headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (error: any) {
     console.error("Error in send-signup-notification function:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 };
