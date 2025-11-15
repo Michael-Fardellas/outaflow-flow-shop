@@ -289,7 +289,7 @@ const MainPage = () => {
           <h2 className={`text-2xl md:text-4xl font-light tracking-[0.3em] glow text-reveal transition-all duration-1200 ease-out delay-300 ${
             visibleSections.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
-            MINIMALISM IN MOTION.
+            MADE WITH PURPOSE.
           </h2>
         </div>
         

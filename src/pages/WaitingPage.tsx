@@ -8,7 +8,7 @@ import logo from "@/assets/outaflow-logo.png";
 const WaitingPage = () => {
   const [email, setEmail] = useState("");
   const [displayText, setDisplayText] = useState("");
-  const fullText = "MINIMALISM IN MOTION.";
+  const fullText = "MADE WITH PURPOSE.";
   
   useEffect(() => {
     let currentIndex = 0;
