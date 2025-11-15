@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
+import { toast } from "sonner";
 
 export const CartDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,9 +43,18 @@ export const CartDrawer = () => {
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
         setIsOpen(false);
+      } else {
+        toast.error('Unable to create checkout', {
+          description: 'Please try again or contact support if the issue persists.',
+          position: 'top-center',
+        });
       }
     } catch (error) {
       console.error('Checkout failed:', error);
+      toast.error('Checkout failed', {
+        description: 'Please try again or contact support.',
+        position: 'top-center',
+      });
     }
   };
 
