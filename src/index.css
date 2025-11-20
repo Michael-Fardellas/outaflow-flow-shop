@@ -1016,19 +1016,39 @@ All colors MUST be HSL.
     }
   }
 
-  /* Broken heart floating animation */
-  @keyframes broken-heart-float {
+  /* Butterfly 3D floating animation */
+  @keyframes butterfly-3d {
     0%, 100% {
-      transform: translate(0, 0) rotate(0deg);
-      opacity: 0.12;
+      transform: translate(0, 0) rotateY(0deg) rotateX(0deg);
+      opacity: 0.5;
     }
     33% {
-      transform: translate(-12px, -18px) rotate(-8deg);
-      opacity: 0.10;
+      transform: translate(15px, -20px) rotateY(30deg) rotateX(10deg);
+      opacity: 0.55;
     }
     66% {
-      transform: translate(18px, -25px) rotate(6deg);
-      opacity: 0.13;
+      transform: translate(-10px, -30px) rotateY(-25deg) rotateX(-8deg);
+      opacity: 0.48;
+    }
+  }
+
+  /* 3D floating animation for flowers and helmets */
+  @keyframes float-3d {
+    0%, 100% {
+      transform: translate(0, 0) rotateY(0deg) rotateX(0deg);
+      opacity: 0.5;
+    }
+    25% {
+      transform: translate(12px, -15px) rotateY(25deg) rotateX(12deg);
+      opacity: 0.55;
+    }
+    50% {
+      transform: translate(-8px, -25px) rotateY(-20deg) rotateX(-10deg);
+      opacity: 0.52;
+    }
+    75% {
+      transform: translate(15px, -18px) rotateY(30deg) rotateX(8deg);
+      opacity: 0.58;
     }
   }
 }
