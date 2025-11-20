@@ -78,14 +78,11 @@ const MainPage = () => {
       try {
         const data = await storefrontApiRequest(STOREFRONT_PRODUCTS_QUERY, { first: 10 });
         const edges: ShopifyProduct[] = data?.data?.products?.edges || [];
-        const filtered = edges.filter((p) => {
-          const h = p.node.handle;
-          return h.includes("helmet") || h.includes("butterfly") || h.includes("fire") || h.includes("love");
-        });
-        setProducts(filtered);
+        // Use all returned products; current store only has the three live tees
+        setProducts(edges);
         const sizes: { [key: string]: number } = {};
         const views: { [key: string]: "front" | "back" } = {};
-        filtered.forEach((p) => {
+        edges.forEach((p) => {
           sizes[p.node.id] = 0;
           views[p.node.id] = "front";
         });
