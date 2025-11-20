@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCartStore } from "@/stores/cartStore";
 import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from "@/lib/shopify";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronDown } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
 
@@ -71,6 +71,8 @@ const MainPage = () => {
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
   const [selectedImageView, setSelectedImageView] = useState<{ [key: string]: "front" | "back" }>({});
   const [sizeChartModalOpen, setSizeChartModalOpen] = useState<"R00227" | "RU0130" | null>(null);
+  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
 
   useEffect(() => {
@@ -96,6 +98,26 @@ const MainPage = () => {
     };
     fetchProducts();
   }, []);
+
+  // Intersection Observer for scroll animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -100px 0px" }
+    );
+
+    Object.values(sectionRefs.current).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [products]);
 
   const handleAddToCart = (product: ShopifyProduct) => {
     const variantIndex = selectedSizes[product.node.id] || 0;
@@ -150,9 +172,9 @@ const MainPage = () => {
   }
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="bg-background text-foreground min-h-screen relative">
       {/* Simple header with logo + cart */}
-      <header className="w-full flex items-center justify-between px-6 py-4 border-b border-border/40">
+      <header className="w-full flex items-center justify-between px-6 py-4 border-b border-border/40 sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <img src={logo} alt="OUTAFLOW" className="h-10 w-auto" />
           <span className="text-xs tracking-[0.3em] uppercase">OUTAFLOW STORE</span>
@@ -162,6 +184,11 @@ const MainPage = () => {
         </div>
       </header>
 
+      {/* Scroll indicator */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 animate-bounce opacity-60 hover:opacity-100 transition-opacity">
+        <ChevronDown className="w-6 h-6 text-foreground" />
+      </div>
+
       {/* Products */}
       <main className="max-w-5xl mx-auto px-4 py-10 space-y-20">
         {products.map((product, index) => {
@@ -169,13 +196,18 @@ const MainPage = () => {
           const material = materialByHandle(handle);
           const currentView = selectedImageView[product.node.id] || "front";
           const imageIndex = currentView === "front" ? 0 : 1;
-
           const isEven = index % 2 === 1;
+          const sectionId = `product-${product.node.id}`;
+          const isVisible = visibleSections.has(sectionId);
 
           return (
             <section
               key={product.node.id}
-              className="grid gap-10 md:grid-cols-2 items-start border-b border-border/30 pb-10 last:border-b-0"
+              id={sectionId}
+              ref={(el) => (sectionRefs.current[sectionId] = el)}
+              className={`grid gap-10 md:grid-cols-2 items-start border-b border-border/30 pb-10 last:border-b-0 transition-all duration-1000 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              }`}
             >
               {/* Text column */}
               <div className={isEven ? "md:order-2" : ""}>
@@ -259,10 +291,10 @@ const MainPage = () => {
                     onClick={() =>
                       setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "front" }))
                     }
-                    className={`pb-1 border-b transition-colors
+                    className={`pb-1 border-b-2 transition-all duration-300 relative
                       ${currentView === "front"
                         ? "border-foreground text-foreground"
-                        : "border-transparent text-muted-foreground"}
+                        : "border-transparent text-muted-foreground hover:text-foreground/70"}
                     `}
                   >
                     Front
@@ -271,22 +303,28 @@ const MainPage = () => {
                     onClick={() =>
                       setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "back" }))
                     }
-                    className={`pb-1 border-b transition-colors
+                    className={`pb-1 border-b-2 transition-all duration-300 relative
                       ${currentView === "back"
                         ? "border-foreground text-foreground"
-                        : "border-transparent text-muted-foreground"}
+                        : "border-transparent text-muted-foreground hover:text-foreground/70"}
                     `}
                   >
                     Back
                   </button>
                 </div>
 
-                <Link to={`/product/${product.node.handle}`} className="block">
+                <Link 
+                  to={`/product/${product.node.handle}`} 
+                  className="block relative group overflow-hidden"
+                >
                   <img
                     src={product.node.images.edges[imageIndex]?.node.url}
                     alt={`${product.node.title} ${currentView}`}
-                    className="w-full h-auto border border-border/40"
+                    className="w-full h-auto border border-border/40 transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]"
+                    style={{ willChange: "transform, filter" }}
                   />
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-foreground/5 via-transparent to-transparent" />
                 </Link>
               </div>
             </section>
