@@ -72,6 +72,8 @@ const MainPage = () => {
   const [selectedImageView, setSelectedImageView] = useState<{ [key: string]: "front" | "back" }>({});
   const [sizeChartModalOpen, setSizeChartModalOpen] = useState<"R00227" | "RU0130" | null>(null);
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [currentSection, setCurrentSection] = useState<string>("");
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
 
@@ -106,6 +108,9 @@ const MainPage = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setVisibleSections((prev) => new Set(prev).add(entry.target.id));
+            // Track current section for progress bar color
+            const handle = products.find(p => `product-${p.node.id}` === entry.target.id)?.node.handle || "";
+            if (handle) setCurrentSection(handle);
           }
         });
       },
@@ -118,6 +123,18 @@ const MainPage = () => {
 
     return () => observer.disconnect();
   }, [products]);
+
+  // Scroll progress tracking
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(Math.min(progress, 100));
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleAddToCart = (product: ShopifyProduct) => {
     const variantIndex = selectedSizes[product.node.id] || 0;
@@ -198,6 +215,22 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
+      {/* Scroll Progress Bar - Color changes based on section */}
+      <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
+        <div 
+          className="h-full transition-all duration-300 ease-out"
+          style={{ 
+            width: `${scrollProgress}%`,
+            background: currentSection.includes("love") || currentSection.includes("fire")
+              ? "linear-gradient(90deg, hsl(217, 91%, 60%), hsl(207, 48%, 53%))"
+              : "hsl(0, 0%, 100%)",
+            boxShadow: currentSection.includes("love") || currentSection.includes("fire")
+              ? "0 0 20px hsla(217, 91%, 60%, 0.6)"
+              : "0 0 10px hsla(0, 0%, 100%, 0.3)"
+          }}
+        />
+      </div>
+
       {/* Floating cart icon - always visible */}
       <div className="fixed top-8 right-8 z-50" data-cart-trigger>
         <CartDrawer />
@@ -293,29 +326,29 @@ const MainPage = () => {
                   <>
                     {/* Vertical soft-light strip */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-white/5 blur-[80px] pointer-events-none" />
-                    {/* Multiple butterflies scattered - increased visibility */}
-                    <div className="absolute left-[12%] top-[18%] opacity-[0.2] pointer-events-none animate-[butterfly-float_20s_ease-in-out_infinite]">
-                      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
+                    {/* Multiple butterflies scattered - increased visibility with glow */}
+                    <div className="absolute left-[12%] top-[18%] opacity-[0.45] pointer-events-none animate-[butterfly-float_20s_ease-in-out_infinite] drop-shadow-[0_0_15px_rgba(200,200,200,0.4)]">
+                      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute left-[25%] top-[35%] opacity-[0.18] pointer-events-none animate-[butterfly-float_24s_ease-in-out_infinite_1s]">
-                      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
+                    <div className="absolute left-[25%] top-[35%] opacity-[0.50] pointer-events-none animate-[butterfly-float_24s_ease-in-out_infinite_1s] drop-shadow-[0_0_18px_rgba(200,200,200,0.5)]">
+                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute right-[15%] top-[28%] opacity-[0.22] pointer-events-none animate-[butterfly-float_28s_ease-in-out_infinite_2s]">
-                      <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
+                    <div className="absolute right-[15%] top-[28%] opacity-[0.55] pointer-events-none animate-[butterfly-float_28s_ease-in-out_infinite_2s] drop-shadow-[0_0_20px_rgba(200,200,200,0.5)]">
+                      <svg width="75" height="75" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute left-[65%] top-[45%] opacity-[0.16] pointer-events-none animate-[butterfly-float_22s_ease-in-out_infinite_3s]">
-                      <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
+                    <div className="absolute left-[65%] top-[45%] opacity-[0.42] pointer-events-none animate-[butterfly-float_22s_ease-in-out_infinite_3s] drop-shadow-[0_0_12px_rgba(200,200,200,0.4)]">
+                      <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute right-[30%] top-[60%] opacity-[0.19] pointer-events-none animate-[butterfly-float_26s_ease-in-out_infinite_4s]">
-                      <svg width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
+                    <div className="absolute right-[30%] top-[60%] opacity-[0.48] pointer-events-none animate-[butterfly-float_26s_ease-in-out_infinite_4s] drop-shadow-[0_0_16px_rgba(200,200,200,0.4)]">
+                      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
@@ -328,24 +361,24 @@ const MainPage = () => {
                   <>
                     {/* Horizontal diffused band */}
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-24 bg-gradient-to-r from-transparent via-white/4 to-transparent blur-[60px] pointer-events-none" />
-                    {/* Big flashy flowers scattered - increased visibility */}
-                    <div className="absolute left-[15%] top-[20%] opacity-[0.25] pointer-events-none animate-[float-minimal_18s_ease-in-out_infinite]">
-                      <Flower2 className="w-24 h-24 md:w-28 md:h-28 text-gray-400" strokeWidth={1.2} />
+                    {/* Big flashy flowers scattered - increased visibility with glow */}
+                    <div className="absolute left-[15%] top-[20%] opacity-[0.50] pointer-events-none animate-[float-minimal_18s_ease-in-out_infinite] drop-shadow-[0_0_25px_rgba(180,180,180,0.5)]">
+                      <Flower2 className="w-28 h-28 md:w-32 md:h-32 text-gray-300" strokeWidth={1.8} />
                     </div>
-                    <div className="absolute right-[20%] top-[30%] opacity-[0.28] pointer-events-none animate-[float-minimal_22s_ease-in-out_infinite_1s]">
-                      <Flower2 className="w-28 h-28 md:w-32 md:h-32 text-gray-400" strokeWidth={1.2} />
+                    <div className="absolute right-[20%] top-[30%] opacity-[0.55] pointer-events-none animate-[float-minimal_22s_ease-in-out_infinite_1s] drop-shadow-[0_0_30px_rgba(180,180,180,0.6)]">
+                      <Flower2 className="w-32 h-32 md:w-36 md:h-36 text-gray-300" strokeWidth={1.8} />
                     </div>
-                    <div className="absolute left-[60%] top-[55%] opacity-[0.22] pointer-events-none animate-[float-minimal_20s_ease-in-out_infinite_2s]">
-                      <Flower2 className="w-20 h-20 md:w-24 md:h-24 text-gray-400" strokeWidth={1.2} />
+                    <div className="absolute left-[60%] top-[55%] opacity-[0.45] pointer-events-none animate-[float-minimal_20s_ease-in-out_infinite_2s] drop-shadow-[0_0_20px_rgba(180,180,180,0.5)]">
+                      <Flower2 className="w-24 h-24 md:w-28 md:h-28 text-gray-300" strokeWidth={1.8} />
                     </div>
-                    {/* Helmet shapes - increased visibility */}
-                    <div className="absolute left-[25%] top-[65%] opacity-[0.20] pointer-events-none animate-[float-minimal_24s_ease-in-out_infinite_3s]">
-                      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                    {/* Helmet shapes - increased visibility with glow */}
+                    <div className="absolute left-[25%] top-[65%] opacity-[0.48] pointer-events-none animate-[float-minimal_24s_ease-in-out_infinite_3s] drop-shadow-[0_0_20px_rgba(180,180,180,0.5)]">
+                      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
                         <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
                       </svg>
                     </div>
-                    <div className="absolute right-[15%] top-[50%] opacity-[0.23] pointer-events-none animate-[float-minimal_26s_ease-in-out_infinite_4s]">
-                      <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                    <div className="absolute right-[15%] top-[50%] opacity-[0.52] pointer-events-none animate-[float-minimal_26s_ease-in-out_infinite_4s] drop-shadow-[0_0_22px_rgba(180,180,180,0.5)]">
+                      <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
                         <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
                       </svg>
                     </div>
@@ -360,26 +393,26 @@ const MainPage = () => {
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-500/15 rounded-full blur-[140px] animate-[glow-pulse-minimal_10s_ease-in-out_infinite] pointer-events-none" />
                     {/* Additional blue layer for brightness */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[40%] bg-blue-400/20 rounded-full blur-[100px] opacity-50 pointer-events-none" />
-                    {/* Broken hearts scattered - increased visibility */}
-                    <div className="absolute left-[18%] top-[22%] opacity-[0.35] pointer-events-none animate-[broken-heart-float_20s_ease-in-out_infinite]">
-                      <Heart className="w-16 h-16 md:w-20 md:h-20 text-blue-300 fill-blue-400/40" strokeWidth={2} />
-                      <div className="absolute top-3 left-4 w-8 h-[3px] bg-background rotate-45" />
+                    {/* Broken hearts scattered - highly visible with blue glow */}
+                    <div className="absolute left-[18%] top-[22%] opacity-[0.65] pointer-events-none animate-[broken-heart-float_20s_ease-in-out_infinite] drop-shadow-[0_0_30px_rgba(96,165,250,0.8)]">
+                      <Heart className="w-20 h-20 md:w-24 md:h-24 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
+                      <div className="absolute top-4 left-5 w-10 h-[4px] bg-background rotate-45 shadow-lg" />
                     </div>
-                    <div className="absolute right-[22%] top-[35%] opacity-[0.38] pointer-events-none animate-[broken-heart-float_24s_ease-in-out_infinite_1s]">
-                      <Heart className="w-18 h-18 md:w-24 md:h-24 text-blue-300 fill-blue-400/40" strokeWidth={2} />
-                      <div className="absolute top-4 left-5 w-10 h-[3px] bg-background rotate-45" />
+                    <div className="absolute right-[22%] top-[35%] opacity-[0.70] pointer-events-none animate-[broken-heart-float_24s_ease-in-out_infinite_1s] drop-shadow-[0_0_35px_rgba(96,165,250,0.9)]">
+                      <Heart className="w-24 h-24 md:w-28 md:h-28 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
+                      <div className="absolute top-5 left-6 w-12 h-[4px] bg-background rotate-45 shadow-lg" />
                     </div>
-                    <div className="absolute left-[65%] top-[48%] opacity-[0.32] pointer-events-none animate-[broken-heart-float_22s_ease-in-out_infinite_2s]">
-                      <Heart className="w-14 h-14 md:w-18 md:h-18 text-blue-300 fill-blue-400/40" strokeWidth={2} />
-                      <div className="absolute top-3 left-3.5 w-7 h-[3px] bg-background rotate-45" />
+                    <div className="absolute left-[65%] top-[48%] opacity-[0.60] pointer-events-none animate-[broken-heart-float_22s_ease-in-out_infinite_2s] drop-shadow-[0_0_25px_rgba(96,165,250,0.7)]">
+                      <Heart className="w-18 h-18 md:w-22 md:h-22 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
+                      <div className="absolute top-4 left-4.5 w-9 h-[4px] bg-background rotate-45 shadow-lg" />
                     </div>
-                    <div className="absolute left-[30%] top-[60%] opacity-[0.36] pointer-events-none animate-[broken-heart-float_26s_ease-in-out_infinite_3s]">
-                      <Heart className="w-17 h-17 md:w-22 md:h-22 text-blue-300 fill-blue-400/40" strokeWidth={2} />
-                      <div className="absolute top-3.5 left-4 w-9 h-[3px] bg-background rotate-45" />
+                    <div className="absolute left-[30%] top-[60%] opacity-[0.68] pointer-events-none animate-[broken-heart-float_26s_ease-in-out_infinite_3s] drop-shadow-[0_0_32px_rgba(96,165,250,0.8)]">
+                      <Heart className="w-22 h-22 md:w-26 md:h-26 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
+                      <div className="absolute top-4.5 left-5 w-11 h-[4px] bg-background rotate-45 shadow-lg" />
                     </div>
-                    <div className="absolute right-[15%] top-[25%] opacity-[0.30] pointer-events-none animate-[broken-heart-float_28s_ease-in-out_infinite_4s]">
-                      <Heart className="w-13 h-13 md:w-16 md:h-16 text-blue-300 fill-blue-400/40" strokeWidth={2} />
-                      <div className="absolute top-2.5 left-3 w-6 h-[3px] bg-background rotate-45" />
+                    <div className="absolute right-[15%] top-[25%] opacity-[0.58] pointer-events-none animate-[broken-heart-float_28s_ease-in-out_infinite_4s] drop-shadow-[0_0_28px_rgba(96,165,250,0.7)]">
+                      <Heart className="w-16 h-16 md:w-20 md:h-20 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
+                      <div className="absolute top-3.5 left-4 w-8 h-[4px] bg-background rotate-45 shadow-lg" />
                     </div>
                   </>
                 )}
@@ -388,8 +421,8 @@ const MainPage = () => {
               <div className={`max-w-6xl mx-auto w-full grid gap-16 md:grid-cols-2 items-center relative z-10 ${
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
               } transition-all duration-1200 delay-200`}>
-                {/* Text column - Staggered fade-in */}
-                <div className={`relative z-10 space-y-6 ${isEven ? "md:order-2" : ""} ${
+                {/* Text column - Staggered fade-in - Always second on mobile */}
+                <div className={`relative z-10 space-y-6 order-2 ${isEven ? "md:order-2" : "md:order-1"} ${
                   (handle.includes("fire") || handle.includes("love")) ? "tracking-wider" : ""
                 }`}>
                   {/* Product title - larger but thinner */}
@@ -487,8 +520,8 @@ const MainPage = () => {
                   </details>
                 </div>
 
-                {/* Image column with editorial baseline */}
-                <div className={`relative z-10 ${isEven ? "md:order-1" : ""}`}>
+                {/* Image column with editorial baseline - Always first on mobile */}
+                <div className={`relative z-10 order-1 ${isEven ? "md:order-1" : "md:order-2"}`}>
                   {/* Minimal front/back toggle with refined underline */}
                   <div className="mb-6 flex gap-8 text-[10px] uppercase tracking-[0.35em] font-light">
                     <button
