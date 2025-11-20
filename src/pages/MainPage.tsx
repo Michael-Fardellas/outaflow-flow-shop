@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCartStore } from "@/stores/cartStore";
 import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from "@/lib/shopify";
-import { Loader2, ChevronDown } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
 
@@ -133,9 +133,20 @@ const MainPage = () => {
       selectedOptions: variant.selectedOptions || [],
     });
 
-    toast.success(`Added to Cart — ${product.node.title}`, {
-      duration: 2000,
-      position: "bottom-left",
+    toast.success(`Added — ${product.node.title}`, {
+      duration: 1800,
+      position: "top-center",
+      style: {
+        background: 'hsl(0 0% 0%)',
+        border: '1px solid hsl(0 0% 100% / 0.1)',
+        color: 'hsl(0 0% 100%)',
+        fontSize: '10px',
+        letterSpacing: '0.2em',
+        textTransform: 'uppercase',
+        fontWeight: '300',
+        padding: '12px 24px',
+        opacity: 0.9,
+      },
     });
   };
 
@@ -156,7 +167,21 @@ const MainPage = () => {
         toast.error("Something went wrong. Please try again.");
         return;
       }
-      toast.success("You're on the list. Welcome to the future.");
+      toast.success("Subscribed. Welcome to the future.", {
+        duration: 1800,
+        position: "top-center",
+        style: {
+          background: 'hsl(0 0% 0%)',
+          border: '1px solid hsl(0 0% 100% / 0.1)',
+          color: 'hsl(0 0% 100%)',
+          fontSize: '10px',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          fontWeight: '300',
+          padding: '12px 24px',
+          opacity: 0.9,
+        },
+      });
       setEmail("");
     } catch {
       toast.error("Something went wrong. Please try again.");
@@ -173,23 +198,25 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
-      {/* Simple header with logo + cart */}
-      <header className="w-full flex items-center justify-between px-6 py-4 border-b border-border/40 sticky top-0 z-40 bg-background/95 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <img src={logo} alt="OUTAFLOW" className="h-10 w-auto" />
-          <span className="text-xs tracking-[0.3em] uppercase">OUTAFLOW STORE</span>
+      {/* Refined header with thin outlined cart */}
+      <header className="w-full flex items-center justify-between px-8 py-6 border-b border-border/20 sticky top-0 z-40 bg-background/98 backdrop-blur-sm">
+        <div className="flex items-center gap-4">
+          <img src={logo} alt="OUTAFLOW" className="h-9 w-auto opacity-90" />
+          <span className="text-[10px] tracking-[0.35em] uppercase font-light opacity-70">OUTAFLOW STORE</span>
         </div>
         <div data-cart-trigger>
           <CartDrawer />
         </div>
       </header>
 
-      {/* Scroll indicator */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 animate-bounce opacity-60 hover:opacity-100 transition-opacity">
-        <ChevronDown className="w-6 h-6 text-foreground" />
+      {/* Minimal scroll indicator */}
+      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-30 opacity-30 hover:opacity-60 transition-opacity duration-500">
+        <div className="w-[1px] h-12 bg-foreground/40 relative">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-6 bg-foreground animate-[scroll-line_2s_ease-in-out_infinite]" />
+        </div>
       </div>
 
-      {/* Products */}
+      {/* Products - Gallery Exhibit Layout */}
       <main className="space-y-0">
         {products.map((product, index) => {
           const handle = product.node.handle;
@@ -200,28 +227,19 @@ const MainPage = () => {
           const sectionId = `product-${product.node.id}`;
           const isVisible = visibleSections.has(sectionId);
 
-          // Determine scene personality based on handle
+          // Scene personality with minimal tonal shifts
           let sceneClass = "";
           let sceneStyles: React.CSSProperties = {};
           
           if (handle.includes("butterfly")) {
-            sceneClass = "butterfly-scene";
-            sceneStyles = {
-              background: "linear-gradient(180deg, #000 0%, #111 100%)",
-              position: "relative",
-            };
+            sceneClass = "butterfly-minimal-scene";
+            sceneStyles = { background: "#000" };
           } else if (handle.includes("helmet")) {
-            sceneClass = "helmet-scene";
-            sceneStyles = {
-              background: "#000",
-              position: "relative",
-            };
+            sceneClass = "helmet-minimal-scene";
+            sceneStyles = { background: "#000" };
           } else if (handle.includes("fire") || handle.includes("love")) {
-            sceneClass = "love-scene";
-            sceneStyles = {
-              background: "radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 60%, #000 100%)",
-              position: "relative",
-            };
+            sceneClass = "love-minimal-scene";
+            sceneStyles = { background: "#000" };
           }
 
           return (
@@ -230,194 +248,238 @@ const MainPage = () => {
               id={sectionId}
               ref={(el) => (sectionRefs.current[sectionId] = el)}
               style={sceneStyles}
-              className={`${sceneClass} min-h-screen flex items-center py-20 px-4 transition-all duration-1000 ${
+              className={`${sceneClass} min-h-screen flex items-center py-[25vh] px-8 relative overflow-hidden transition-opacity duration-1000 ${
                 isVisible ? "opacity-100" : "opacity-0"
               }`}
             >
-              <div className={`max-w-5xl mx-auto w-full grid gap-10 md:grid-cols-2 items-center ${
-                isVisible ? "translate-y-0" : "translate-y-10"
-              } transition-transform duration-1000 delay-200`}>
-                {/* Scene-specific background effects */}
+              {/* Micro-parallax background layer */}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  transform: isVisible ? "translateY(0)" : "translateY(-20px)",
+                  transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+              >
+                {/* Minimal scene-specific background effects */}
                 {handle.includes("butterfly") && (
                   <>
-                    {/* Off-white vertical panel */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] h-[85%] bg-white/5 rounded-[40px] pointer-events-none" />
-                    {/* Vertical spotlight sweep */}
-                    <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[50%] h-32 bg-gradient-to-b from-white/10 to-transparent blur-3xl animate-[sweep-vertical_16s_ease-in-out_infinite] pointer-events-none" />
-                    {/* Floral silhouettes */}
-                    <div className="absolute left-[15%] top-[20%] w-20 h-20 opacity-5 animate-[float-slow_20s_ease-in-out_infinite]">
-                      <svg viewBox="0 0 100 100" className="w-full h-full">
-                        <path d="M50 10 Q30 30 50 50 Q70 30 50 10 M50 50 Q30 70 50 90 Q70 70 50 50" stroke="currentColor" fill="none" strokeWidth="2"/>
-                      </svg>
+                    {/* Vertical soft-light strip */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-white/5 blur-[80px] pointer-events-none" />
+                    {/* Abstract minimal shapes */}
+                    <div className="absolute left-[20%] top-[25%] w-32 h-48 opacity-[0.04] pointer-events-none">
+                      <div className="w-full h-full border border-white/40 rounded-full animate-[float-minimal_24s_ease-in-out_infinite]" />
                     </div>
-                    <div className="absolute right-[15%] top-[40%] w-24 h-24 opacity-4 animate-[float-slow_24s_ease-in-out_infinite_reverse]">
-                      <svg viewBox="0 0 100 100" className="w-full h-full">
-                        <path d="M50 10 Q30 30 50 50 Q70 30 50 10 M50 50 Q30 70 50 90 Q70 70 50 50" stroke="currentColor" fill="none" strokeWidth="2"/>
-                      </svg>
+                    <div className="absolute right-[20%] top-[35%] w-40 h-56 opacity-[0.05] pointer-events-none">
+                      <div className="w-full h-full border border-white/40 rounded-[30%] animate-[float-minimal_28s_ease-in-out_infinite_reverse]" />
                     </div>
+                    {/* Long-duration light sweep */}
+                    <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[40%] h-32 bg-gradient-to-b from-white/8 to-transparent blur-[100px] animate-[sweep-slow_18s_ease-in-out_infinite] pointer-events-none" />
                   </>
                 )}
 
                 {handle.includes("helmet") && (
                   <>
-                    {/* Horizontal light bar */}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-20 bg-gradient-to-r from-transparent via-white/8 to-transparent blur-2xl pointer-events-none" />
-                    {/* Smoke band */}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-32 bg-gradient-to-r from-transparent via-foreground/3 to-transparent blur-3xl animate-[drift_20s_linear_infinite] pointer-events-none" />
+                    {/* Horizontal diffused band */}
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-24 bg-gradient-to-r from-transparent via-white/4 to-transparent blur-[60px] pointer-events-none" />
+                    {/* Slow gradient shift */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent opacity-50 animate-[gradient-shift_16s_ease-in-out_infinite] pointer-events-none" />
                   </>
                 )}
 
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <>
-                    {/* Diagonal blue beam */}
-                    <div className="absolute left-0 bottom-0 w-[120%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent blur-xl rotate-[25deg] origin-bottom-left pointer-events-none" />
-                    {/* Blue glow pulse */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[120px] animate-[pulse-glow_9s_ease-in-out_infinite] pointer-events-none" />
-                    {/* Spark points */}
-                    <div className="absolute right-[25%] top-[30%] w-1 h-1 bg-white rounded-full animate-[spark_3s_ease-in-out_infinite] pointer-events-none" />
-                    <div className="absolute right-[28%] top-[32%] w-1 h-1 bg-white rounded-full animate-[spark_4s_ease-in-out_infinite_0.5s] pointer-events-none" />
+                    {/* Muted navy accent */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] bg-[#0d1b2a]/30 rounded-full blur-[140px] animate-[glow-pulse-minimal_10s_ease-in-out_infinite] pointer-events-none" />
+                    {/* Subtle radial glow */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[35%] h-[35%] bg-blue-900/20 rounded-full blur-[100px] opacity-40 pointer-events-none" />
                   </>
                 )}
-
-                {/* Text column */}
-                <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
-                <h2 className="text-3xl md:text-4xl font-light tracking-wide uppercase mb-2">
-                  {product.node.title}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {handle.includes("butterfly") && "Rebellion in Bloom"}
-                  {handle.includes("helmet") && "Built for Momentum"}
-                  {(handle.includes("fire") || handle.includes("love")) && "Love fades. Style stays."}
-                </p>
-
-                <p className="text-base mb-2">
-                  <span className="font-semibold">Fabric:</span> {material.fabric}
-                </p>
-                <p className="text-sm text-muted-foreground mb-4">{material.model}</p>
-
-                <p className="text-3xl font-light mb-4">
-                  ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)}
-                  <span className="ml-2 text-xs align-middle">
-                    {product.node.priceRange.minVariantPrice.currencyCode}
-                  </span>
-                </p>
-
-                {/* Sizes */}
-                <div className="space-y-3 mb-6">
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Select Size</p>
-                  <div className="flex flex-wrap gap-2">
-                    {product.node.variants.edges.map((variant, idx) => (
-                      <button
-                        key={variant.node.id}
-                        onClick={() =>
-                          setSelectedSizes((prev) => ({ ...prev, [product.node.id]: idx }))
-                        }
-                        className={`px-5 py-2 text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background
-                          ${selectedSizes[product.node.id] === idx
-                            ? "bg-foreground text-background"
-                            : "bg-transparent text-foreground hover:bg-foreground/10"}
-                        `}
-                      >
-                        {variant.node.title}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => handleAddToCart(product)}
-                  size="lg"
-                  className="w-full mb-4 bg-foreground text-background hover:bg-foreground/90"
-                >
-                  Add to Cart
-                </Button>
-
-                {/* Fabric details + size chart */}
-                <details className="mt-4 border border-border/50 rounded-md">
-                  <summary className="cursor-pointer px-4 py-3 text-sm tracking-[0.15em] uppercase">
-                    Fabric Details & Size
-                  </summary>
-                  <div className="px-4 py-3 space-y-3 text-sm">
-                    <p>{material.notes}</p>
-                    <p className="text-xs text-muted-foreground">
-                      The printed size-chart graphic is an art element, not a measurement guide.
-                    </p>
-                    <button
-                      onClick={() =>
-                        setSizeChartModalOpen(material.id as "R00227" | "RU0130")
-                      }
-                      className="text-xs underline mt-1"
-                    >
-                      View numeric size chart ({material.id})
-                    </button>
-                  </div>
-                </details>
               </div>
 
-                {/* Image column */}
-                <div className={`relative z-10 ${isEven ? "md:order-1" : ""}`}>
-                <div className="mb-3 flex gap-4 text-sm uppercase tracking-[0.2em]">
-                  <button
-                    onClick={() =>
-                      setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "front" }))
-                    }
-                    className={`pb-1 border-b-2 transition-all duration-300 relative
-                      ${currentView === "front"
-                        ? "border-foreground text-foreground"
-                        : "border-transparent text-muted-foreground hover:text-foreground/70"}
-                    `}
+              <div className={`max-w-6xl mx-auto w-full grid gap-16 md:grid-cols-2 items-center relative z-10 ${
+                isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
+              } transition-all duration-1200 delay-200`}>
+                {/* Text column - Staggered fade-in */}
+                <div className={`relative z-10 space-y-6 ${isEven ? "md:order-2" : ""} ${
+                  (handle.includes("fire") || handle.includes("love")) ? "tracking-wider" : ""
+                }`}>
+                  {/* Product title - larger but thinner */}
+                  <h2 className={`text-4xl md:text-5xl font-extralight tracking-[0.08em] uppercase mb-3 transition-opacity duration-1000 ${
+                    isVisible ? "opacity-100" : "opacity-0"
+                  }`} style={{ transitionDelay: "400ms" }}>
+                    {product.node.title}
+                  </h2>
+                  
+                  {/* Subtitle - smaller with increased letter spacing */}
+                  <p className={`text-sm font-light tracking-[0.25em] uppercase opacity-60 mb-6 transition-opacity duration-1000 ${
+                    isVisible ? "opacity-60" : "opacity-0"
+                  }`} style={{ transitionDelay: "600ms" }}>
+                    {handle.includes("butterfly") && "Rebellion in Bloom"}
+                    {handle.includes("helmet") && "Built for Momentum"}
+                    {(handle.includes("fire") || handle.includes("love")) && "Love fades. Style stays."}
+                  </p>
+
+                  {/* Fabric info with max-width */}
+                  <div className={`max-w-md space-y-2 transition-opacity duration-1000 ${
+                    isVisible ? "opacity-100" : "opacity-0"
+                  }`} style={{ transitionDelay: "800ms" }}>
+                    <p className="text-sm font-light leading-relaxed">
+                      <span className="opacity-70">Fabric:</span> {material.fabric}
+                    </p>
+                    <p className="text-xs font-light opacity-50 tracking-wide">{material.model}</p>
+                  </div>
+
+                  {/* Price */}
+                  <p className={`text-3xl font-extralight tracking-wider mb-8 transition-opacity duration-1000 ${
+                    isVisible ? "opacity-100" : "opacity-0"
+                  }`} style={{ transitionDelay: "1000ms" }}>
+                    ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)}
+                    <span className="ml-3 text-[10px] align-middle opacity-50 tracking-[0.3em]">
+                      {product.node.priceRange.minVariantPrice.currencyCode}
+                    </span>
+                  </p>
+
+                  {/* Size selector */}
+                  <div className={`space-y-4 mb-8 transition-opacity duration-1000 ${
+                    isVisible ? "opacity-100" : "opacity-0"
+                  }`} style={{ transitionDelay: "1200ms" }}>
+                    <p className="text-[10px] uppercase tracking-[0.3em] font-light opacity-50">Select Size</p>
+                    <div className="flex flex-wrap gap-3">
+                      {product.node.variants.edges.map((variant, idx) => (
+                        <button
+                          key={variant.node.id}
+                          onClick={() =>
+                            setSelectedSizes((prev) => ({ ...prev, [product.node.id]: idx }))
+                          }
+                          className={`px-6 py-2.5 text-xs font-light tracking-[0.2em] border transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-offset-background focus:ring-foreground/20
+                            ${selectedSizes[product.node.id] === idx
+                              ? "bg-foreground/5 text-foreground border-foreground/40"
+                              : "bg-transparent text-foreground/60 border-foreground/20 hover:border-foreground/40 hover:text-foreground/80"}
+                          `}
+                        >
+                          {variant.node.title}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Add to cart button */}
+                  <Button
+                    onClick={() => handleAddToCart(product)}
+                    className={`w-full mb-6 bg-transparent border border-foreground/30 text-foreground hover:bg-foreground/5 hover:border-foreground/50 transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light ${
+                      isVisible ? "opacity-100" : "opacity-0"
+                    }`}
+                    style={{ transitionDelay: "1400ms" }}
                   >
-                    Front
-                  </button>
-                  <button
-                    onClick={() =>
-                      setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "back" }))
-                    }
-                    className={`pb-1 border-b-2 transition-all duration-300 relative
-                      ${currentView === "back"
-                        ? "border-foreground text-foreground"
-                        : "border-transparent text-muted-foreground hover:text-foreground/70"}
-                    `}
-                  >
-                    Back
-                  </button>
+                    Add to Cart
+                  </Button>
+
+                  {/* Fabric details - thin sliding sheet aesthetic */}
+                  <details className={`mt-6 border-t border-foreground/10 transition-opacity duration-1000 ${
+                    isVisible ? "opacity-100" : "opacity-0"
+                  }`} style={{ transitionDelay: "1600ms" }}>
+                    <summary className="cursor-pointer py-4 text-[10px] tracking-[0.3em] uppercase font-light opacity-50 hover:opacity-80 transition-opacity">
+                      Fabric Details & Size
+                    </summary>
+                    <div className="pb-4 space-y-4 text-xs font-light leading-relaxed max-w-md opacity-70">
+                      <p>{material.notes}</p>
+                      <p className="text-[10px] opacity-50">
+                        The printed size-chart graphic is an art element, not a measurement guide.
+                      </p>
+                      <button
+                        onClick={() =>
+                          setSizeChartModalOpen(material.id as "R00227" | "RU0130")
+                        }
+                        className="text-[10px] tracking-[0.2em] uppercase underline decoration-foreground/20 hover:decoration-foreground/60 transition-all mt-2 opacity-60 hover:opacity-100"
+                      >
+                        View numeric size chart ({material.id})
+                      </button>
+                    </div>
+                  </details>
                 </div>
 
-                <Link 
-                  to={`/product/${product.node.handle}`} 
-                  className="block relative group overflow-hidden"
-                >
-                  <img
-                    src={product.node.images.edges[imageIndex]?.node.url}
-                    alt={`${product.node.title} ${currentView}`}
-                    className="w-full h-auto border border-border/40 transition-all duration-500 group-hover:brightness-110 group-hover:scale-[1.02]"
-                    style={{ willChange: "transform, filter" }}
-                  />
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-foreground/5 via-transparent to-transparent" />
-                </Link>
+                {/* Image column with editorial baseline */}
+                <div className={`relative z-10 ${isEven ? "md:order-1" : ""}`}>
+                  {/* Minimal front/back toggle with refined underline */}
+                  <div className="mb-6 flex gap-8 text-[10px] uppercase tracking-[0.35em] font-light">
+                    <button
+                      onClick={() =>
+                        setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "front" }))
+                      }
+                      className={`pb-2 relative transition-all duration-300
+                        ${currentView === "front"
+                          ? "text-foreground opacity-100"
+                          : "text-foreground/40 hover:text-foreground/70"}
+                      `}
+                    >
+                      Front
+                      <div className={`absolute bottom-0 left-0 right-0 h-[1px] bg-foreground transition-all duration-300 ${
+                        currentView === "front" ? "opacity-100" : "opacity-0"
+                      }`} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "back" }))
+                      }
+                      className={`pb-2 relative transition-all duration-300
+                        ${currentView === "back"
+                          ? "text-foreground opacity-100"
+                          : "text-foreground/40 hover:text-foreground/70"}
+                      `}
+                    >
+                      Back
+                      <div className={`absolute bottom-0 left-0 right-0 h-[1px] bg-foreground transition-all duration-300 ${
+                        currentView === "back" ? "opacity-100" : "opacity-0"
+                      }`} />
+                    </button>
+                  </div>
+
+                  {/* Product image with precision glow and editorial baseline */}
+                  <Link 
+                    to={`/product/${product.node.handle}`} 
+                    className="block relative group"
+                  >
+                    <div className="relative">
+                      <img
+                        key={currentView}
+                        src={product.node.images.edges[imageIndex]?.node.url}
+                        alt={`${product.node.title} ${currentView}`}
+                        className="w-full h-auto transition-opacity duration-[160ms] ease-out"
+                        style={{ willChange: "opacity" }}
+                      />
+                      {/* Precision glow on hover */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                        <div className="absolute inset-0 bg-gradient-radial from-foreground/[0.008] via-transparent to-transparent blur-sm" />
+                      </div>
+                      {/* Long-duration light sweep overlay */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none">
+                        <div className="absolute top-0 left-0 w-full h-[30%] bg-gradient-to-b from-white/[0.015] to-transparent animate-[image-sweep_20s_ease-in-out_infinite]" />
+                      </div>
+                    </div>
+                    {/* Editorial baseline rule */}
+                    <div className="w-full h-[1px] bg-foreground/10 mt-6" />
+                  </Link>
                 </div>
               </div>
             </section>
           );
         })}
 
-        {/* Email capture */}
-        <section className="pt-10 border-t border-border/40 mt-10">
-          <div className="max-w-md mx-auto text-center space-y-6">
-            <h2 className="text-2xl tracking-[0.3em] uppercase">Stay in Flow</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Email capture - refined minimal layout */}
+        <section className="min-h-[60vh] flex items-center justify-center py-[20vh] px-8 border-t border-foreground/5">
+          <div className="max-w-lg mx-auto text-center space-y-8">
+            <h2 className="text-2xl font-extralight tracking-[0.35em] uppercase opacity-80">Stay in Flow</h2>
+            <form onSubmit={handleSubmit} className="space-y-6">
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Get notified on next drops"
-                className="h-12 bg-transparent border-2 border-foreground text-center"
+                className="h-12 bg-transparent border border-foreground/20 text-center text-xs tracking-[0.2em] font-light focus:border-foreground/40 transition-all duration-500"
               />
               <Button
                 type="submit"
-                size="lg"
-                className="w-full bg-foreground text-background hover:bg-background hover:text-foreground border-2 border-foreground"
+                className="w-full bg-transparent border border-foreground/30 text-foreground hover:bg-foreground/5 hover:border-foreground/50 transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light"
               >
                 Notify Me
               </Button>
@@ -426,56 +488,56 @@ const MainPage = () => {
         </section>
       </main>
 
-      {/* Size chart modal */}
+      {/* Refined size chart modal */}
       {sizeChartModalOpen && (
         <div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center px-4"
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center px-8 backdrop-blur-sm"
           onClick={() => setSizeChartModalOpen(null)}
         >
           <div
-            className="bg-background border border-border/60 rounded-md max-w-3xl w-full max-h-[80vh] overflow-auto p-6"
+            className="bg-background border border-foreground/10 max-w-4xl w-full max-h-[85vh] overflow-auto p-10"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl tracking-[0.2em] uppercase">
+            <div className="flex justify-between items-center mb-8 pb-6 border-b border-foreground/10">
+              <h3 className="text-xl font-extralight tracking-[0.3em] uppercase opacity-80">
                 Size Chart — {sizeCharts[sizeChartModalOpen].name}
               </h3>
               <button
                 onClick={() => setSizeChartModalOpen(null)}
-                className="text-2xl leading-none"
+                className="text-2xl leading-none opacity-50 hover:opacity-100 transition-opacity w-8 h-8 flex items-center justify-center"
                 aria-label="Close size chart"
               >
                 ×
               </button>
             </div>
-            <p className="text-xs text-muted-foreground mb-3">
+            <p className="text-[10px] font-light opacity-50 mb-6 tracking-wide">
               Measurements in inches and centimeters. Use this table for accurate sizing.
             </p>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse">
+              <table className="w-full text-sm font-light border-collapse">
                 <thead>
-                  <tr className="border-b border-border/60">
-                    <th className="text-left py-2 px-3">Size</th>
-                    <th className="text-left py-2 px-3">Chest (in / cm)</th>
-                    <th className="text-left py-2 px-3">Length (in / cm)</th>
-                    <th className="text-left py-2 px-3">Shoulder (in / cm)</th>
-                    <th className="text-left py-2 px-3">Sleeve (in / cm)</th>
+                  <tr className="border-b border-foreground/10">
+                    <th className="text-left py-3 px-4 text-[10px] uppercase tracking-[0.2em] font-light opacity-50">Size</th>
+                    <th className="text-left py-3 px-4 text-[10px] uppercase tracking-[0.2em] font-light opacity-50">Chest (in / cm)</th>
+                    <th className="text-left py-3 px-4 text-[10px] uppercase tracking-[0.2em] font-light opacity-50">Length (in / cm)</th>
+                    <th className="text-left py-3 px-4 text-[10px] uppercase tracking-[0.2em] font-light opacity-50">Shoulder (in / cm)</th>
+                    <th className="text-left py-3 px-4 text-[10px] uppercase tracking-[0.2em] font-light opacity-50">Sleeve (in / cm)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {sizeCharts[sizeChartModalOpen].sizes.map((row, idx) => (
-                    <tr key={idx} className="border-b border-border/40">
-                      <td className="py-2 px-3 font-medium">{row.size}</td>
-                      <td className="py-2 px-3">
+                    <tr key={idx} className="border-b border-foreground/5">
+                      <td className="py-3 px-4 font-normal opacity-80">{row.size}</td>
+                      <td className="py-3 px-4 opacity-60">
                         {row.chest_in} / {row.chest_cm}
                       </td>
-                      <td className="py-2 px-3">
+                      <td className="py-3 px-4 opacity-60">
                         {row.length_in} / {row.length_cm}
                       </td>
-                      <td className="py-2 px-3">
+                      <td className="py-3 px-4 opacity-60">
                         {row.shoulder_in} / {row.shoulder_cm}
                       </td>
-                      <td className="py-2 px-3">
+                      <td className="py-3 px-4 opacity-60">
                         {row.sleeve_in} / {row.sleeve_cm}
                       </td>
                     </tr>
@@ -483,7 +545,7 @@ const MainPage = () => {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-muted-foreground mt-4">
+            <p className="text-[10px] font-light opacity-40 mt-6 tracking-wide">
               The typographic size-chart motif printed on the garments is a design element only.
             </p>
           </div>
