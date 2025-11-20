@@ -190,7 +190,7 @@ const MainPage = () => {
       </div>
 
       {/* Products */}
-      <main className="max-w-5xl mx-auto px-4 py-10 space-y-20">
+      <main className="space-y-0">
         {products.map((product, index) => {
           const handle = product.node.handle;
           const material = materialByHandle(handle);
@@ -200,17 +200,87 @@ const MainPage = () => {
           const sectionId = `product-${product.node.id}`;
           const isVisible = visibleSections.has(sectionId);
 
+          // Determine scene personality based on handle
+          let sceneClass = "";
+          let sceneStyles: React.CSSProperties = {};
+          
+          if (handle.includes("butterfly")) {
+            sceneClass = "butterfly-scene";
+            sceneStyles = {
+              background: "linear-gradient(180deg, #000 0%, #111 100%)",
+              position: "relative",
+            };
+          } else if (handle.includes("helmet")) {
+            sceneClass = "helmet-scene";
+            sceneStyles = {
+              background: "#000",
+              position: "relative",
+            };
+          } else if (handle.includes("fire") || handle.includes("love")) {
+            sceneClass = "love-scene";
+            sceneStyles = {
+              background: "radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 60%, #000 100%)",
+              position: "relative",
+            };
+          }
+
           return (
             <section
               key={product.node.id}
               id={sectionId}
               ref={(el) => (sectionRefs.current[sectionId] = el)}
-              className={`grid gap-10 md:grid-cols-2 items-start border-b border-border/30 pb-10 last:border-b-0 transition-all duration-1000 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+              style={sceneStyles}
+              className={`${sceneClass} min-h-screen flex items-center py-20 px-4 transition-all duration-1000 ${
+                isVisible ? "opacity-100" : "opacity-0"
               }`}
             >
-              {/* Text column */}
-              <div className={isEven ? "md:order-2" : ""}>
+              <div className={`max-w-5xl mx-auto w-full grid gap-10 md:grid-cols-2 items-center ${
+                isVisible ? "translate-y-0" : "translate-y-10"
+              } transition-transform duration-1000 delay-200`}>
+                {/* Scene-specific background effects */}
+                {handle.includes("butterfly") && (
+                  <>
+                    {/* Off-white vertical panel */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] h-[85%] bg-white/5 rounded-[40px] pointer-events-none" />
+                    {/* Vertical spotlight sweep */}
+                    <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[50%] h-32 bg-gradient-to-b from-white/10 to-transparent blur-3xl animate-[sweep-vertical_16s_ease-in-out_infinite] pointer-events-none" />
+                    {/* Floral silhouettes */}
+                    <div className="absolute left-[15%] top-[20%] w-20 h-20 opacity-5 animate-[float-slow_20s_ease-in-out_infinite]">
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
+                        <path d="M50 10 Q30 30 50 50 Q70 30 50 10 M50 50 Q30 70 50 90 Q70 70 50 50" stroke="currentColor" fill="none" strokeWidth="2"/>
+                      </svg>
+                    </div>
+                    <div className="absolute right-[15%] top-[40%] w-24 h-24 opacity-4 animate-[float-slow_24s_ease-in-out_infinite_reverse]">
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
+                        <path d="M50 10 Q30 30 50 50 Q70 30 50 10 M50 50 Q30 70 50 90 Q70 70 50 50" stroke="currentColor" fill="none" strokeWidth="2"/>
+                      </svg>
+                    </div>
+                  </>
+                )}
+
+                {handle.includes("helmet") && (
+                  <>
+                    {/* Horizontal light bar */}
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-20 bg-gradient-to-r from-transparent via-white/8 to-transparent blur-2xl pointer-events-none" />
+                    {/* Smoke band */}
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-32 bg-gradient-to-r from-transparent via-foreground/3 to-transparent blur-3xl animate-[drift_20s_linear_infinite] pointer-events-none" />
+                  </>
+                )}
+
+                {(handle.includes("fire") || handle.includes("love")) && (
+                  <>
+                    {/* Diagonal blue beam */}
+                    <div className="absolute left-0 bottom-0 w-[120%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent blur-xl rotate-[25deg] origin-bottom-left pointer-events-none" />
+                    {/* Blue glow pulse */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[120px] animate-[pulse-glow_9s_ease-in-out_infinite] pointer-events-none" />
+                    {/* Spark points */}
+                    <div className="absolute right-[25%] top-[30%] w-1 h-1 bg-white rounded-full animate-[spark_3s_ease-in-out_infinite] pointer-events-none" />
+                    <div className="absolute right-[28%] top-[32%] w-1 h-1 bg-white rounded-full animate-[spark_4s_ease-in-out_infinite_0.5s] pointer-events-none" />
+                  </>
+                )}
+
+                {/* Text column */}
+                <div className={`relative z-10 ${isEven ? "md:order-2" : ""}`}>
                 <h2 className="text-3xl md:text-4xl font-light tracking-wide uppercase mb-2">
                   {product.node.title}
                 </h2>
@@ -284,8 +354,8 @@ const MainPage = () => {
                 </details>
               </div>
 
-              {/* Image column */}
-              <div className={isEven ? "md:order-1" : ""}>
+                {/* Image column */}
+                <div className={`relative z-10 ${isEven ? "md:order-1" : ""}`}>
                 <div className="mb-3 flex gap-4 text-sm uppercase tracking-[0.2em]">
                   <button
                     onClick={() =>
@@ -326,6 +396,7 @@ const MainPage = () => {
                   {/* Hover glow effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-t from-foreground/5 via-transparent to-transparent" />
                 </Link>
+                </div>
               </div>
             </section>
           );
