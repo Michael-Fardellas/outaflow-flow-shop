@@ -10,6 +10,91 @@ import { Loader2, ChevronDown } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
 
+// Data normalization helper
+const cleanDescription = (html: string): string => {
+  return html
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .trim();
+};
+
+// Size chart data
+const sizeCharts = {
+  R00227: {
+    name: "R00227",
+    sizes: [
+      { size: "XS", chest_in: "31.5-33.1", chest_cm: "80-84", length_in: "25.2", length_cm: "64", shoulder_in: "15.7", shoulder_cm: "40", sleeve_in: "7.1", sleeve_cm: "18" },
+      { size: "S", chest_in: "33.1-35.4", chest_cm: "84-90", length_in: "26.4", length_cm: "67", shoulder_in: "16.5", shoulder_cm: "42", sleeve_in: "7.5", sleeve_cm: "19" },
+      { size: "M", chest_in: "35.4-38.6", chest_cm: "90-98", length_in: "27.6", length_cm: "70", shoulder_in: "17.3", shoulder_cm: "44", sleeve_in: "7.9", sleeve_cm: "20" },
+      { size: "L", chest_in: "38.6-41.7", chest_cm: "98-106", length_in: "28.7", length_cm: "73", shoulder_in: "18.1", shoulder_cm: "46", sleeve_in: "8.3", sleeve_cm: "21" },
+      { size: "XL", chest_in: "41.7-44.9", chest_cm: "106-114", length_in: "29.9", length_cm: "76", shoulder_in: "18.9", shoulder_cm: "48", sleeve_in: "8.7", sleeve_cm: "22" },
+      { size: "XXL", chest_in: "44.9-48.0", chest_cm: "114-122", length_in: "31.1", length_cm: "79", shoulder_in: "19.7", shoulder_cm: "50", sleeve_in: "9.1", sleeve_cm: "23" }
+    ]
+  },
+  RU0130: {
+    name: "RU0130",
+    sizes: [
+      { size: "S", chest_in: "41.7", chest_cm: "106", length_in: "26.8", length_cm: "68", shoulder_in: "20.9", shoulder_cm: "53", sleeve_in: "8.3", sleeve_cm: "21" },
+      { size: "M", chest_in: "43.3", chest_cm: "110", length_in: "27.6", length_cm: "70", shoulder_in: "21.7", shoulder_cm: "55", sleeve_in: "8.7", sleeve_cm: "22" },
+      { size: "L", chest_in: "44.9", chest_cm: "114", length_in: "28.3", length_cm: "72", shoulder_in: "22.4", shoulder_cm: "57", sleeve_in: "9.1", sleeve_cm: "23" },
+      { size: "XL", chest_in: "46.5", chest_cm: "118", length_in: "29.1", length_cm: "74", shoulder_in: "23.2", shoulder_cm: "59", sleeve_in: "9.4", sleeve_cm: "24" },
+      { size: "2XL", chest_in: "48.0", chest_cm: "122", length_in: "29.9", length_cm: "76", shoulder_in: "24.0", shoulder_cm: "61", sleeve_in: "9.8", sleeve_cm: "25" }
+    ]
+  }
+};
+
+// Material data with full specifications
+const materialData: { [key: string]: any } = {
+  "helmet": {
+    id: "R00227",
+    title: "Helmet Flowers Tee — Black",
+    gender: "Unisex",
+    model: "Regular",
+    fabric: "100% cotton",
+    weight: "9.0 oz/yd² (305 g/m²)",
+    thickness: "Moderate",
+    stretch: "Slight stretch",
+    care: "30°C gentle wash, do not bleach, tumble dry low, iron low avoiding print, no dry clean",
+    features: "Casual, Basics, Daily, Pure Cotton, Short Sleeve, Regular Sleeve, Round Neck, Spring Summer",
+    printSize: "40×52 cm",
+    notes: "Due to different batches and manual measurement, there may be slight differences in fabric and size between products.",
+    sizeChart: "R00227"
+  },
+  "butterfly": {
+    id: "R00227",
+    title: "Butterfly Mask Tee — Black",
+    gender: "Unisex",
+    model: "Regular",
+    fabric: "100% cotton",
+    weight: "9.0 oz/yd² (305 g/m²)",
+    thickness: "Moderate",
+    stretch: "Slight stretch",
+    care: "30°C gentle wash, do not bleach, tumble dry low, iron low avoiding print, no dry clean",
+    features: "Casual, Basics, Daily, Pure Cotton, Short Sleeve, Regular Sleeve, Round Neck, Spring Summer",
+    printSize: "40×52 cm",
+    notes: "Due to different batches and manual measurement, there may be slight differences in fabric and size between products.",
+    sizeChart: "R00227"
+  },
+  "love": {
+    id: "RU0130",
+    title: "Love's Gone but the Fit's Fire",
+    gender: "Unisex",
+    model: "Loose",
+    fabric: "73.31% cotton, 26.69% Sorona",
+    weight: "7.1 oz/yd² (240 g/m²)",
+    thickness: "Moderate",
+    care: "30°C gentle wash, do not bleach, tumble dry low, iron low avoiding print, no dry clean",
+    features: "Basics, Casual, Street, Drop Shoulder, Long, Loose, All Seasons",
+    printSize: "40×52 cm",
+    notes: "Sorona® hang tag included. This fabric combines natural cotton comfort with Sorona's moisture-wicking performance.",
+    sizeChart: "RU0130"
+  }
+};
+
 const MainPage = () => {
   const [email, setEmail] = useState("");
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -27,31 +112,13 @@ const MainPage = () => {
   const [floorLightActive, setFloorLightActive] = useState<{ [key: string]: boolean }>({});
   const [selectedImageView, setSelectedImageView] = useState<{ [key: string]: "front" | "back" }>({});
   const [imageTransitioning, setImageTransitioning] = useState<{ [key: string]: boolean }>({});
-  const [sizeChartModalOpen, setSizeChartModalOpen] = useState(false);
+  const [sizeChartModalOpen, setSizeChartModalOpen] = useState<string | null>(null);
+  const [backImageLoaded, setBackImageLoaded] = useState<{ [key: string]: boolean }>({});
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const outroRef = useRef<HTMLDivElement>(null);
-
-  // Material data mapping
-  const materialData: { [key: string]: { composition: string; weight: string; features: string } } = {
-    "love": {
-      composition: "73% cotton / 27% Sorona polymer blend",
-      weight: "240 gsm",
-      features: "Moisture-wicking, breathable, fast-drying"
-    },
-    "helmet": {
-      composition: "100% cotton heavyweight",
-      weight: "280 gsm",
-      features: "Dense knit, structured drape, high shape retention"
-    },
-    "butterfly": {
-      composition: "100% cotton heavyweight",
-      weight: "280 gsm",
-      features: "Dense knit, structured drape, high shape retention"
-    }
-  };
 
   useEffect(() => {
     setMounted(true);
@@ -59,7 +126,7 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    // Keyboard shortcut: C for cart
+    // Keyboard shortcuts
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === 'c' || e.key === 'C') {
         const cartButton = document.querySelector('[data-cart-trigger]') as HTMLButtonElement;
@@ -67,9 +134,8 @@ const MainPage = () => {
           cartButton.click();
         }
       }
-      // ESC to close size chart modal
       if (e.key === 'Escape' && sizeChartModalOpen) {
-        setSizeChartModalOpen(false);
+        setSizeChartModalOpen(null);
       }
     };
     window.addEventListener('keydown', handleKeyPress);
@@ -90,11 +156,20 @@ const MainPage = () => {
             ...prev,
             [entry.target.id]: true
           }));
+          
+          // Preload next section images
+          const currentIndex = parseInt(entry.target.id.replace('product', '')) - 1;
+          if (!isNaN(currentIndex) && products[currentIndex + 1]) {
+            const nextProduct = products[currentIndex + 1];
+            if (nextProduct.node.images.edges[1]?.node.url) {
+              const img = new Image();
+              img.src = nextProduct.node.images.edges[1].node.url;
+            }
+          }
         }
       });
     }, observerOptions);
 
-    // Observe all sections
     const sections = [
       heroRef.current,
       ...productRefs.current,
@@ -112,7 +187,6 @@ const MainPage = () => {
     };
   }, [products.length]);
 
-  // Load saved sizes from localStorage
   useEffect(() => {
     if (products.length > 0) {
       const savedSizes: { [key: string]: number } = {};
@@ -151,6 +225,7 @@ const MainPage = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
@@ -169,7 +244,6 @@ const MainPage = () => {
           setScrollY(scrollTop);
           setScrollProgress(progress);
 
-          // Determine which section we're in and set progress bar color
           const sections = productRefs.current.filter(ref => ref !== null);
           const viewportCenter = scrollTop + windowHeight / 2;
           for (let i = 0; i < sections.length; i++) {
@@ -199,7 +273,6 @@ const MainPage = () => {
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Initial call to sync progress bar on load
     handleScroll();
 
     return () => {
@@ -212,7 +285,6 @@ const MainPage = () => {
     const variantIndex = selectedSizes[product.node.id] || 0;
     const variant = product.node.variants.edges[variantIndex].node;
     
-    // Add glow effect to product
     const productElement = document.getElementById(productId);
     if (productElement) {
       productElement.classList.add('product-glow');
@@ -231,9 +303,14 @@ const MainPage = () => {
     };
     
     addItem(cartItem);
+    
+    const toastContainer = document.createElement('div');
+    toastContainer.setAttribute('aria-live', 'polite');
+    toastContainer.setAttribute('role', 'status');
+    
     toast.success(`Added to Cart — ${product.node.title}`, {
       duration: 2000,
-      position: "top-center",
+      position: "bottom-left",
       style: {
         background: 'rgba(0, 0, 0, 0.95)',
         color: 'white',
@@ -245,6 +322,18 @@ const MainPage = () => {
   const handleImageToggle = (productId: string, view: "front" | "back") => {
     if (selectedImageView[productId] === view || imageTransitioning[productId]) return;
     
+    // Lazy load back image if needed
+    if (view === "back" && !backImageLoaded[productId]) {
+      const product = products.find(p => p.node.id === productId);
+      if (product?.node.images.edges[1]?.node.url) {
+        const img = new Image();
+        img.onload = () => {
+          setBackImageLoaded(prev => ({ ...prev, [productId]: true }));
+        };
+        img.src = product.node.images.edges[1].node.url;
+      }
+    }
+    
     setImageTransitioning(prev => ({ ...prev, [productId]: true }));
     setSelectedImageView(prev => ({ ...prev, [productId]: view }));
     
@@ -255,7 +344,6 @@ const MainPage = () => {
 
   const handleSizeSelect = (productId: string, handle: string, idx: number) => {
     setSelectedSizes(prev => ({ ...prev, [productId]: idx }));
-    // Save to localStorage with 24 hour expiry
     localStorage.setItem(`selected-size-${handle}`, idx.toString());
     setTimeout(() => {
       localStorage.removeItem(`selected-size-${handle}`);
@@ -304,7 +392,7 @@ const MainPage = () => {
     } else if (handle.includes('butterfly')) {
       return materialData.butterfly;
     }
-    return materialData.butterfly; // default
+    return materialData.butterfly;
   };
 
   if (loading) {
@@ -317,7 +405,6 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground relative">
-      {/* Floating cart that scrolls with content */}
       <div className="sticky top-4 z-40 px-4">
         <div className="flex justify-end">
           <div data-cart-trigger>
@@ -326,7 +413,6 @@ const MainPage = () => {
         </div>
       </div>
 
-      {/* Scroll progress bar with gradient */}
       <div className="scroll-progress-container">
         <div 
           className="scroll-progress-gradient" 
@@ -359,7 +445,7 @@ const MainPage = () => {
         />
       )}
 
-      {/* Section 1: Hero Intro */}
+      {/* Hero Section */}
       <section 
         id="hero"
         ref={heroRef}
@@ -394,7 +480,7 @@ const MainPage = () => {
         </div>
       </section>
 
-      {/* Product Sections - Dynamically rendered */}
+      {/* Product Sections */}
       {products.map((product, index) => {
         const productId = `product${index + 1}`;
         const handle = product.node.handle;
@@ -405,7 +491,6 @@ const MainPage = () => {
         const imageIndex = currentView === "front" ? 0 : 1;
         const material = getMaterialForProduct(handle);
         
-        // Layout alternation: butterfly (left text), helmet (right text), love's gone (centered)
         const isLeftLayout = isButterfly;
         const isRightLayout = isHelmet;
         const isCenteredLayout = isLovesGone;
@@ -422,7 +507,6 @@ const MainPage = () => {
             {/* Background effects per product */}
             {isButterfly && (
               <>
-                {/* Soft atmospheric white glow - NO solid panels */}
                 <div 
                   className="absolute inset-0 pointer-events-none"
                   style={{
@@ -431,10 +515,8 @@ const MainPage = () => {
                   }}
                 />
                 
-                {/* Vertical spotlight sweep */}
                 <div className="vertical-spotlight" />
                 
-                {/* Floating particles */}
                 <div className="floating-particle" style={{ top: '25%', right: '30%', zIndex: 2 }} />
                 <div className="floating-particle" style={{ top: '30%', right: '28%', animationDelay: '2s', zIndex: 2 }} />
                 <div className="floating-particle" style={{ top: '28%', right: '32%', animationDelay: '4s', zIndex: 2 }} />
@@ -443,7 +525,6 @@ const MainPage = () => {
             
             {isHelmet && (
               <>
-                {/* Pure black background with tunnel light */}
                 <div className="tunnel-light" />
                 <div className="smoke-band" />
               </>
@@ -451,7 +532,6 @@ const MainPage = () => {
             
             {isLovesGone && (
               <>
-                {/* Deep navy radial glow */}
                 <div 
                   className="absolute inset-0 pointer-events-none"
                   style={{
@@ -460,7 +540,6 @@ const MainPage = () => {
                   }}
                 />
                 
-                {/* Pulsing blue background layer */}
                 <div 
                   className="absolute inset-0 pointer-events-none opacity-70"
                   style={{
@@ -469,10 +548,8 @@ const MainPage = () => {
                   }}
                 />
                 
-                {/* Diagonal blue beam */}
                 <div className="diagonal-beam" />
                 
-                {/* Gradient fade to black at bottom */}
                 <div 
                   className="absolute bottom-0 left-0 right-0 h-[40vh] pointer-events-none"
                   style={{
@@ -484,15 +561,9 @@ const MainPage = () => {
             
             <div className={`container mx-auto px-4 ${isHelmet ? 'max-w-6xl' : 'max-w-5xl'} relative z-10`}>
               <div className={`grid grid-cols-1 ${!isCenteredLayout ? 'lg:grid-cols-2' : ''} gap-12 items-center`}>
-                {/* Text Section - Left for Butterfly, Right for Helmet, Center for Love's Gone */}
+                {/* Text Section - Left for Butterfly, Center for Love's Gone */}
                 {(isLeftLayout || isCenteredLayout) && (
                   <div className={`space-y-6 ${isCenteredLayout ? 'text-center mx-auto max-w-2xl order-2' : ''}`}>
-                    {isHelmet && (
-                      <p className="text-xs tracking-widest text-muted-foreground uppercase">
-                        Performance Cotton 280 gsm
-                      </p>
-                    )}
-                    
                     <div>
                       <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
                         visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
@@ -501,26 +572,17 @@ const MainPage = () => {
                       </h3>
                       <p className={`text-sm tracking-widest mt-2 transition-all duration-1000 ease-out delay-300 ${
                         visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                      } ${isButterfly ? 'italic font-serif text-muted-foreground' : ''} ${isHelmet ? 'text-muted-foreground' : ''} ${isLovesGone ? 'nightclub-blue' : ''}`}>
+                      } ${isButterfly ? 'italic font-serif text-muted-foreground' : ''} ${isLovesGone ? 'nightclub-blue' : ''}`}>
                         {isButterfly && "Rebellion in Bloom"}
-                        {isHelmet && "Built for Momentum"}
                         {isLovesGone && "Love fades. Style stays."}
                       </p>
                     </div>
                     
-                    {isHelmet && (
-                      <div className="flex gap-2 flex-wrap">
-                        <span className="pill-badge">Heavyweight</span>
-                        <span className="pill-badge">Fit Holds Shape</span>
-                        <span className="pill-badge">Day to Night</span>
-                      </div>
-                    )}
-                    
                     {isButterfly && (
-                      <div className="flex gap-2 flex-wrap text-xs tracking-wider text-muted-foreground">
+                      <div className="flex gap-2 flex-wrap justify-center text-xs">
                         <span className="pill-badge">Heavyweight</span>
                         <span className="pill-badge">Structured Drape</span>
-                        <span className="pill-badge">Breathable Cotton</span>
+                        <span className="pill-badge">Pure Cotton</span>
                       </div>
                     )}
                     
@@ -537,7 +599,7 @@ const MainPage = () => {
                         ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)} {product.node.priceRange.minVariantPrice.currencyCode}
                       </p>
                       
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex gap-2 flex-wrap justify-center">
                         {product.node.variants.edges.map((variant, idx) => (
                           <button
                             key={variant.node.id}
@@ -559,7 +621,7 @@ const MainPage = () => {
                         size="lg"
                         className={`w-full transition-all duration-500 ${
                           isLovesGone 
-                            ? 'bg-foreground text-background hover:bg-nightclub-blue hover:text-white border-nightclub-blue hover:shadow-[0_0_30px_rgba(70,130,200,0.4)]'
+                            ? 'bg-foreground text-background hover:bg-nightclub-blue hover:text-white hover:shadow-[0_0_30px_rgba(70,130,200,0.4)]'
                             : 'bg-foreground text-background hover:bg-foreground/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]'
                         }`}
                       >
@@ -577,27 +639,42 @@ const MainPage = () => {
                       {fabricDetailsOpen[productId] && (
                         <div className={`
                           ${isButterfly ? 'fabric-panel-right bg-white/95 text-black' : ''}
-                          ${isHelmet ? 'fabric-panel-bottom bg-black/95 text-white border border-white/20' : ''}
                           ${isLovesGone ? 'fabric-panel-left bg-black/90 text-white border border-nightclub-blue/30 backdrop-blur-sm' : ''}
                           p-6 rounded space-y-3 text-sm
                         `}>
                           <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
-                          <p className="leading-relaxed">{material.composition}</p>
-                          <p className="leading-relaxed">{material.weight}</p>
-                          <p className="leading-relaxed">{material.features}</p>
-                          {isHelmet && (
-                            <p className="text-xs tracking-wider text-muted-foreground">
-                              Structure level: High
-                            </p>
+                          <div className="space-y-2 text-xs">
+                            <p><strong>Fabric:</strong> {material.fabric}</p>
+                            <p><strong>Weight:</strong> {material.weight}</p>
+                            <p><strong>Thickness:</strong> {material.thickness}</p>
+                            {material.stretch && <p><strong>Stretch:</strong> {material.stretch}</p>}
+                            <p><strong>Print Size:</strong> {material.printSize}</p>
+                          </div>
+                          
+                          <div className="pt-3 mt-3 border-t border-current/20">
+                            <h5 className="font-semibold tracking-wider uppercase mb-2">Care</h5>
+                            <p className="text-xs leading-relaxed">{material.care}</p>
+                          </div>
+                          
+                          <div className="pt-3 mt-3 border-t border-current/20">
+                            <h5 className="font-semibold tracking-wider uppercase mb-2">Features</h5>
+                            <p className="text-xs leading-relaxed">{material.features}</p>
+                          </div>
+                          
+                          {material.notes && (
+                            <div className="pt-3 mt-3 border-t border-current/20">
+                              <p className="text-xs leading-relaxed italic">{material.notes}</p>
+                            </div>
                           )}
-                          <div className="pt-3 mt-3 border-t border-white/20">
+                          
+                          <div className="pt-3 mt-3 border-t border-current/20">
                             <h5 className="font-semibold tracking-wider uppercase mb-2">Size and Fit</h5>
-                            <p className="text-xs leading-relaxed">The printed graphic contains a typographic size chart motif used across designs.</p>
+                            <p className="text-xs leading-relaxed">The printed graphic contains a typographic size chart motif used across designs. For accurate sizing:</p>
                             <button
-                              onClick={() => setSizeChartModalOpen(true)}
-                              className="text-xs underline mt-2 hover:text-foreground transition-colors"
+                              onClick={() => setSizeChartModalOpen(material.sizeChart)}
+                              className="text-xs underline mt-2 hover:opacity-70 transition-opacity"
                             >
-                              View Size Guide
+                              View Size Chart ({material.sizeChart})
                             </button>
                           </div>
                         </div>
@@ -621,6 +698,12 @@ const MainPage = () => {
                     if (isLovesGone) {
                       setFloorLightActive(prev => ({ ...prev, [productId]: true }));
                     }
+                    // Preload back image on hover
+                    if (!backImageLoaded[product.node.id] && product.node.images.edges[1]?.node.url) {
+                      const img = new Image();
+                      img.onload = () => setBackImageLoaded(prev => ({ ...prev, [product.node.id]: true }));
+                      img.src = product.node.images.edges[1].node.url;
+                    }
                   }}
                   onMouseLeave={() => {
                     setImageHover(null);
@@ -641,7 +724,6 @@ const MainPage = () => {
                     zIndex: 1
                   }}
                 >
-                  {/* Front/Back Toggle Tabs */}
                   <div className="flex gap-4 mb-4 justify-center">
                     <button
                       onClick={() => handleImageToggle(product.node.id, "front")}
@@ -667,11 +749,8 @@ const MainPage = () => {
                     </button>
                   </div>
 
-                  {/* Image effects overlay */}
                   {isButterfly && currentView === "front" && (
-                    <>
-                      <div className="vertical-spotlight" />
-                    </>
+                    <div className="vertical-spotlight" />
                   )}
                   
                   {isHelmet && currentView === "front" && (
@@ -688,12 +767,10 @@ const MainPage = () => {
                     </>
                   )}
                   
-                  {/* Gallery frame for Butterfly back view */}
                   {isButterfly && currentView === "back" && (
                     <div className="gallery-frame" />
                   )}
                   
-                  {/* Progress bar for Helmet back view */}
                   {isHelmet && currentView === "back" && (
                     <div className="progress-bar" />
                   )}
@@ -702,6 +779,7 @@ const MainPage = () => {
                     <img 
                       src={product.node.images.edges[imageIndex]?.node.url}
                       alt={`${product.node.title} ${currentView}`}
+                      loading={imageIndex === 0 ? "eager" : "lazy"}
                       className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
                         visibleSections[productId] ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                       } ${isLovesGone && currentView === "back" ? 'desaturate-pulse' : ''}`}
@@ -782,20 +860,42 @@ const MainPage = () => {
                       {fabricDetailsOpen[productId] && (
                         <div className="fabric-panel-bottom bg-black/95 text-white border border-white/20 p-6 rounded space-y-3 text-sm">
                           <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
-                          <p className="leading-relaxed">{material.composition}</p>
-                          <p className="leading-relaxed">{material.weight}</p>
-                          <p className="leading-relaxed">{material.features}</p>
+                          <div className="space-y-2 text-xs">
+                            <p><strong>Fabric:</strong> {material.fabric}</p>
+                            <p><strong>Weight:</strong> {material.weight}</p>
+                            <p><strong>Thickness:</strong> {material.thickness}</p>
+                            {material.stretch && <p><strong>Stretch:</strong> {material.stretch}</p>}
+                            <p><strong>Print Size:</strong> {material.printSize}</p>
+                          </div>
+                          
+                          <div className="pt-3 mt-3 border-t border-white/20">
+                            <h5 className="font-semibold tracking-wider uppercase mb-2">Care</h5>
+                            <p className="text-xs leading-relaxed">{material.care}</p>
+                          </div>
+                          
+                          <div className="pt-3 mt-3 border-t border-white/20">
+                            <h5 className="font-semibold tracking-wider uppercase mb-2">Features</h5>
+                            <p className="text-xs leading-relaxed">{material.features}</p>
+                          </div>
+                          
                           <p className="text-xs tracking-wider text-muted-foreground">
                             Structure level: High
                           </p>
+                          
+                          {material.notes && (
+                            <div className="pt-3 mt-3 border-t border-white/20">
+                              <p className="text-xs leading-relaxed italic">{material.notes}</p>
+                            </div>
+                          )}
+                          
                           <div className="pt-3 mt-3 border-t border-white/20">
                             <h5 className="font-semibold tracking-wider uppercase mb-2">Size and Fit</h5>
-                            <p className="text-xs leading-relaxed">The printed graphic contains a typographic size chart motif used across designs.</p>
+                            <p className="text-xs leading-relaxed">The printed graphic contains a typographic size chart motif used across designs. For accurate sizing:</p>
                             <button
-                              onClick={() => setSizeChartModalOpen(true)}
-                              className="text-xs underline mt-2 hover:text-foreground transition-colors"
+                              onClick={() => setSizeChartModalOpen(material.sizeChart)}
+                              className="text-xs underline mt-2 hover:opacity-70 transition-opacity"
                             >
-                              View Size Guide
+                              View Size Chart ({material.sizeChart})
                             </button>
                           </div>
                         </div>
@@ -809,7 +909,7 @@ const MainPage = () => {
         );
       })}
 
-      {/* Section: Brand Outro */}
+      {/* Outro Section */}
       <section 
         id="outro"
         ref={outroRef}
@@ -880,16 +980,21 @@ const MainPage = () => {
       {sizeChartModalOpen && (
         <div 
           className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setSizeChartModalOpen(false)}
+          onClick={() => setSizeChartModalOpen(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="size-chart-title"
         >
           <div 
-            className="bg-background border border-white/20 rounded-lg p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            className="bg-background border border-white/20 rounded-lg p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-light tracking-wider uppercase">Size Guide</h3>
+              <h3 id="size-chart-title" className="text-2xl font-light tracking-wider uppercase">
+                Size Guide - {sizeChartModalOpen}
+              </h3>
               <button
-                onClick={() => setSizeChartModalOpen(false)}
+                onClick={() => setSizeChartModalOpen(null)}
                 className="text-muted-foreground hover:text-foreground transition-colors text-2xl"
                 aria-label="Close size chart"
               >
@@ -897,50 +1002,32 @@ const MainPage = () => {
               </button>
             </div>
             <div className="space-y-4 text-sm">
-              <p className="text-muted-foreground">All measurements are in inches.</p>
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b border-white/20">
-                    <th className="text-left py-3 px-2">Size</th>
-                    <th className="text-left py-3 px-2">Chest</th>
-                    <th className="text-left py-3 px-2">Length</th>
-                    <th className="text-left py-3 px-2">Shoulder</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-2">S</td>
-                    <td className="py-3 px-2">36-38</td>
-                    <td className="py-3 px-2">27</td>
-                    <td className="py-3 px-2">17</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-2">M</td>
-                    <td className="py-3 px-2">38-40</td>
-                    <td className="py-3 px-2">28</td>
-                    <td className="py-3 px-2">18</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-2">L</td>
-                    <td className="py-3 px-2">40-42</td>
-                    <td className="py-3 px-2">29</td>
-                    <td className="py-3 px-2">19</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="py-3 px-2">XL</td>
-                    <td className="py-3 px-2">42-44</td>
-                    <td className="py-3 px-2">30</td>
-                    <td className="py-3 px-2">20</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-2">2XL</td>
-                    <td className="py-3 px-2">44-46</td>
-                    <td className="py-3 px-2">31</td>
-                    <td className="py-3 px-2">21</td>
-                  </tr>
-                </tbody>
-              </table>
-              <p className="text-xs text-muted-foreground pt-4">
+              <p className="text-muted-foreground mb-4">All measurements provided in both inches and centimeters.</p>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/20">
+                      <th className="text-left py-3 px-4">Size</th>
+                      <th className="text-left py-3 px-4">Chest (in / cm)</th>
+                      <th className="text-left py-3 px-4">Length (in / cm)</th>
+                      <th className="text-left py-3 px-4">Shoulder (in / cm)</th>
+                      <th className="text-left py-3 px-4">Sleeve (in / cm)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sizeCharts[sizeChartModalOpen as keyof typeof sizeCharts]?.sizes.map((row, index) => (
+                      <tr key={index} className="border-b border-white/10">
+                        <td className="py-3 px-4 font-medium">{row.size}</td>
+                        <td className="py-3 px-4">{row.chest_in} / {row.chest_cm}</td>
+                        <td className="py-3 px-4">{row.length_in} / {row.length_cm}</td>
+                        <td className="py-3 px-4">{row.shoulder_in} / {row.shoulder_cm}</td>
+                        <td className="py-3 px-4">{row.sleeve_in} / {row.sleeve_cm}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-xs text-muted-foreground pt-4 italic">
                 Note: The typographic size chart printed on the garment is a design element and not a functional measurement guide. Please refer to this table for accurate sizing.
               </p>
             </div>
