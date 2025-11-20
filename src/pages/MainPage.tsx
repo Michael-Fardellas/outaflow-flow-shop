@@ -198,23 +198,44 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
-      {/* Refined header with thin outlined cart */}
-      <header className="w-full flex items-center justify-between px-8 py-6 border-b border-border/20 sticky top-0 z-40 bg-background/98 backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <img src={logo} alt="OUTAFLOW" className="h-9 w-auto opacity-90" />
-          <span className="text-[10px] tracking-[0.35em] uppercase font-light opacity-70">OUTAFLOW STORE</span>
-        </div>
-        <div data-cart-trigger>
-          <CartDrawer />
-        </div>
-      </header>
-
-      {/* Minimal scroll indicator */}
-      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-30 opacity-30 hover:opacity-60 transition-opacity duration-500">
-        <div className="w-[1px] h-12 bg-foreground/40 relative">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-6 bg-foreground animate-[scroll-line_2s_ease-in-out_infinite]" />
-        </div>
+      {/* Floating cart icon - always visible */}
+      <div className="fixed top-8 right-8 z-50" data-cart-trigger>
+        <CartDrawer />
       </div>
+
+      {/* Hero Intro Section */}
+      <section className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+        {/* Ambient light pulse behind logo */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-white/5 rounded-full blur-[120px] animate-[ambient-pulse_6s_ease-in-out_infinite] pointer-events-none" />
+        
+        {/* Logo fade-in */}
+        <div className="relative z-10 mb-12 animate-[hero-fade-in_1.5s_ease-out_forwards] opacity-0">
+          <img src={logo} alt="OUTAFLOW" className="h-24 md:h-32 w-auto" />
+        </div>
+
+        {/* Letter-by-letter text animation */}
+        <div className="relative z-10 mb-32">
+          <h1 className="text-2xl md:text-3xl font-extralight tracking-[0.3em] uppercase">
+            {"Made with purpose.".split("").map((char, i) => (
+              <span
+                key={i}
+                className="inline-block opacity-0 animate-[letter-appear_0.05s_ease-out_forwards]"
+                style={{ animationDelay: `${2 + i * 0.08}s` }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </h1>
+        </div>
+
+        {/* Scroll to Discover cue */}
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-0 animate-[hero-fade-in_1s_ease-out_forwards] pointer-events-none" style={{ animationDelay: "3.5s" }}>
+          <p className="text-[10px] tracking-[0.4em] uppercase font-light opacity-60">Scroll to Discover</p>
+          <div className="w-[1px] h-16 bg-foreground/30 relative">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground/50 rounded-full animate-[bounce-arrow_2.5s_ease-in-out_infinite]" />
+          </div>
+        </div>
+      </section>
 
       {/* Products - Gallery Exhibit Layout */}
       <main className="space-y-0">
