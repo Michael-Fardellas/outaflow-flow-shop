@@ -135,12 +135,15 @@ const MainPage = () => {
         setProducts(data.data.products.edges);
         const initialSizes: { [key: string]: number } = {};
         const initialViews: { [key: string]: "front" | "back" } = {};
-        data.data.products.edges.forEach((product: ShopifyProduct) => {
+        const initialVisible: { [key: string]: boolean } = { hero: true, outro: true };
+        data.data.products.edges.forEach((product: ShopifyProduct, index: number) => {
           initialSizes[product.node.id] = 0;
           initialViews[product.node.id] = "front";
+          initialVisible[`product${index + 1}`] = true;
         });
         setSelectedSizes(initialSizes);
         setSelectedImageView(initialViews);
+        setVisibleSections(initialVisible);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -148,7 +151,6 @@ const MainPage = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
