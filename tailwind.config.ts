@@ -58,7 +58,7 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         nightclub: {
-          blue: "rgb(70, 130, 200)",
+          blue: "hsl(var(--nightclub-blue))",
         },
       },
       borderRadius: {

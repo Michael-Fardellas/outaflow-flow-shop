@@ -25,16 +25,56 @@ const MainPage = () => {
   const [fabricDetailsOpen, setFabricDetailsOpen] = useState<{ [key: string]: boolean }>({});
   const [visorTrigger, setVisorTrigger] = useState<{ [key: string]: boolean }>({});
   const [floorLightActive, setFloorLightActive] = useState<{ [key: string]: boolean }>({});
+  const [selectedImageView, setSelectedImageView] = useState<{ [key: string]: "front" | "back" }>({});
+  const [imageTransitioning, setImageTransitioning] = useState<{ [key: string]: boolean }>({});
+  const [sizeChartModalOpen, setSizeChartModalOpen] = useState(false);
   const addItem = useCartStore(state => state.addItem);
   
   const heroRef = useRef<HTMLDivElement>(null);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
   const outroRef = useRef<HTMLDivElement>(null);
 
+  // Material data mapping
+  const materialData: { [key: string]: { composition: string; weight: string; features: string } } = {
+    "love": {
+      composition: "73% cotton / 27% Sorona polymer blend",
+      weight: "240 gsm",
+      features: "Moisture-wicking, breathable, fast-drying"
+    },
+    "helmet": {
+      composition: "100% cotton heavyweight",
+      weight: "280 gsm",
+      features: "Dense knit, structured drape, high shape retention"
+    },
+    "butterfly": {
+      composition: "100% cotton heavyweight",
+      weight: "280 gsm",
+      features: "Dense knit, structured drape, high shape retention"
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    // Keyboard shortcut: C for cart
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'c' || e.key === 'C') {
+        const cartButton = document.querySelector('[data-cart-trigger]') as HTMLButtonElement;
+        if (cartButton) {
+          cartButton.click();
+        }
+      }
+      // ESC to close size chart modal
+      if (e.key === 'Escape' && sizeChartModalOpen) {
+        setSizeChartModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [sizeChartModalOpen]);
 
   useEffect(() => {
     // Setup intersection observer for animations
@@ -72,16 +112,35 @@ const MainPage = () => {
     };
   }, [products.length]);
 
+  // Load saved sizes from localStorage
+  useEffect(() => {
+    if (products.length > 0) {
+      const savedSizes: { [key: string]: number } = {};
+      products.forEach((product) => {
+        const saved = localStorage.getItem(`selected-size-${product.node.handle}`);
+        if (saved) {
+          savedSizes[product.node.id] = parseInt(saved);
+        }
+      });
+      if (Object.keys(savedSizes).length > 0) {
+        setSelectedSizes(prev => ({ ...prev, ...savedSizes }));
+      }
+    }
+  }, [products]);
+
   const fetchProducts = async () => {
     try {
       const data = await storefrontApiRequest(STOREFRONT_PRODUCTS_QUERY, { first: 10 });
       if (data.data.products.edges) {
         setProducts(data.data.products.edges);
         const initialSizes: { [key: string]: number } = {};
+        const initialViews: { [key: string]: "front" | "back" } = {};
         data.data.products.edges.forEach((product: ShopifyProduct) => {
           initialSizes[product.node.id] = 0;
+          initialViews[product.node.id] = "front";
         });
         setSelectedSizes(initialSizes);
+        setSelectedImageView(initialViews);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -181,6 +240,26 @@ const MainPage = () => {
     });
   };
 
+  const handleImageToggle = (productId: string, view: "front" | "back") => {
+    if (selectedImageView[productId] === view || imageTransitioning[productId]) return;
+    
+    setImageTransitioning(prev => ({ ...prev, [productId]: true }));
+    setSelectedImageView(prev => ({ ...prev, [productId]: view }));
+    
+    setTimeout(() => {
+      setImageTransitioning(prev => ({ ...prev, [productId]: false }));
+    }, 160);
+  };
+
+  const handleSizeSelect = (productId: string, handle: string, idx: number) => {
+    setSelectedSizes(prev => ({ ...prev, [productId]: idx }));
+    // Save to localStorage with 24 hour expiry
+    localStorage.setItem(`selected-size-${handle}`, idx.toString());
+    setTimeout(() => {
+      localStorage.removeItem(`selected-size-${handle}`);
+    }, 24 * 60 * 60 * 1000);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
@@ -215,6 +294,17 @@ const MainPage = () => {
     }
   };
 
+  const getMaterialForProduct = (handle: string) => {
+    if (handle.includes('love') || handle.includes('fire')) {
+      return materialData.love;
+    } else if (handle.includes('helmet')) {
+      return materialData.helmet;
+    } else if (handle.includes('butterfly')) {
+      return materialData.butterfly;
+    }
+    return materialData.butterfly; // default
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -228,9 +318,12 @@ const MainPage = () => {
       {/* Floating cart that scrolls with content */}
       <div className="sticky top-4 z-40 px-4">
         <div className="flex justify-end">
-          <CartDrawer />
+          <div data-cart-trigger>
+            <CartDrawer />
+          </div>
         </div>
       </div>
+
       {/* Scroll progress bar with gradient */}
       <div className="scroll-progress-container">
         <div 
@@ -306,6 +399,14 @@ const MainPage = () => {
         const isButterfly = handle.includes('butterfly');
         const isHelmet = handle.includes('helmet');
         const isLovesGone = handle.includes('fire') || handle.includes('love');
+        const currentView = selectedImageView[product.node.id] || "front";
+        const imageIndex = currentView === "front" ? 0 : 1;
+        const material = getMaterialForProduct(handle);
+        
+        // Layout alternation: butterfly (left text), helmet (right text), love's gone (centered)
+        const isLeftLayout = isButterfly;
+        const isRightLayout = isHelmet;
+        const isCenteredLayout = isLovesGone;
         
         return (
           <section 
@@ -319,157 +420,68 @@ const MainPage = () => {
             {/* Background effects per product */}
             {isButterfly && (
               <>
-                {/* Enhanced white radial glow */}
-                <div 
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 70%)',
-                    filter: 'blur(50px)'
-                  }}
-                />
-                {/* Pulsing white background layer */}
-                <div 
-                  className="absolute inset-0 pointer-events-none opacity-50"
-                  style={{
-                    background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, rgba(200,200,200,0.05) 50%, transparent 80%)',
-                    animation: 'breathe 8s ease-in-out infinite'
-                  }}
-                />
-                {/* Soft vertical light beam */}
-                <div 
-                  className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-full opacity-[0.08]"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.08) 50%, transparent 100%)',
-                    filter: 'blur(60px)',
-                  }}
-                />
+                {/* Off-white vertical panel */}
+                <div className="off-white-panel" />
                 
-                {/* Floating butterfly silhouettes */}
-                <div className="absolute left-[10%] top-[15%] opacity-[0.15]">
-                  <svg width="60" height="60" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 12s ease-in-out infinite' }}>
-                    {/* Left upper wing - thicker */}
-                    <path d="M 60 50 Q 25 15, 12 35 Q 8 50, 20 55 Q 38 58, 60 50 Z" />
-                    {/* Right upper wing - thicker */}
-                    <path d="M 60 50 Q 95 15, 108 35 Q 112 50, 100 55 Q 82 58, 60 50 Z" />
-                    {/* Left lower wing - thicker */}
-                    <path d="M 60 50 Q 30 68, 22 82 Q 18 92, 32 90 Q 50 85, 60 50 Z" />
-                    {/* Right lower wing - thicker */}
-                    <path d="M 60 50 Q 90 68, 98 82 Q 102 92, 88 90 Q 70 85, 60 50 Z" />
-                    {/* Body */}
-                    <ellipse cx="60" cy="50" rx="4" ry="32" fill="white" />
-                    {/* Head */}
-                    <circle cx="60" cy="32" r="5" fill="white" />
-                    {/* Antennae */}
-                    <path d="M 60 32 Q 55 22, 52 16" stroke="white" strokeWidth="1.5" fill="none" />
-                    <path d="M 60 32 Q 65 22, 68 16" stroke="white" strokeWidth="1.5" fill="none" />
-                    <circle cx="52" cy="16" r="2" fill="white" />
-                    <circle cx="68" cy="16" r="2" fill="white" />
+                {/* Low opacity floral outlines */}
+                <div className="absolute left-[8%] top-[10%] opacity-[0.05]" style={{ animation: 'float 18s ease-in-out infinite' }}>
+                  <svg width="150" height="200" viewBox="0 0 100 150" fill="none" stroke="black" strokeWidth="1">
+                    <path d="M50,20 Q30,30 25,50 Q20,70 30,85 Q40,100 50,110" />
+                    <path d="M50,20 Q70,30 75,50 Q80,70 70,85 Q60,100 50,110" />
+                    <ellipse cx="35" cy="40" rx="15" ry="25" transform="rotate(-30 35 40)" />
+                    <ellipse cx="65" cy="40" rx="15" ry="25" transform="rotate(30 65 40)" />
                   </svg>
                 </div>
-                <div className="absolute right-[15%] top-[50%] opacity-[0.12]">
-                  <svg width="45" height="45" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 15s ease-in-out infinite', animationDelay: '-5s' }}>
-                    <path d="M 60 50 Q 25 15, 12 35 Q 8 50, 20 55 Q 38 58, 60 50 Z" />
-                    <path d="M 60 50 Q 95 15, 108 35 Q 112 50, 100 55 Q 82 58, 60 50 Z" />
-                    <path d="M 60 50 Q 30 68, 22 82 Q 18 92, 32 90 Q 50 85, 60 50 Z" />
-                    <path d="M 60 50 Q 90 68, 98 82 Q 102 92, 88 90 Q 70 85, 60 50 Z" />
-                    <ellipse cx="60" cy="50" rx="4" ry="32" fill="white" />
-                    <circle cx="60" cy="32" r="5" fill="white" />
-                    <path d="M 60 32 Q 55 22, 52 16" stroke="white" strokeWidth="1.5" fill="none" />
-                    <path d="M 60 32 Q 65 22, 68 16" stroke="white" strokeWidth="1.5" fill="none" />
-                    <circle cx="52" cy="16" r="2" fill="white" />
-                    <circle cx="68" cy="16" r="2" fill="white" />
+                <div className="absolute right-[10%] top-[60%] opacity-[0.04]" style={{ animation: 'float 22s ease-in-out infinite', animationDelay: '-8s' }}>
+                  <svg width="130" height="180" viewBox="0 0 100 150" fill="none" stroke="black" strokeWidth="1">
+                    <path d="M50,20 Q30,30 25,50 Q20,70 30,85 Q40,100 50,110" />
+                    <path d="M50,20 Q70,30 75,50 Q80,70 70,85 Q60,100 50,110" />
+                    <ellipse cx="35" cy="40" rx="15" ry="25" transform="rotate(-30 35 40)" />
+                    <ellipse cx="65" cy="40" rx="15" ry="25" transform="rotate(30 65 40)" />
                   </svg>
                 </div>
-                <div className="absolute left-[70%] top-[70%] opacity-[0.10]">
-                  <svg width="50" height="50" viewBox="0 0 120 100" fill="white" style={{ animation: 'float 18s ease-in-out infinite', animationDelay: '-10s' }}>
-                    <path d="M 60 50 Q 25 15, 12 35 Q 8 50, 20 55 Q 38 58, 60 50 Z" />
-                    <path d="M 60 50 Q 95 15, 108 35 Q 112 50, 100 55 Q 82 58, 60 50 Z" />
-                    <path d="M 60 50 Q 30 68, 22 82 Q 18 92, 32 90 Q 50 85, 60 50 Z" />
-                    <path d="M 60 50 Q 90 68, 98 82 Q 102 92, 88 90 Q 70 85, 60 50 Z" />
-                    <ellipse cx="60" cy="50" rx="4" ry="32" fill="white" />
-                    <circle cx="60" cy="32" r="5" fill="white" />
-                    <path d="M 60 32 Q 55 22, 52 16" stroke="white" strokeWidth="1.5" fill="none" />
-                    <path d="M 60 32 Q 65 22, 68 16" stroke="white" strokeWidth="1.5" fill="none" />
-                    <circle cx="52" cy="16" r="2" fill="white" />
-                    <circle cx="68" cy="16" r="2" fill="white" />
-                  </svg>
-                </div>
+                
+                {/* Vertical spotlight sweep */}
+                <div className="vertical-spotlight" />
+                
+                {/* Floating particles */}
+                <div className="floating-particle" style={{ top: '25%', right: '30%' }} />
+                <div className="floating-particle" style={{ top: '30%', right: '28%', animationDelay: '2s' }} />
+                <div className="floating-particle" style={{ top: '28%', right: '32%', animationDelay: '4s' }} />
               </>
             )}
             
             {isHelmet && (
               <>
-                {/* Gray atmospheric glow matching helmet graphic */}
-                <div 
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(140,140,140,0.12) 0%, transparent 70%)',
-                    filter: 'blur(50px)'
-                  }}
-                />
-                {/* Cold gray layer */}
-                <div 
-                  className="absolute inset-0 pointer-events-none opacity-40"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(80,80,80,0.15) 0%, rgba(40,40,40,0.08) 50%, transparent 100%)',
-                  }}
-                />
+                {/* Pure black background with tunnel light */}
                 <div className="tunnel-light" />
                 <div className="smoke-band" />
-                
-                {/* Floating flower petals */}
-                <div className="absolute right-[12%] top-[20%] opacity-[0.18]">
-                  <svg width="35" height="35" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 14s ease-in-out infinite', filter: 'blur(0.5px)' }}>
-                    <ellipse cx="50" cy="20" rx="12" ry="18" />
-                    <ellipse cx="75" cy="40" rx="12" ry="18" transform="rotate(72 75 40)" />
-                    <ellipse cx="65" cy="72" rx="12" ry="18" transform="rotate(144 65 72)" />
-                    <ellipse cx="35" cy="72" rx="12" ry="18" transform="rotate(216 35 72)" />
-                    <ellipse cx="25" cy="40" rx="12" ry="18" transform="rotate(288 25 40)" />
-                    <circle cx="50" cy="50" r="10" fill="rgba(255,255,255,0.8)" />
-                  </svg>
-                </div>
-                <div className="absolute left-[18%] top-[65%] opacity-[0.15]">
-                  <svg width="30" height="30" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 16s ease-in-out infinite', animationDelay: '-7s', filter: 'blur(0.5px)' }}>
-                    <ellipse cx="50" cy="20" rx="12" ry="18" />
-                    <ellipse cx="75" cy="40" rx="12" ry="18" transform="rotate(72 75 40)" />
-                    <ellipse cx="65" cy="72" rx="12" ry="18" transform="rotate(144 65 72)" />
-                    <ellipse cx="35" cy="72" rx="12" ry="18" transform="rotate(216 35 72)" />
-                    <ellipse cx="25" cy="40" rx="12" ry="18" transform="rotate(288 25 40)" />
-                    <circle cx="50" cy="50" r="10" fill="rgba(255,255,255,0.8)" />
-                  </svg>
-                </div>
-                <div className="absolute right-[75%] top-[40%] opacity-[0.12]">
-                  <svg width="40" height="40" viewBox="0 0 100 100" fill="white" style={{ animation: 'float 20s ease-in-out infinite', animationDelay: '-12s', filter: 'blur(0.5px)' }}>
-                    <ellipse cx="50" cy="20" rx="12" ry="18" />
-                    <ellipse cx="75" cy="40" rx="12" ry="18" transform="rotate(72 75 40)" />
-                    <ellipse cx="65" cy="72" rx="12" ry="18" transform="rotate(144 65 72)" />
-                    <ellipse cx="35" cy="72" rx="12" ry="18" transform="rotate(216 35 72)" />
-                    <ellipse cx="25" cy="40" rx="12" ry="18" transform="rotate(288 25 40)" />
-                    <circle cx="50" cy="50" r="10" fill="rgba(255,255,255,0.8)" />
-                  </svg>
-                </div>
               </>
             )}
             
             {isLovesGone && (
               <>
-                {/* Stronger blue radial glow */}
+                {/* Deep navy radial glow */}
                 <div 
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(70, 130, 200, 0.18) 0%, transparent 70%)',
+                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(70, 130, 200, 0.20) 0%, rgba(30, 50, 80, 0.08) 50%, transparent 70%)',
                     filter: 'blur(40px)'
                   }}
                 />
+                
                 {/* Pulsing blue background layer */}
                 <div 
-                  className="absolute inset-0 pointer-events-none opacity-60"
+                  className="absolute inset-0 pointer-events-none opacity-70"
                   style={{
                     background: 'radial-gradient(circle at 50% 50%, rgba(70, 130, 200, 0.15) 0%, rgba(30, 60, 100, 0.08) 50%, transparent 80%)',
                     animation: 'blue-glow-pulse 10s ease-in-out infinite'
                   }}
                 />
+                
+                {/* Diagonal blue beam */}
                 <div className="diagonal-beam" />
+                
                 {/* Gradient fade to black at bottom */}
                 <div 
                   className="absolute bottom-0 left-0 right-0 h-[40vh] pointer-events-none"
@@ -477,34 +489,138 @@ const MainPage = () => {
                     background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,1) 100%)'
                   }}
                 />
-                
-                {/* Broken heart elements */}
-                <div className="absolute left-[15%] top-[25%] opacity-[0.20]">
-                  <svg width="50" height="50" viewBox="0 0 60 60" fill="rgb(70,130,200)" style={{ animation: 'float 13s ease-in-out infinite' }}>
-                    <path d="M30,50 L18,35 Q10,25 15,15 Q20,10 25,15 L30,20" />
-                    <path d="M30,20 L35,15 Q40,10 45,15 Q50,25 42,35 L30,50" style={{ transform: 'translateX(3px)', opacity: 0.7 }} />
-                  </svg>
-                </div>
-                <div className="absolute right-[10%] top-[60%] opacity-[0.18]">
-                  <svg width="40" height="40" viewBox="0 0 60 60" fill="rgb(70,130,200)" style={{ animation: 'float 17s ease-in-out infinite', animationDelay: '-8s' }}>
-                    <path d="M30,50 L18,35 Q10,25 15,15 Q20,10 25,15 L30,20" />
-                    <path d="M30,20 L35,15 Q40,10 45,15 Q50,25 42,35 L30,50" style={{ transform: 'translateX(3px)', opacity: 0.7 }} />
-                  </svg>
-                </div>
-                <div className="absolute left-[75%] top-[40%] opacity-[0.15]">
-                  <svg width="35" height="35" viewBox="0 0 60 60" fill="rgb(70,130,200)" style={{ animation: 'float 20s ease-in-out infinite', animationDelay: '-15s' }}>
-                    <path d="M30,50 L18,35 Q10,25 15,15 Q20,10 25,15 L30,20" />
-                    <path d="M30,20 L35,15 Q40,10 45,15 Q50,25 42,35 L30,50" style={{ transform: 'translateX(3px)', opacity: 0.7 }} />
-                  </svg>
-                </div>
               </>
             )}
             
-            <div className={`container mx-auto px-4 ${isHelmet ? 'max-w-6xl' : 'max-w-4xl'} relative z-10`}>
-              <div className={isHelmet ? 'grid grid-cols-1 lg:grid-cols-2 gap-12 items-start' : ''}>
+            <div className={`container mx-auto px-4 ${isHelmet ? 'max-w-6xl' : 'max-w-5xl'} relative z-10`}>
+              <div className={`grid grid-cols-1 ${!isCenteredLayout ? 'lg:grid-cols-2' : ''} gap-12 items-center`}>
+                {/* Text Section - Left for Butterfly, Right for Helmet, Center for Love's Gone */}
+                {(isLeftLayout || isCenteredLayout) && (
+                  <div className={`space-y-6 ${isCenteredLayout ? 'text-center mx-auto max-w-2xl order-2' : ''}`}>
+                    {isHelmet && (
+                      <p className="text-xs tracking-widest text-muted-foreground uppercase">
+                        Performance Cotton 280 gsm
+                      </p>
+                    )}
+                    
+                    <div>
+                      <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
+                        visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                      } ${isLovesGone ? 'tracking-widest' : ''}`}>
+                        {product.node.title}
+                      </h3>
+                      <p className={`text-sm tracking-widest mt-2 transition-all duration-1000 ease-out delay-300 ${
+                        visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                      } ${isButterfly ? 'italic font-serif text-muted-foreground' : ''} ${isHelmet ? 'text-muted-foreground' : ''} ${isLovesGone ? 'nightclub-blue' : ''}`}>
+                        {isButterfly && "Rebellion in Bloom"}
+                        {isHelmet && "Built for Momentum"}
+                        {isLovesGone && "Love fades. Style stays."}
+                      </p>
+                    </div>
+                    
+                    {isHelmet && (
+                      <div className="flex gap-2 flex-wrap">
+                        <span className="pill-badge">Heavyweight</span>
+                        <span className="pill-badge">Fit Holds Shape</span>
+                        <span className="pill-badge">Day to Night</span>
+                      </div>
+                    )}
+                    
+                    {isButterfly && (
+                      <div className="flex gap-2 flex-wrap text-xs tracking-wider text-muted-foreground">
+                        <span className="pill-badge">Heavyweight</span>
+                        <span className="pill-badge">Structured Drape</span>
+                        <span className="pill-badge">Breathable Cotton</span>
+                      </div>
+                    )}
+                    
+                    {isLovesGone && (
+                      <p className="text-xs tracking-wider nightclub-blue">
+                        Sorona blend • Breathable • Fast dry
+                      </p>
+                    )}
+                    
+                    <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
+                      visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    }`}>
+                      <p className="text-3xl font-light tracking-wider">
+                        ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)} {product.node.priceRange.minVariantPrice.currencyCode}
+                      </p>
+                      
+                      <div className="flex gap-2 flex-wrap">
+                        {product.node.variants.edges.map((variant, idx) => (
+                          <button
+                            key={variant.node.id}
+                            onClick={() => handleSizeSelect(product.node.id, product.node.handle, idx)}
+                            className={`size-button px-6 py-2 border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background ${
+                              selectedSizes[product.node.id] === idx
+                                ? isLovesGone ? 'bg-nightclub-blue text-white border-nightclub-blue' : 'bg-foreground text-background'
+                                : 'bg-transparent text-foreground hover:bg-foreground/10'
+                            } ${isLovesGone ? 'border-nightclub-blue focus:ring-nightclub-blue' : 'focus:ring-foreground'}`}
+                            aria-label={`Select size ${variant.node.title}`}
+                          >
+                            {variant.node.title}
+                          </button>
+                        ))}
+                      </div>
+
+                      <Button
+                        onClick={() => handleAddToCart(product, `product-${index + 1}`)}
+                        size="lg"
+                        className={`w-full transition-all duration-500 ${
+                          isLovesGone 
+                            ? 'bg-foreground text-background hover:bg-nightclub-blue hover:text-white border-nightclub-blue hover:shadow-[0_0_30px_rgba(70,130,200,0.4)]'
+                            : 'bg-foreground text-background hover:bg-foreground/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]'
+                        }`}
+                      >
+                        ADD TO CART
+                      </Button>
+                      
+                      <button
+                        onClick={() => setFabricDetailsOpen(prev => ({ ...prev, [productId]: !prev[productId] }))}
+                        className="w-full text-sm tracking-wider text-muted-foreground hover:text-foreground transition-colors uppercase"
+                        aria-expanded={fabricDetailsOpen[productId]}
+                      >
+                        {fabricDetailsOpen[productId] ? '− Close' : '+ Fabric Details'}
+                      </button>
+                      
+                      {fabricDetailsOpen[productId] && (
+                        <div className={`
+                          ${isButterfly ? 'fabric-panel-right bg-white/90 text-black' : ''}
+                          ${isHelmet ? 'fabric-panel-bottom bg-background/95 border border-white/20' : ''}
+                          ${isLovesGone ? 'fabric-panel-left bg-nightclub-blue/10 text-white backdrop-blur-sm' : ''}
+                          p-6 rounded space-y-3 text-sm
+                        `}>
+                          <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
+                          <p className="leading-relaxed">{material.composition}</p>
+                          <p className="leading-relaxed">{material.weight}</p>
+                          <p className="leading-relaxed">{material.features}</p>
+                          {isHelmet && (
+                            <p className="text-xs tracking-wider text-muted-foreground">
+                              Structure level: High
+                            </p>
+                          )}
+                          <div className="pt-3 mt-3 border-t border-white/20">
+                            <h5 className="font-semibold tracking-wider uppercase mb-2">Size and Fit</h5>
+                            <p className="text-xs leading-relaxed">The printed graphic contains a typographic size chart motif used across designs.</p>
+                            <button
+                              onClick={() => setSizeChartModalOpen(true)}
+                              className="text-xs underline mt-2 hover:text-foreground transition-colors"
+                            >
+                              View Size Guide
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Image Section */}
                 <div 
-                  className={`relative overflow-hidden product-hover-container ambient-shadow ${!isHelmet ? 'mb-8' : 'lg:row-span-2 lg:mt-20'}`}
+                  className={`relative overflow-hidden product-hover-container ambient-shadow ${
+                    isHelmet ? 'lg:order-first' : ''
+                  } ${isCenteredLayout ? 'order-1 max-w-lg mx-auto' : ''}`}
                   id={`product-${index + 1}`}
                   onMouseEnter={() => {
                     setImageHover(productId);
@@ -535,153 +651,175 @@ const MainPage = () => {
                     zIndex: 1
                   }}
                 >
-                  {isButterfly && (
+                  {/* Front/Back Toggle Tabs */}
+                  <div className="flex gap-4 mb-4 justify-center">
+                    <button
+                      onClick={() => handleImageToggle(product.node.id, "front")}
+                      className={`text-sm tracking-widest uppercase pb-2 border-b-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background ${
+                        currentView === "front"
+                          ? isLovesGone ? 'border-nightclub-blue nightclub-blue' : 'border-foreground text-foreground'
+                          : 'border-transparent text-muted-foreground hover:text-foreground'
+                      } ${isLovesGone ? 'focus:ring-nightclub-blue' : 'focus:ring-foreground'}`}
+                      aria-pressed={currentView === "front"}
+                    >
+                      Front
+                    </button>
+                    <button
+                      onClick={() => handleImageToggle(product.node.id, "back")}
+                      className={`text-sm tracking-widest uppercase pb-2 border-b-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background ${
+                        currentView === "back"
+                          ? isLovesGone ? 'border-nightclub-blue nightclub-blue' : 'border-foreground text-foreground'
+                          : 'border-transparent text-muted-foreground hover:text-foreground'
+                      } ${isLovesGone ? 'focus:ring-nightclub-blue' : 'focus:ring-foreground'}`}
+                      aria-pressed={currentView === "back"}
+                    >
+                      Back
+                    </button>
+                  </div>
+
+                  {/* Image effects overlay */}
+                  {isButterfly && currentView === "front" && (
                     <>
                       <div className="vertical-spotlight" />
-                      <div className="floating-particle" style={{ top: '20%', right: '25%' }} />
                     </>
                   )}
                   
-                  {isHelmet && (
+                  {isHelmet && currentView === "front" && (
                     <div className={`visor-sweep ${visorTrigger[productId] ? 'trigger' : ''}`} />
                   )}
                   
-                  {isLovesGone && (
+                  {isLovesGone && currentView === "front" && (
                     <>
                       <div className={`floor-light ${floorLightActive[productId] ? 'active' : ''}`} />
-                      <div style={{ position: 'absolute', top: '15%', right: '30%' }}>
+                      <div style={{ position: 'absolute', top: '18%', right: '32%', zIndex: 2 }}>
                         <div className="sparkle-dot" />
                         <div className="sparkle-dot" style={{ marginLeft: '8px' }} />
-                        <div className="sparkle-dot" style={{ marginLeft: '16px' }} />
                       </div>
                     </>
                   )}
                   
-                  <Link to={`/product/${product.node.handle}`}>
+                  {/* Gallery frame for Butterfly back view */}
+                  {isButterfly && currentView === "back" && (
+                    <div className="gallery-frame" />
+                  )}
+                  
+                  {/* Progress bar for Helmet back view */}
+                  {isHelmet && currentView === "back" && (
+                    <div className="progress-bar" />
+                  )}
+                  
+                  <Link to={`/product/${product.node.handle}`} className="block">
                     <img 
-                      src={product.node.images.edges[0]?.node.url}
-                      alt={product.node.title}
+                      src={product.node.images.edges[imageIndex]?.node.url}
+                      alt={`${product.node.title} ${currentView}`}
                       className={`w-full h-auto product-image-zoom transition-all duration-1000 ease-out ${
                         visibleSections[productId] ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                      }`}
+                      } ${isLovesGone && currentView === "back" ? 'desaturate-pulse' : ''}`}
                       style={{
-                        filter: imageHover === productId ? 'brightness(1.12)' : 'brightness(1)',
+                        filter: imageHover === productId ? 'brightness(1.08)' : 'brightness(1)',
                         transition: 'filter 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                       }}
                     />
                   </Link>
                 </div>
-                
-                {/* Content Section */}
-                <div className="space-y-8">
-                  {isHelmet && (
+
+                {/* Text Section - Right for Helmet */}
+                {isRightLayout && (
+                  <div className="space-y-6">
                     <p className="text-xs tracking-widest text-muted-foreground uppercase">
                       Performance Cotton 280 gsm
                     </p>
-                  )}
-                  
-                  <div>
-                    <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
-                      visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-                    } ${isLovesGone ? 'tracking-widest' : ''}`}>
-                      {product.node.title}
-                    </h3>
-                    <p className={`text-sm tracking-widest text-muted-foreground mt-2 transition-all duration-1000 ease-out delay-300 ${
-                      visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                    } ${isButterfly ? 'italic font-serif' : ''} ${isLovesGone ? 'text-nightclub-blue' : ''}`}>
-                      {isButterfly && "Rebellion in Bloom."}
-                      {isHelmet && "Built for Momentum."}
-                      {isLovesGone && "Love fades. Style stays."}
-                    </p>
-                  </div>
-                  
-                  {isHelmet && (
+                    
+                    <div>
+                      <h3 className={`text-4xl md:text-5xl font-light tracking-wider uppercase text-reveal transition-all duration-1000 ease-out delay-200 ${
+                        visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                      }`}>
+                        {product.node.title}
+                      </h3>
+                      <p className={`text-sm tracking-widest text-muted-foreground mt-2 transition-all duration-1000 ease-out delay-300 ${
+                        visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                      }`}>
+                        Built for Momentum
+                      </p>
+                    </div>
+                    
                     <div className="flex gap-2 flex-wrap">
                       <span className="pill-badge">Heavyweight</span>
                       <span className="pill-badge">Fit Holds Shape</span>
                       <span className="pill-badge">Day to Night</span>
                     </div>
-                  )}
-                  
-                  {isLovesGone && (
-                    <p className="text-xs tracking-wider text-nightclub-blue">
-                      Sorona blend. Breathable. Fast dry.
-                    </p>
-                  )}
-                  
-                  <p className={`text-lg text-muted-foreground leading-relaxed transition-all duration-1000 ease-out delay-400 ${
-                    visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-                  }`}>
-                    {product.node.description}
-                  </p>
+                    
+                    <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
+                      visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    }`}>
+                      <p className="text-3xl font-light tracking-wider">
+                        ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)} {product.node.priceRange.minVariantPrice.currencyCode}
+                      </p>
+                      
+                      <div className="flex gap-2 flex-wrap">
+                        {product.node.variants.edges.map((variant, idx) => (
+                          <button
+                            key={variant.node.id}
+                            onClick={() => handleSizeSelect(product.node.id, product.node.handle, idx)}
+                            className={`size-button px-6 py-2 border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-foreground ${
+                              selectedSizes[product.node.id] === idx
+                                ? 'bg-foreground text-background'
+                                : 'bg-transparent text-foreground hover:bg-foreground/10'
+                            }`}
+                            aria-label={`Select size ${variant.node.title}`}
+                          >
+                            {variant.node.title}
+                          </button>
+                        ))}
+                      </div>
 
-                  <div className={`space-y-4 transition-all duration-1000 ease-out delay-700 ${
-                    visibleSections[productId] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-                  }`}>
-                    <p className="text-3xl font-light tracking-wider">
-                      ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)} {product.node.priceRange.minVariantPrice.currencyCode}
-                    </p>
-                    
-                    <div className="flex gap-2 flex-wrap">
-                      {product.node.variants.edges.map((variant, idx) => (
-                        <button
-                          key={variant.node.id}
-                          onClick={() => setSelectedSizes(prev => ({ ...prev, [product.node.id]: idx }))}
-                          className={`size-button px-6 py-2 border transition-all duration-300 ${
-                            selectedSizes[product.node.id] === idx
-                              ? isLovesGone ? 'bg-nightclub-blue text-white border-nightclub-blue' : 'bg-foreground text-background'
-                              : 'bg-transparent text-foreground hover:bg-foreground/10'
-                          } ${isLovesGone ? 'border-nightclub-blue' : ''}`}
-                        >
-                          {variant.node.title}
-                        </button>
-                      ))}
-                    </div>
-
-                    <Button
-                      onClick={() => handleAddToCart(product, `product-${index + 1}`)}
-                      size="lg"
-                      className={`w-full transition-all duration-500 ${
-                        isLovesGone 
-                          ? 'bg-foreground text-background hover:bg-nightclub-blue hover:text-white border-nightclub-blue hover:shadow-[0_0_30px_rgba(70,130,200,0.4)]'
-                          : 'bg-foreground text-background hover:bg-foreground/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]'
-                      }`}
-                    >
-                      ADD TO CART
-                    </Button>
-                    
-                    <button
-                      onClick={() => setFabricDetailsOpen(prev => ({ ...prev, [productId]: !prev[productId] }))}
-                      className="w-full text-sm tracking-wider text-muted-foreground hover:text-foreground transition-colors uppercase"
-                    >
-                      {fabricDetailsOpen[productId] ? '− Close' : '+ Fabric Details'}
-                    </button>
-                    
-                    {fabricDetailsOpen[productId] && (
-                      <div className={`
-                        ${isButterfly ? 'fabric-panel-right bg-white/90 text-black' : ''}
-                        ${isHelmet ? 'fabric-panel-bottom bg-background/95 border border-white/20' : ''}
-                        ${isLovesGone ? 'fabric-panel-left bg-nightclub-blue/10 text-white' : ''}
-                        p-6 rounded backdrop-blur-sm space-y-3 text-sm
-                      `}>
-                        <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
-                        <p className="leading-relaxed">{product.node.description}</p>
-                        {isHelmet && (
+                      <Button
+                        onClick={() => handleAddToCart(product, `product-${index + 1}`)}
+                        size="lg"
+                        className="w-full transition-all duration-500 bg-foreground text-background hover:bg-foreground/90 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+                      >
+                        ADD TO CART
+                      </Button>
+                      
+                      <button
+                        onClick={() => setFabricDetailsOpen(prev => ({ ...prev, [productId]: !prev[productId] }))}
+                        className="w-full text-sm tracking-wider text-muted-foreground hover:text-foreground transition-colors uppercase"
+                        aria-expanded={fabricDetailsOpen[productId]}
+                      >
+                        {fabricDetailsOpen[productId] ? '− Close' : '+ Fabric Details'}
+                      </button>
+                      
+                      {fabricDetailsOpen[productId] && (
+                        <div className="fabric-panel-bottom bg-background/95 border border-white/20 p-6 rounded space-y-3 text-sm">
+                          <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
+                          <p className="leading-relaxed">{material.composition}</p>
+                          <p className="leading-relaxed">{material.weight}</p>
+                          <p className="leading-relaxed">{material.features}</p>
                           <p className="text-xs tracking-wider text-muted-foreground">
                             Structure level: High
                           </p>
-                        )}
-                      </div>
-                    )}
+                          <div className="pt-3 mt-3 border-t border-white/20">
+                            <h5 className="font-semibold tracking-wider uppercase mb-2">Size and Fit</h5>
+                            <p className="text-xs leading-relaxed">The printed graphic contains a typographic size chart motif used across designs.</p>
+                            <button
+                              onClick={() => setSizeChartModalOpen(true)}
+                              className="text-xs underline mt-2 hover:text-foreground transition-colors"
+                            >
+                              View Size Guide
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </section>
         );
       })}
 
-      {/* Section 5: Brand Outro */}
+      {/* Section: Brand Outro */}
       <section 
         id="outro"
         ref={outroRef}
@@ -747,6 +885,78 @@ const MainPage = () => {
           <span className="font-light">Made by @mixalis_fardellas</span>
         </a>
       </div>
+
+      {/* Size Chart Modal */}
+      {sizeChartModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSizeChartModalOpen(false)}
+        >
+          <div 
+            className="bg-background border border-white/20 rounded-lg p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-light tracking-wider uppercase">Size Guide</h3>
+              <button
+                onClick={() => setSizeChartModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors text-2xl"
+                aria-label="Close size chart"
+              >
+                ×
+              </button>
+            </div>
+            <div className="space-y-4 text-sm">
+              <p className="text-muted-foreground">All measurements are in inches.</p>
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-white/20">
+                    <th className="text-left py-3 px-2">Size</th>
+                    <th className="text-left py-3 px-2">Chest</th>
+                    <th className="text-left py-3 px-2">Length</th>
+                    <th className="text-left py-3 px-2">Shoulder</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-white/10">
+                    <td className="py-3 px-2">S</td>
+                    <td className="py-3 px-2">36-38</td>
+                    <td className="py-3 px-2">27</td>
+                    <td className="py-3 px-2">17</td>
+                  </tr>
+                  <tr className="border-b border-white/10">
+                    <td className="py-3 px-2">M</td>
+                    <td className="py-3 px-2">38-40</td>
+                    <td className="py-3 px-2">28</td>
+                    <td className="py-3 px-2">18</td>
+                  </tr>
+                  <tr className="border-b border-white/10">
+                    <td className="py-3 px-2">L</td>
+                    <td className="py-3 px-2">40-42</td>
+                    <td className="py-3 px-2">29</td>
+                    <td className="py-3 px-2">19</td>
+                  </tr>
+                  <tr className="border-b border-white/10">
+                    <td className="py-3 px-2">XL</td>
+                    <td className="py-3 px-2">42-44</td>
+                    <td className="py-3 px-2">30</td>
+                    <td className="py-3 px-2">20</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-2">2XL</td>
+                    <td className="py-3 px-2">44-46</td>
+                    <td className="py-3 px-2">31</td>
+                    <td className="py-3 px-2">21</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p className="text-xs text-muted-foreground pt-4">
+                Note: The typographic size chart printed on the garment is a design element and not a functional measurement guide. Please refer to this table for accurate sizing.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
