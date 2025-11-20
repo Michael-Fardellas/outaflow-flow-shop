@@ -762,9 +762,10 @@ All colors MUST be HSL.
     transform: translate(-50%, -50%);
     width: 55%;
     height: 90%;
-    background: hsl(var(--off-white));
+    background: rgba(247, 247, 247, 0.08);
     border-radius: 40px;
     z-index: 0;
+    pointer-events: none;
   }
 
   /* Gallery frame animation */

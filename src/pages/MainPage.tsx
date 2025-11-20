@@ -420,34 +420,22 @@ const MainPage = () => {
             {/* Background effects per product */}
             {isButterfly && (
               <>
-                {/* Off-white vertical panel */}
-                <div className="off-white-panel" />
-                
-                {/* Low opacity floral outlines */}
-                <div className="absolute left-[8%] top-[10%] opacity-[0.05]" style={{ animation: 'float 18s ease-in-out infinite' }}>
-                  <svg width="150" height="200" viewBox="0 0 100 150" fill="none" stroke="black" strokeWidth="1">
-                    <path d="M50,20 Q30,30 25,50 Q20,70 30,85 Q40,100 50,110" />
-                    <path d="M50,20 Q70,30 75,50 Q80,70 70,85 Q60,100 50,110" />
-                    <ellipse cx="35" cy="40" rx="15" ry="25" transform="rotate(-30 35 40)" />
-                    <ellipse cx="65" cy="40" rx="15" ry="25" transform="rotate(30 65 40)" />
-                  </svg>
-                </div>
-                <div className="absolute right-[10%] top-[60%] opacity-[0.04]" style={{ animation: 'float 22s ease-in-out infinite', animationDelay: '-8s' }}>
-                  <svg width="130" height="180" viewBox="0 0 100 150" fill="none" stroke="black" strokeWidth="1">
-                    <path d="M50,20 Q30,30 25,50 Q20,70 30,85 Q40,100 50,110" />
-                    <path d="M50,20 Q70,30 75,50 Q80,70 70,85 Q60,100 50,110" />
-                    <ellipse cx="35" cy="40" rx="15" ry="25" transform="rotate(-30 35 40)" />
-                    <ellipse cx="65" cy="40" rx="15" ry="25" transform="rotate(30 65 40)" />
-                  </svg>
-                </div>
+                {/* Soft atmospheric white glow - NO solid panels */}
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(ellipse 60% 70% at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 70%)',
+                    filter: 'blur(60px)'
+                  }}
+                />
                 
                 {/* Vertical spotlight sweep */}
                 <div className="vertical-spotlight" />
                 
                 {/* Floating particles */}
-                <div className="floating-particle" style={{ top: '25%', right: '30%' }} />
-                <div className="floating-particle" style={{ top: '30%', right: '28%', animationDelay: '2s' }} />
-                <div className="floating-particle" style={{ top: '28%', right: '32%', animationDelay: '4s' }} />
+                <div className="floating-particle" style={{ top: '25%', right: '30%', zIndex: 2 }} />
+                <div className="floating-particle" style={{ top: '30%', right: '28%', animationDelay: '2s', zIndex: 2 }} />
+                <div className="floating-particle" style={{ top: '28%', right: '32%', animationDelay: '4s', zIndex: 2 }} />
               </>
             )}
             
@@ -586,9 +574,9 @@ const MainPage = () => {
                       
                       {fabricDetailsOpen[productId] && (
                         <div className={`
-                          ${isButterfly ? 'fabric-panel-right bg-white/90 text-black' : ''}
-                          ${isHelmet ? 'fabric-panel-bottom bg-background/95 border border-white/20' : ''}
-                          ${isLovesGone ? 'fabric-panel-left bg-nightclub-blue/10 text-white backdrop-blur-sm' : ''}
+                          ${isButterfly ? 'fabric-panel-right bg-white/95 text-black' : ''}
+                          ${isHelmet ? 'fabric-panel-bottom bg-black/95 text-white border border-white/20' : ''}
+                          ${isLovesGone ? 'fabric-panel-left bg-black/90 text-white border border-nightclub-blue/30 backdrop-blur-sm' : ''}
                           p-6 rounded space-y-3 text-sm
                         `}>
                           <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
@@ -790,7 +778,7 @@ const MainPage = () => {
                       </button>
                       
                       {fabricDetailsOpen[productId] && (
-                        <div className="fabric-panel-bottom bg-background/95 border border-white/20 p-6 rounded space-y-3 text-sm">
+                        <div className="fabric-panel-bottom bg-black/95 text-white border border-white/20 p-6 rounded space-y-3 text-sm">
                           <h4 className="font-semibold tracking-wider uppercase">Material Details</h4>
                           <p className="leading-relaxed">{material.composition}</p>
                           <p className="leading-relaxed">{material.weight}</p>
