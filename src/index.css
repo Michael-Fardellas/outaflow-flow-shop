@@ -53,6 +53,12 @@ All colors MUST be HSL.
   html {
     scroll-behavior: smooth;
   }
+  
+  @supports (scroll-behavior: smooth) {
+    html {
+      scroll-padding-top: 2rem;
+    }
+  }
 
   body {
     @apply bg-background text-foreground overflow-x-hidden;
@@ -249,9 +255,21 @@ All colors MUST be HSL.
     transition: transform 0.1s ease-out;
   }
 
-  /* Smooth scroll with inertia */
-  html {
+  /* Smooth scroll with momentum */
+  * {
     scroll-behavior: smooth;
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+    
+    section {
+      scroll-snap-align: start;
+      scroll-snap-stop: normal;
+    }
   }
 
   /* Cart backdrop dimming */

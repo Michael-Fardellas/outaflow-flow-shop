@@ -278,7 +278,7 @@ const MainPage = () => {
       </section>
 
       {/* Products - Gallery Exhibit Layout */}
-      <main className="space-y-0">
+      <main className="space-y-0" style={{ scrollBehavior: 'smooth' }}>
         {products.map((product, index) => {
           const handle = product.node.handle;
           const material = materialByHandle(handle);
@@ -294,13 +294,13 @@ const MainPage = () => {
           
           if (handle.includes("butterfly")) {
             sceneClass = "butterfly-minimal-scene";
-            sceneStyles = { background: "#000" };
+            sceneStyles = { background: "linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%)" };
           } else if (handle.includes("helmet")) {
             sceneClass = "helmet-minimal-scene";
-            sceneStyles = { background: "#000" };
+            sceneStyles = { background: "linear-gradient(180deg, #000 0%, #0d0d0d 50%, #000 100%)" };
           } else if (handle.includes("fire") || handle.includes("love")) {
             sceneClass = "love-minimal-scene";
-            sceneStyles = { background: "#000" };
+            sceneStyles = { background: "radial-gradient(ellipse at center, #0a1628 0%, #050a14 50%, #000 100%)" };
           }
 
           return (
@@ -309,7 +309,7 @@ const MainPage = () => {
               id={sectionId}
               ref={(el) => (sectionRefs.current[sectionId] = el)}
               style={sceneStyles}
-              className={`${sceneClass} min-h-screen flex items-center py-[25vh] px-8 relative overflow-hidden transition-opacity duration-1000 ${
+              className={`${sceneClass} min-h-screen flex items-center py-16 md:py-20 px-8 relative overflow-hidden transition-opacity duration-700 ${
                 isVisible ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -389,10 +389,12 @@ const MainPage = () => {
 
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <>
-                    {/* Big bright blue but subtle hue */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-500/15 rounded-full blur-[140px] animate-[glow-pulse-minimal_10s_ease-in-out_infinite] pointer-events-none" />
+                    {/* Big bright blue hue with enhanced visibility */}
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-blue-500/25 rounded-full blur-[160px] animate-[glow-pulse-minimal_10s_ease-in-out_infinite] pointer-events-none" />
                     {/* Additional blue layer for brightness */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[40%] bg-blue-400/20 rounded-full blur-[100px] opacity-50 pointer-events-none" />
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] bg-blue-400/30 rounded-full blur-[120px] opacity-60 pointer-events-none" />
+                    {/* Outer blue glow layer */}
+                    <div className="absolute inset-0 bg-blue-600/5 pointer-events-none" />
                     {/* Broken hearts scattered - highly visible with blue glow */}
                     <div className="absolute left-[18%] top-[22%] opacity-[0.65] pointer-events-none animate-[broken-heart-float_20s_ease-in-out_infinite] drop-shadow-[0_0_30px_rgba(96,165,250,0.8)]">
                       <Heart className="w-20 h-20 md:w-24 md:h-24 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
@@ -418,9 +420,9 @@ const MainPage = () => {
                 )}
               </div>
 
-              <div className={`max-w-6xl mx-auto w-full grid gap-16 md:grid-cols-2 items-center relative z-10 ${
-                isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
-              } transition-all duration-1200 delay-200`}>
+              <div className={`max-w-6xl mx-auto w-full grid gap-12 md:gap-16 md:grid-cols-2 items-center relative z-10 ${
+                isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+              } transition-all duration-900 delay-150`}>
                 {/* Text column - Staggered fade-in - Always second on mobile */}
                 <div className={`relative z-10 space-y-6 order-2 ${isEven ? "md:order-2" : "md:order-1"} ${
                   (handle.includes("fire") || handle.includes("love")) ? "tracking-wider" : ""
