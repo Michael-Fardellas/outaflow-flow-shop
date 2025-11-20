@@ -203,24 +203,31 @@ const MainPage = () => {
         <CartDrawer />
       </div>
 
-      {/* Hero Intro Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
-        {/* Ambient light pulse behind logo */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-white/5 rounded-full blur-[120px] animate-[ambient-pulse_6s_ease-in-out_infinite] pointer-events-none" />
+      {/* Hero Intro Section - Mobile Optimized */}
+      <section className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
+        {/* Multi-layer ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-white/8 rounded-full blur-[150px] animate-[ambient-pulse_5s_ease-in-out_infinite] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-white/10 rounded-full blur-[100px] animate-[ambient-pulse_5s_ease-in-out_infinite_1s] pointer-events-none" />
         
-        {/* Logo fade-in */}
-        <div className="relative z-10 mb-12 animate-[hero-fade-in_1.5s_ease-out_forwards] opacity-0">
-          <img src={logo} alt="OUTAFLOW" className="h-24 md:h-32 w-auto" />
+        {/* Logo with 3D fade effect */}
+        <div className="relative z-10 mb-8 md:mb-12 animate-[logo-3d-enter_1.2s_ease-out_forwards] opacity-0 perspective-1000">
+          <div className="relative">
+            {/* Shadow layers for 3D depth */}
+            <img src={logo} alt="" className="absolute inset-0 h-20 md:h-28 w-auto blur-md opacity-20 transform translate-y-2" aria-hidden="true" />
+            <img src={logo} alt="" className="absolute inset-0 h-20 md:h-28 w-auto blur-sm opacity-30 transform translate-y-1" aria-hidden="true" />
+            {/* Main logo */}
+            <img src={logo} alt="OUTAFLOW" className="relative h-20 md:h-28 w-auto drop-shadow-2xl" />
+          </div>
         </div>
 
-        {/* Letter-by-letter text animation */}
-        <div className="relative z-10 mb-32">
-          <h1 className="text-2xl md:text-3xl font-extralight tracking-[0.3em] uppercase">
+        {/* Faster typewriter text animation */}
+        <div className="relative z-10 mb-24 md:mb-32 text-center">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-extralight tracking-[0.25em] md:tracking-[0.3em] uppercase px-4">
             {"Made with purpose.".split("").map((char, i) => (
               <span
                 key={i}
-                className="inline-block opacity-0 animate-[letter-appear_0.05s_ease-out_forwards]"
-                style={{ animationDelay: `${2 + i * 0.08}s` }}
+                className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
+                style={{ animationDelay: `${1.3 + i * 0.04}s` }}
               >
                 {char === " " ? "\u00A0" : char}
               </span>
@@ -229,10 +236,10 @@ const MainPage = () => {
         </div>
 
         {/* Scroll to Discover cue */}
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-0 animate-[hero-fade-in_1s_ease-out_forwards] pointer-events-none" style={{ animationDelay: "3.5s" }}>
-          <p className="text-[10px] tracking-[0.4em] uppercase font-light opacity-60">Scroll to Discover</p>
-          <div className="w-[1px] h-16 bg-foreground/30 relative">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground/50 rounded-full animate-[bounce-arrow_2.5s_ease-in-out_infinite]" />
+        <div className="absolute bottom-12 md:bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 md:gap-4 opacity-0 animate-[hero-fade-in_0.8s_ease-out_forwards] pointer-events-none" style={{ animationDelay: "2.2s" }}>
+          <p className="text-[9px] md:text-[10px] tracking-[0.35em] md:tracking-[0.4em] uppercase font-light opacity-50">Scroll to Discover</p>
+          <div className="w-[1px] h-12 md:h-16 bg-foreground/30 relative">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 md:w-2 md:h-2 bg-foreground/50 rounded-full animate-[bounce-arrow_2.5s_ease-in-out_infinite]" />
           </div>
         </div>
       </section>
@@ -286,29 +293,29 @@ const MainPage = () => {
                   <>
                     {/* Vertical soft-light strip */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-white/5 blur-[80px] pointer-events-none" />
-                    {/* Multiple butterflies scattered across the scene */}
-                    <div className="absolute left-[12%] top-[18%] opacity-[0.08] pointer-events-none animate-[butterfly-float_20s_ease-in-out_infinite]">
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-400">
+                    {/* Multiple butterflies scattered - increased visibility */}
+                    <div className="absolute left-[12%] top-[18%] opacity-[0.2] pointer-events-none animate-[butterfly-float_20s_ease-in-out_infinite]">
+                      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute left-[25%] top-[35%] opacity-[0.06] pointer-events-none animate-[butterfly-float_24s_ease-in-out_infinite_1s]">
-                      <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-400">
+                    <div className="absolute left-[25%] top-[35%] opacity-[0.18] pointer-events-none animate-[butterfly-float_24s_ease-in-out_infinite_1s]">
+                      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute right-[15%] top-[28%] opacity-[0.07] pointer-events-none animate-[butterfly-float_28s_ease-in-out_infinite_2s]">
-                      <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-400">
+                    <div className="absolute right-[15%] top-[28%] opacity-[0.22] pointer-events-none animate-[butterfly-float_28s_ease-in-out_infinite_2s]">
+                      <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute left-[65%] top-[45%] opacity-[0.05] pointer-events-none animate-[butterfly-float_22s_ease-in-out_infinite_3s]">
-                      <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-400">
+                    <div className="absolute left-[65%] top-[45%] opacity-[0.16] pointer-events-none animate-[butterfly-float_22s_ease-in-out_infinite_3s]">
+                      <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
-                    <div className="absolute right-[30%] top-[60%] opacity-[0.06] pointer-events-none animate-[butterfly-float_26s_ease-in-out_infinite_4s]">
-                      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-400">
+                    <div className="absolute right-[30%] top-[60%] opacity-[0.19] pointer-events-none animate-[butterfly-float_26s_ease-in-out_infinite_4s]">
+                      <svg width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
                         <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
                       </svg>
                     </div>
@@ -321,24 +328,24 @@ const MainPage = () => {
                   <>
                     {/* Horizontal diffused band */}
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-24 bg-gradient-to-r from-transparent via-white/4 to-transparent blur-[60px] pointer-events-none" />
-                    {/* Big flashy flowers scattered */}
-                    <div className="absolute left-[15%] top-[20%] opacity-[0.08] pointer-events-none animate-[float-minimal_18s_ease-in-out_infinite]">
-                      <Flower2 className="w-20 h-20 text-gray-500" strokeWidth={0.8} />
+                    {/* Big flashy flowers scattered - increased visibility */}
+                    <div className="absolute left-[15%] top-[20%] opacity-[0.25] pointer-events-none animate-[float-minimal_18s_ease-in-out_infinite]">
+                      <Flower2 className="w-24 h-24 md:w-28 md:h-28 text-gray-400" strokeWidth={1.2} />
                     </div>
-                    <div className="absolute right-[20%] top-[30%] opacity-[0.09] pointer-events-none animate-[float-minimal_22s_ease-in-out_infinite_1s]">
-                      <Flower2 className="w-24 h-24 text-gray-500" strokeWidth={0.8} />
+                    <div className="absolute right-[20%] top-[30%] opacity-[0.28] pointer-events-none animate-[float-minimal_22s_ease-in-out_infinite_1s]">
+                      <Flower2 className="w-28 h-28 md:w-32 md:h-32 text-gray-400" strokeWidth={1.2} />
                     </div>
-                    <div className="absolute left-[60%] top-[55%] opacity-[0.07] pointer-events-none animate-[float-minimal_20s_ease-in-out_infinite_2s]">
-                      <Flower2 className="w-16 h-16 text-gray-500" strokeWidth={0.8} />
+                    <div className="absolute left-[60%] top-[55%] opacity-[0.22] pointer-events-none animate-[float-minimal_20s_ease-in-out_infinite_2s]">
+                      <Flower2 className="w-20 h-20 md:w-24 md:h-24 text-gray-400" strokeWidth={1.2} />
                     </div>
-                    {/* Helmet shapes */}
-                    <div className="absolute left-[25%] top-[65%] opacity-[0.06] pointer-events-none animate-[float-minimal_24s_ease-in-out_infinite_3s]">
-                      <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-500">
+                    {/* Helmet shapes - increased visibility */}
+                    <div className="absolute left-[25%] top-[65%] opacity-[0.20] pointer-events-none animate-[float-minimal_24s_ease-in-out_infinite_3s]">
+                      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
                         <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
                       </svg>
                     </div>
-                    <div className="absolute right-[15%] top-[50%] opacity-[0.07] pointer-events-none animate-[float-minimal_26s_ease-in-out_infinite_4s]">
-                      <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-500">
+                    <div className="absolute right-[15%] top-[50%] opacity-[0.23] pointer-events-none animate-[float-minimal_26s_ease-in-out_infinite_4s]">
+                      <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
                         <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
                       </svg>
                     </div>
@@ -353,26 +360,26 @@ const MainPage = () => {
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-500/15 rounded-full blur-[140px] animate-[glow-pulse-minimal_10s_ease-in-out_infinite] pointer-events-none" />
                     {/* Additional blue layer for brightness */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[40%] bg-blue-400/20 rounded-full blur-[100px] opacity-50 pointer-events-none" />
-                    {/* Broken hearts scattered across the scene */}
-                    <div className="absolute left-[18%] top-[22%] opacity-[0.12] pointer-events-none animate-[broken-heart-float_20s_ease-in-out_infinite]">
-                      <Heart className="w-12 h-12 text-blue-400 fill-blue-400/30" strokeWidth={1.5} />
-                      <div className="absolute top-2 left-3 w-6 h-[2px] bg-background rotate-45" />
+                    {/* Broken hearts scattered - increased visibility */}
+                    <div className="absolute left-[18%] top-[22%] opacity-[0.35] pointer-events-none animate-[broken-heart-float_20s_ease-in-out_infinite]">
+                      <Heart className="w-16 h-16 md:w-20 md:h-20 text-blue-300 fill-blue-400/40" strokeWidth={2} />
+                      <div className="absolute top-3 left-4 w-8 h-[3px] bg-background rotate-45" />
                     </div>
-                    <div className="absolute right-[22%] top-[35%] opacity-[0.11] pointer-events-none animate-[broken-heart-float_24s_ease-in-out_infinite_1s]">
-                      <Heart className="w-14 h-14 text-blue-400 fill-blue-400/30" strokeWidth={1.5} />
-                      <div className="absolute top-3 left-4 w-7 h-[2px] bg-background rotate-45" />
+                    <div className="absolute right-[22%] top-[35%] opacity-[0.38] pointer-events-none animate-[broken-heart-float_24s_ease-in-out_infinite_1s]">
+                      <Heart className="w-18 h-18 md:w-24 md:h-24 text-blue-300 fill-blue-400/40" strokeWidth={2} />
+                      <div className="absolute top-4 left-5 w-10 h-[3px] bg-background rotate-45" />
                     </div>
-                    <div className="absolute left-[65%] top-[48%] opacity-[0.10] pointer-events-none animate-[broken-heart-float_22s_ease-in-out_infinite_2s]">
-                      <Heart className="w-11 h-11 text-blue-400 fill-blue-400/30" strokeWidth={1.5} />
-                      <div className="absolute top-2 left-2.5 w-5 h-[2px] bg-background rotate-45" />
+                    <div className="absolute left-[65%] top-[48%] opacity-[0.32] pointer-events-none animate-[broken-heart-float_22s_ease-in-out_infinite_2s]">
+                      <Heart className="w-14 h-14 md:w-18 md:h-18 text-blue-300 fill-blue-400/40" strokeWidth={2} />
+                      <div className="absolute top-3 left-3.5 w-7 h-[3px] bg-background rotate-45" />
                     </div>
-                    <div className="absolute left-[30%] top-[60%] opacity-[0.13] pointer-events-none animate-[broken-heart-float_26s_ease-in-out_infinite_3s]">
-                      <Heart className="w-13 h-13 text-blue-400 fill-blue-400/30" strokeWidth={1.5} />
-                      <div className="absolute top-2.5 left-3 w-6 h-[2px] bg-background rotate-45" />
+                    <div className="absolute left-[30%] top-[60%] opacity-[0.36] pointer-events-none animate-[broken-heart-float_26s_ease-in-out_infinite_3s]">
+                      <Heart className="w-17 h-17 md:w-22 md:h-22 text-blue-300 fill-blue-400/40" strokeWidth={2} />
+                      <div className="absolute top-3.5 left-4 w-9 h-[3px] bg-background rotate-45" />
                     </div>
-                    <div className="absolute right-[15%] top-[25%] opacity-[0.09] pointer-events-none animate-[broken-heart-float_28s_ease-in-out_infinite_4s]">
-                      <Heart className="w-10 h-10 text-blue-400 fill-blue-400/30" strokeWidth={1.5} />
-                      <div className="absolute top-2 left-2 w-5 h-[2px] bg-background rotate-45" />
+                    <div className="absolute right-[15%] top-[25%] opacity-[0.30] pointer-events-none animate-[broken-heart-float_28s_ease-in-out_infinite_4s]">
+                      <Heart className="w-13 h-13 md:w-16 md:h-16 text-blue-300 fill-blue-400/40" strokeWidth={2} />
+                      <div className="absolute top-2.5 left-3 w-6 h-[3px] bg-background rotate-45" />
                     </div>
                   </>
                 )}
