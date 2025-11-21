@@ -215,14 +215,6 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
-      {/* Personality Texture Overlay */}
-      <div 
-        className="fixed inset-0 z-40 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")',
-          backgroundRepeat: 'repeat',
-        }}
-      />
 
       {/* Scroll Progress Bar - Color changes based on section */}
       <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
@@ -297,19 +289,15 @@ const MainPage = () => {
           const sectionId = `product-${product.node.id}`;
           const isVisible = visibleSections.has(sectionId);
 
-          // Scene personality with cyan/indigo nebula backgrounds
+          // Scene personality - let CSS handle atmosphere
           let sceneClass = "";
-          let sceneStyles: React.CSSProperties = {};
           
           if (handle.includes("butterfly")) {
             sceneClass = "butterfly-minimal-scene";
-            sceneStyles = { background: "radial-gradient(circle at center, rgba(6, 182, 212, 0.15) 0%, rgba(0, 0, 0, 1) 70%)" };
           } else if (handle.includes("helmet")) {
             sceneClass = "helmet-minimal-scene";
-            sceneStyles = { background: "radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 1) 70%)" };
           } else if (handle.includes("fire") || handle.includes("love")) {
             sceneClass = "love-minimal-scene";
-            sceneStyles = { background: "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.2) 0%, rgba(0, 0, 0, 1) 70%)" };
           }
 
           return (
@@ -317,7 +305,6 @@ const MainPage = () => {
               key={product.node.id}
               id={sectionId}
               ref={(el) => (sectionRefs.current[sectionId] = el)}
-              style={sceneStyles}
               className={`${sceneClass} min-h-screen flex items-center py-16 md:py-20 px-8 relative overflow-hidden transition-opacity duration-700 ${
                 isVisible ? "opacity-100" : "opacity-0"
               }`}
