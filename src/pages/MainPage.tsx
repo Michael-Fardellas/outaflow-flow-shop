@@ -10,6 +10,7 @@ import { Loader2, Heart, Flower2 } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useSoundEffect } from "@/hooks/use-sound-effect";
+import { ParticleEffect } from "@/components/ParticleEffect";
 
 // Simple size chart data (R00227 + RU0130)
 const sizeCharts = {
@@ -75,6 +76,7 @@ const MainPage = () => {
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentSection, setCurrentSection] = useState<string>("");
+  const [particleTriggers, setParticleTriggers] = useState<{ [key: string]: number }>({});
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
   const { playClick } = useSoundEffect();
@@ -158,6 +160,13 @@ const MainPage = () => {
     if (!variant) return;
 
     playClick();
+    
+    // Trigger particle effect
+    setParticleTriggers(prev => ({
+      ...prev,
+      [product.node.id]: (prev[product.node.id] || 0) + 1
+    }));
+    
     addItem({
       product,
       variantId: variant.id,
@@ -458,64 +467,79 @@ const MainPage = () => {
                       />
                     </div>
  
-                    {/* MASSIVE BRIGHT HEARTS */}
+                    {/* MASSIVE BRIGHT BROKEN HEARTS */}
                     <div className="relative flex gap-20 scale-150">
-                      {/* Heart 1 - Glow Layer */}
-                      <Heart
+                      {/* Broken Heart 1 - Glow Layer */}
+                      <svg
                         className="absolute left-0 w-[400px] h-[400px] blur-3xl animate-[float_14s_ease-in-out_infinite] rotate-12"
-                        strokeWidth={3}
-                        style={{
-                          color: "hsl(213, 98%, 75%)",
-                          opacity: 0.95,
-                        }}
-                      />
-                      {/* Heart 1 - Object Layer */}
-                      <Heart
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="hsl(213, 98%, 75%)"
+                        strokeWidth="0.5"
+                        style={{ opacity: 0.95 }}
+                      >
+                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" fill="hsl(213, 98%, 75%)" />
+                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                      {/* Broken Heart 1 - Object Layer */}
+                      <svg
                         className="relative w-64 h-64 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] rotate-12"
-                        strokeWidth={3}
-                        style={{
-                          color: "hsl(213, 95%, 82%)",
-                          fill: "hsl(213, 98%, 75%)",
-                        }}
-                      />
+                        viewBox="0 0 24 24"
+                        fill="hsl(213, 98%, 75%)"
+                        stroke="hsl(213, 95%, 82%)"
+                        strokeWidth="0.5"
+                      >
+                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
+                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
  
-                      {/* Heart 2 - Glow Layer */}
-                      <Heart
+                      {/* Broken Heart 2 - Glow Layer */}
+                      <svg
                         className="absolute left-[33%] w-[480px] h-[480px] blur-3xl animate-[float_14s_ease-in-out_infinite_0.8s] z-10"
-                        strokeWidth={3.5}
-                        style={{
-                          color: "hsl(217, 98%, 68%)",
-                          opacity: 0.95,
-                        }}
-                      />
-                      {/* Heart 2 - Object Layer */}
-                      <Heart
+                        viewBox="0 0 24 24"
+                        fill="hsl(217, 98%, 68%)"
+                        stroke="hsl(217, 98%, 68%)"
+                        strokeWidth="0.5"
+                        style={{ opacity: 0.95 }}
+                      >
+                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
+                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                      {/* Broken Heart 2 - Object Layer */}
+                      <svg
                         className="relative w-80 h-80 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10"
-                        strokeWidth={3.5}
-                        style={{
-                          color: "hsl(213, 95%, 82%)",
-                          fill: "hsl(217, 98%, 68%)",
-                        }}
-                      />
+                        viewBox="0 0 24 24"
+                        fill="hsl(217, 98%, 68%)"
+                        stroke="hsl(213, 95%, 82%)"
+                        strokeWidth="0.5"
+                      >
+                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
+                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
  
-                      {/* Heart 3 - Glow Layer */}
-                      <Heart
+                      {/* Broken Heart 3 - Glow Layer */}
+                      <svg
                         className="absolute right-0 w-[360px] h-[360px] blur-3xl animate-[float_14s_ease-in-out_infinite_1.5s] -rotate-12"
-                        strokeWidth={2.8}
-                        style={{
-                          color: "hsl(213, 98%, 75%)",
-                          opacity: 0.95,
-                        }}
-                      />
-                      {/* Heart 3 - Object Layer */}
-                      <Heart
+                        viewBox="0 0 24 24"
+                        fill="hsl(213, 98%, 75%)"
+                        stroke="hsl(213, 98%, 75%)"
+                        strokeWidth="0.5"
+                        style={{ opacity: 0.95 }}
+                      >
+                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
+                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
+                      {/* Broken Heart 3 - Object Layer */}
+                      <svg
                         className="relative w-60 h-60 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] -rotate-12"
-                        strokeWidth={2.8}
-                        style={{
-                          color: "hsl(213, 95%, 82%)",
-                          fill: "hsl(213, 98%, 75%)",
-                        }}
-                      />
+                        viewBox="0 0 24 24"
+                        fill="hsl(213, 98%, 75%)"
+                        stroke="hsl(213, 95%, 82%)"
+                        strokeWidth="0.5"
+                      >
+                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
+                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
+                      </svg>
                     </div>
                   </div>
                 )}
@@ -537,11 +561,13 @@ const MainPage = () => {
               } transition-all duration-900 delay-150`}>
                 {/* Text column - Staggered fade-in - Always second on mobile */}
                 <div className={`relative z-10 space-y-6 order-2 ${isEven ? "md:order-2" : "md:order-1"} ${
-                  (handle.includes("fire") || handle.includes("love")) ? "tracking-wider text-primary" : ""
+                  (handle.includes("fire") || handle.includes("love")) ? "tracking-wider" : ""
                 }`}>
                   {/* Product title - larger but thinner */}
-                  <h2 className={`text-4xl md:text-5xl font-extralight tracking-[0.08em] uppercase mb-3 transition-opacity duration-1000 ${
+                  <h2 className={`text-4xl md:text-5xl font-bold tracking-[0.08em] uppercase mb-3 transition-opacity duration-1000 ${
                     isVisible ? "opacity-100" : "opacity-0"
+                  } ${
+                    (handle.includes("fire") || handle.includes("love")) ? "text-[hsl(217,98%,68%)]" : ""
                   }`} style={{ transitionDelay: "400ms" }}>
                     {product.node.title}
                   </h2>
@@ -549,6 +575,8 @@ const MainPage = () => {
                   {/* Subtitle - smaller with increased letter spacing */}
                   <p className={`text-sm font-light tracking-[0.25em] uppercase opacity-60 mb-6 transition-opacity duration-1000 ${
                     isVisible ? "opacity-60" : "opacity-0"
+                  } ${
+                    (handle.includes("fire") || handle.includes("love")) ? "text-[hsl(217,98%,68%)]" : ""
                   }`} style={{ transitionDelay: "600ms" }}>
                     {handle.includes("butterfly") && "Rebellion in Bloom"}
                     {handle.includes("helmet") && "Built for Momentum"}
@@ -558,6 +586,8 @@ const MainPage = () => {
                   {/* Fabric info with max-width */}
                   <div className={`max-w-md space-y-2 transition-opacity duration-1000 ${
                     isVisible ? "opacity-100" : "opacity-0"
+                  } ${
+                    (handle.includes("fire") || handle.includes("love")) ? "text-[hsl(217,98%,68%)]" : ""
                   }`} style={{ transitionDelay: "800ms" }}>
                     <p className="text-sm font-light leading-relaxed">
                       <span className="opacity-70">Fabric:</span> {material.fabric}
@@ -568,6 +598,8 @@ const MainPage = () => {
                   {/* Price */}
                   <p className={`text-3xl font-extralight tracking-wider mb-8 transition-opacity duration-1000 ${
                     isVisible ? "opacity-100" : "opacity-0"
+                  } ${
+                    (handle.includes("fire") || handle.includes("love")) ? "text-[hsl(217,98%,68%)]" : ""
                   }`} style={{ transitionDelay: "1000ms" }}>
                     ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)}
                     <span className="ml-3 text-[10px] align-middle opacity-50 tracking-[0.3em]">
@@ -789,6 +821,30 @@ const MainPage = () => {
           </div>
         </div>
       )}
+
+      {/* Particle Effects for each product */}
+      {products.map((product) => {
+        const handle = product.node.handle;
+        let particleType: 'heart' | 'butterfly' | 'flower' = 'heart';
+        let particleColor = 'hsl(217, 98%, 68%)';
+
+        if (handle.includes("butterfly")) {
+          particleType = 'butterfly';
+          particleColor = 'hsla(185, 95%, 65%, 1)';
+        } else if (handle.includes("helmet") || handle.includes("flower")) {
+          particleType = 'flower';
+          particleColor = 'hsla(239, 95%, 75%, 1)';
+        }
+
+        return (
+          <ParticleEffect
+            key={product.node.id}
+            type={particleType}
+            color={particleColor}
+            trigger={particleTriggers[product.node.id] || 0}
+          />
+        );
+      })}
     </div>
   );
 };
