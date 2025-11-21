@@ -376,12 +376,12 @@ const MainPage = () => {
                 {/* BUTTERFLY: Small scattered butterflies + radial cyan hue with ultra-smooth gradual transitions */}
                 {theme === 'butterfly' && (
                   <>
-                    {/* Extended radial hue - stronger on mobile, still gradual */}
+                    {/* Extended radial hue - matching fire theme settings for visibility */}
                     <div className="absolute -top-[60vh] -bottom-[60vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[220px]"
+                        className="absolute inset-0 blur-[240px]"
                         style={{
-                          background: "radial-gradient(ellipse 130% 105% at 50% 45%, hsla(185, 95%, 65%, 0.5) 0%, hsla(185, 95%, 65%, 0.3) 22%, hsla(185, 95%, 65%, 0.18) 38%, hsla(185, 95%, 65%, 0.1) 55%, hsla(185, 95%, 65%, 0.05) 72%, transparent 100%)",
+                          background: "radial-gradient(ellipse 140% 110% at 50% 50%, hsla(185, 95%, 65%, 0.35) 0%, hsla(185, 95%, 65%, 0.22) 20%, hsla(185, 95%, 65%, 0.14) 35%, hsla(185, 95%, 65%, 0.08) 50%, hsla(185, 95%, 65%, 0.04) 65%, hsla(185, 95%, 65%, 0.02) 80%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -424,12 +424,12 @@ const MainPage = () => {
                 {/* HELMET: Small scattered flowers + radial indigo hue with ultra-smooth gradual transitions (no helmets) */}
                 {theme === 'helmet' && (
                   <>
-                    {/* Extended radial hue - stronger on mobile, still gradual */}
+                    {/* Extended radial hue - matching fire theme settings for visibility */}
                     <div className="absolute -top-[60vh] -bottom-[60vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[220px]"
+                        className="absolute inset-0 blur-[240px]"
                         style={{
-                          background: "radial-gradient(ellipse 130% 105% at 50% 45%, hsla(239, 95%, 75%, 0.5) 0%, hsla(239, 95%, 75%, 0.3) 22%, hsla(239, 95%, 75%, 0.18) 38%, hsla(239, 95%, 75%, 0.1) 55%, hsla(239, 95%, 75%, 0.05) 72%, transparent 100%)",
+                          background: "radial-gradient(ellipse 140% 110% at 50% 50%, hsla(239, 95%, 75%, 0.35) 0%, hsla(239, 95%, 75%, 0.22) 20%, hsla(239, 95%, 75%, 0.14) 35%, hsla(239, 95%, 75%, 0.08) 50%, hsla(239, 95%, 75%, 0.04) 65%, hsla(239, 95%, 75%, 0.02) 80%, transparent 100%)",
                         }}
                       />
                     </div>
