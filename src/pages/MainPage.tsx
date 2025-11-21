@@ -373,55 +373,72 @@ const MainPage = () => {
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Cyan 3D Nebula with layered depth + Floating Butterflies */}
+                {/* BUTTERFLY: Subtle cyan halo with minimal floating butterflies */}
                 {theme === 'butterfly' && (
                   <>
-                    <div className="relative w-[900px] h-[900px] flex items-center justify-center perspective-1000">
+                    <div className="relative w-[700px] h-[700px] flex items-center justify-center perspective-1000">
+                      {/* Subtle background glow */}
                       <div
-                        className="absolute inset-0 rounded-full blur-[140px]"
+                        className="absolute inset-0 rounded-full blur-[120px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(185, 95%, 65%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
+                            "radial-gradient(circle, hsla(185, 95%, 65%, 0.25) 0%, hsla(0, 0%, 0%, 0) 65%)",
                         }}
                       />
-                      {/* Layer 1: The Glow */}
+                      {/* Subtle outer halo */}
+                      <div
+                        className="absolute inset-0 rounded-full blur-[80px]"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsla(185, 95%, 65%, 0.15) 0%, transparent 60%)",
+                        }}
+                      />
+                      {/* Glow layer with subtle halo */}
                       <svg
-                        width="360"
-                        height="360"
+                        width="280"
+                        height="280"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="absolute blur-2xl animate-[float_14s_ease-in-out_infinite]"
-                        style={{ transform: "scale(1.2)", color: "hsla(185, 95%, 65%, 0.8)" }}
+                        className="absolute blur-xl animate-[float_14s_ease-in-out_infinite]"
+                        style={{ 
+                          transform: "scale(1.15)", 
+                          color: "hsla(185, 95%, 65%, 0.4)",
+                          filter: "drop-shadow(0 0 40px hsla(185, 95%, 65%, 0.6))"
+                        }}
                       >
                         <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                       </svg>
-                      {/* Layer 2: The Object */}
+                      {/* Main butterfly with halo */}
                       <svg
-                        width="300"
-                        height="300"
+                        width="220"
+                        height="220"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
-                        style={{ color: "hsla(185, 92%, 72%, 1)" }}
+                        className="relative brightness-110 animate-[float_12s_ease-in-out_infinite]"
+                        style={{ 
+                          color: "hsla(185, 92%, 72%, 1)",
+                          filter: "drop-shadow(0 0 30px hsla(185, 95%, 65%, 0.8)) drop-shadow(0 0 60px hsla(185, 95%, 65%, 0.4))"
+                        }}
                       >
                         <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                       </svg>
                     </div>
                     
-                    {/* Floating 3D Butterflies across screen */}
+                    {/* Subtle floating butterflies - reduced to 3 */}
                     <div className="absolute inset-0 overflow-visible pointer-events-none">
-                      {[...Array(8)].map((_, i) => (
+                      {[...Array(3)].map((_, i) => (
                         <svg
                           key={i}
-                          className="absolute animate-[float-across_${15 + i * 2}s_linear_infinite]"
+                          className="absolute animate-[float-across_${20 + i * 3}s_linear_infinite]"
                           style={{
-                            top: `${10 + i * 12}%`,
+                            top: `${20 + i * 25}%`,
                             left: '-10%',
-                            animationDelay: `${i * 2}s`,
-                            color: 'hsla(185, 95%, 65%, 0.6)',
+                            animationDelay: `${i * 3}s`,
+                            color: 'hsla(185, 95%, 65%, 0.3)',
+                            filter: 'drop-shadow(0 0 10px hsla(185, 95%, 65%, 0.5))',
                           }}
-                          width={60 + i * 8}
-                          height={60 + i * 8}
+                          width={40 + i * 6}
+                          height={40 + i * 6}
                           viewBox="0 0 24 24"
                           fill="currentColor"
                         >
@@ -432,53 +449,47 @@ const MainPage = () => {
                   </>
                 )}
 
-                {/* HELMET: Indigo 3D Nebula with layered depth + Floating Flowers */}
+                {/* HELMET: Subtle indigo halo with minimal floating flowers */}
                 {theme === 'helmet' && (
                   <>
-                    <div className="relative w-[900px] h-[900px] flex items-center justify-center gap-16 perspective-1000">
+                    <div className="relative w-[700px] h-[700px] flex items-center justify-center gap-12 perspective-1000">
+                      {/* Subtle background glow */}
                       <div
-                        className="absolute inset-0 rounded-full blur-[140px]"
+                        className="absolute inset-0 rounded-full blur-[120px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(239, 95%, 75%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
+                            "radial-gradient(circle, hsla(239, 95%, 75%, 0.25) 0%, hsla(0, 0%, 0%, 0) 65%)",
                         }}
                       />
-                      {/* Flower Glow Layer */}
-                      <Flower2
-                        className="absolute left-[25%] blur-2xl w-52 h-52 animate-[float_14s_ease-in-out_infinite]"
-                        strokeWidth={2}
-                        style={{ transform: "scale(1.3)", color: "hsla(239, 95%, 72%, 0.8)" }}
+                      {/* Subtle outer halo */}
+                      <div
+                        className="absolute inset-0 rounded-full blur-[80px]"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsla(239, 95%, 75%, 0.15) 0%, transparent 60%)",
+                        }}
                       />
-                      {/* Flower Object Layer */}
+                      {/* Flower with subtle halo */}
                       <Flower2
-                        className="relative brightness-125 w-44 h-44 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                        className="relative brightness-110 w-32 h-32 animate-[float_12s_ease-in-out_infinite]"
                         strokeWidth={2}
-                        style={{ color: "hsla(239, 92%, 78%, 1)" }}
+                        style={{ 
+                          color: "hsla(239, 92%, 78%, 1)",
+                          filter: "drop-shadow(0 0 30px hsla(239, 95%, 75%, 0.8)) drop-shadow(0 0 60px hsla(239, 95%, 75%, 0.4))"
+                        }}
                       />
    
-                      {/* Helmet Glow Layer */}
+                      {/* Helmet with subtle halo */}
                       <svg
-                        width="220"
-                        height="220"
+                        width="140"
+                        height="140"
                         viewBox="0 0 24 24"
                         fill="none"
-                        className="absolute right-[25%] blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
-                        style={{ transform: "scale(1.35)", color: "hsla(239, 95%, 72%, 0.8)" }}
-                      >
-                        <path
-                          d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
-                          stroke="currentColor"
-                          strokeWidth="2.2"
-                        />
-                      </svg>
-                      {/* Helmet Object Layer */}
-                      <svg
-                        width="190"
-                        height="190"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
-                        style={{ color: "hsla(239, 92%, 78%, 1)" }}
+                        className="relative brightness-110 animate-[float_12s_ease-in-out_infinite_1.8s]"
+                        style={{ 
+                          color: "hsla(239, 92%, 78%, 1)",
+                          filter: "drop-shadow(0 0 30px hsla(239, 95%, 75%, 0.8)) drop-shadow(0 0 60px hsla(239, 95%, 75%, 0.4))"
+                        }}
                       >
                         <path
                           d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -488,19 +499,20 @@ const MainPage = () => {
                       </svg>
                     </div>
                     
-                    {/* Floating 3D Flowers across screen */}
+                    {/* Subtle floating flowers - reduced to 3 */}
                     <div className="absolute inset-0 overflow-visible pointer-events-none">
-                      {[...Array(8)].map((_, i) => (
+                      {[...Array(3)].map((_, i) => (
                         <Flower2
                           key={i}
-                          className="absolute animate-[float-across_${15 + i * 2}s_linear_infinite]"
+                          className="absolute animate-[float-across_${20 + i * 3}s_linear_infinite]"
                           style={{
-                            top: `${10 + i * 12}%`,
+                            top: `${20 + i * 25}%`,
                             left: '-10%',
-                            animationDelay: `${i * 2}s`,
-                            color: 'hsla(239, 95%, 75%, 0.6)',
+                            animationDelay: `${i * 3}s`,
+                            color: 'hsla(239, 95%, 75%, 0.3)',
+                            filter: 'drop-shadow(0 0 10px hsla(239, 95%, 75%, 0.5))',
                           }}
-                          size={60 + i * 8}
+                          size={40 + i * 6}
                           strokeWidth={2}
                         />
                       ))}
@@ -508,105 +520,69 @@ const MainPage = () => {
                   </>
                 )}
 
-                {/* LOVE'S GONE: MASSIVE BLUE NEBULA - COVERS ENTIRE SECTION */}
+                {/* LOVE'S GONE: Subtle blue halo with broken hearts */}
                 {theme === 'fire' && (
                   <div className="absolute inset-0 perspective-1000 flex items-center justify-center overflow-visible">
-                    {/* GIANT BLUE NEBULA - FILLS SCREEN */}
-                    <div className="absolute inset-0 w-[220vw] h-[220vh] -translate-x-1/4 -translate-y-1/4">
+                     {/* Subtle blue atmosphere */}
+                    <div className="absolute inset-0">
                       <div
-                        className="absolute inset-0 rounded-full blur-[260px] animate-pulse"
+                        className="absolute inset-0 rounded-full blur-[150px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(217, 98%, 68%, 1) 0%, hsla(217, 98%, 68%, 0.85) 25%, hsla(217, 98%, 68%, 0.55) 50%, transparent 72%)",
-                          animationDuration: "4s",
+                            "radial-gradient(circle, hsla(217, 98%, 68%, 0.25) 0%, hsla(217, 98%, 68%, 0.12) 45%, transparent 65%)",
                         }}
                       />
                       <div
-                        className="absolute inset-0 rounded-full blur-[200px]"
+                        className="absolute inset-0 rounded-full blur-[100px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(213, 98%, 75%, 1) 0%, hsla(217, 98%, 68%, 0.75) 30%, hsla(220, 95%, 65%, 0.55) 60%, transparent 82%)",
-                        }}
-                      />
-                      <div
-                        className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
-                        style={{
-                          background:
-                            "radial-gradient(circle, hsla(217, 98%, 72%, 0.9) 0%, hsla(217, 98%, 68%, 0.6) 40%, transparent 70%)",
-                          animationDuration: "5s",
+                            "radial-gradient(circle, hsla(213, 98%, 75%, 0.15) 0%, transparent 55%)",
                         }}
                       />
                     </div>
  
-                    {/* MASSIVE BRIGHT BROKEN HEARTS */}
-                    <div className="relative flex gap-20 scale-150">
-                      {/* Broken Heart 1 - Glow Layer */}
+                    {/* Subtle broken hearts with halos */}
+                    <div className="relative flex gap-16">
+                      {/* Heart 1 with halo */}
                       <svg
-                        className="absolute left-0 w-[400px] h-[400px] blur-3xl animate-[float_14s_ease-in-out_infinite] rotate-12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="hsl(213, 98%, 75%)"
-                        strokeWidth="0.5"
-                        style={{ opacity: 0.95 }}
-                      >
-                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" fill="hsl(213, 98%, 75%)" />
-                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                      {/* Broken Heart 1 - Object Layer */}
-                      <svg
-                        className="relative w-64 h-64 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] rotate-12"
+                        className="relative w-44 h-44 brightness-110 animate-[float_12s_ease-in-out_infinite] rotate-6"
                         viewBox="0 0 24 24"
                         fill="hsl(213, 98%, 75%)"
                         stroke="hsl(213, 95%, 82%)"
                         strokeWidth="0.5"
+                        style={{
+                          filter: "drop-shadow(0 0 30px hsla(217, 98%, 68%, 0.8)) drop-shadow(0 0 60px hsla(217, 98%, 68%, 0.4))"
+                        }}
                       >
                         <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
                         <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
                       </svg>
  
-                      {/* Broken Heart 2 - Glow Layer */}
+                      {/* Heart 2 with halo - slightly larger */}
                       <svg
-                        className="absolute left-[33%] w-[480px] h-[480px] blur-3xl animate-[float_14s_ease-in-out_infinite_0.8s] z-10"
-                        viewBox="0 0 24 24"
-                        fill="hsl(217, 98%, 68%)"
-                        stroke="hsl(217, 98%, 68%)"
-                        strokeWidth="0.5"
-                        style={{ opacity: 0.95 }}
-                      >
-                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
-                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                      {/* Broken Heart 2 - Object Layer */}
-                      <svg
-                        className="relative w-80 h-80 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10"
+                        className="relative w-52 h-52 brightness-110 animate-[float_12s_ease-in-out_infinite_0.8s] z-10"
                         viewBox="0 0 24 24"
                         fill="hsl(217, 98%, 68%)"
                         stroke="hsl(213, 95%, 82%)"
                         strokeWidth="0.5"
+                        style={{
+                          filter: "drop-shadow(0 0 35px hsla(217, 98%, 68%, 0.9)) drop-shadow(0 0 70px hsla(217, 98%, 68%, 0.5))"
+                        }}
                       >
                         <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
                         <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
                       </svg>
  
-                      {/* Broken Heart 3 - Glow Layer */}
+                      {/* Heart 3 with halo */}
                       <svg
-                        className="absolute right-0 w-[360px] h-[360px] blur-3xl animate-[float_14s_ease-in-out_infinite_1.5s] -rotate-12"
-                        viewBox="0 0 24 24"
-                        fill="hsl(213, 98%, 75%)"
-                        stroke="hsl(213, 98%, 75%)"
-                        strokeWidth="0.5"
-                        style={{ opacity: 0.95 }}
-                      >
-                        <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
-                        <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
-                      </svg>
-                      {/* Broken Heart 3 - Object Layer */}
-                      <svg
-                        className="relative w-60 h-60 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] -rotate-12"
+                        className="relative w-40 h-40 brightness-110 animate-[float_12s_ease-in-out_infinite_1.5s] -rotate-6"
                         viewBox="0 0 24 24"
                         fill="hsl(213, 98%, 75%)"
                         stroke="hsl(213, 95%, 82%)"
                         strokeWidth="0.5"
+                        style={{
+                          filter: "drop-shadow(0 0 30px hsla(217, 98%, 68%, 0.8)) drop-shadow(0 0 60px hsla(217, 98%, 68%, 0.4))"
+                        }}
                       >
                         <path d="M12 21C12 21 3 15 3 9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 12-9 12Z" />
                         <path d="M12 5.5L12 21M8 8.5L12 5.5L16 8.5" stroke="hsl(0, 0%, 0%)" strokeWidth="2" strokeLinecap="round" />
@@ -615,15 +591,17 @@ const MainPage = () => {
                   </div>
                 )}
  
-                {/* Fallback: neutral halo if handle doesn't match */}
-                {!handle.includes("butterfly") && !handle.includes("helmet") && !handle.includes("fire") && !handle.includes("love") && (
-                  <div
-                    className="w-[680px] h-[680px] rounded-full blur-[90px]"
-                    style={{
-                      background:
-                        "radial-gradient(circle, hsl(var(--foreground) / 0.2) 0%, hsl(var(--foreground) / 0.06) 35%, transparent 70%)",
-                    }}
-                  />
+                {/* Fallback: neutral subtle halo if theme doesn't match */}
+                {theme === 'default' && (
+                  <div className="relative w-[500px] h-[500px] flex items-center justify-center">
+                    <div
+                      className="absolute inset-0 rounded-full blur-[90px]"
+                      style={{
+                        background:
+                          "radial-gradient(circle, hsl(var(--foreground) / 0.15) 0%, hsl(var(--foreground) / 0.05) 40%, transparent 65%)",
+                      }}
+                    />
+                  </div>
                 )}
               </div>
 
