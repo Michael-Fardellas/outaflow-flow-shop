@@ -317,8 +317,8 @@ const MainPage = () => {
               <div 
                 className="absolute inset-0 pointer-events-none flex items-center justify-center z-0"
                 style={{
-                  transform: isVisible ? "scale(1)" : "scale(0.9)",
-                  opacity: isVisible ? 1 : 0,
+                  transform: "scale(1)",
+                  opacity: 0.9,
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
