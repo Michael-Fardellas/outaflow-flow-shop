@@ -376,12 +376,12 @@ const MainPage = () => {
                 {/* BUTTERFLY: Small scattered butterflies + radial cyan hue with smooth transitions */}
                 {theme === 'butterfly' && (
                   <>
-                    {/* Extended radial hue - bleeds beyond section for smooth transition */}
+                    {/* Extended radial hue - intense center, bleeds beyond section for smooth transition */}
                     <div className="absolute inset-0 overflow-visible" style={{ margin: '-30vh 0' }}>
                       <div
-                        className="absolute inset-0 blur-[250px]"
+                        className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse at 50% 50%, hsla(185, 95%, 65%, 0.4) 0%, hsla(185, 95%, 65%, 0.25) 25%, hsla(185, 95%, 65%, 0.12) 45%, hsla(185, 95%, 65%, 0.05) 70%, transparent 100%)",
+                          background: "radial-gradient(circle at 50% 50%, hsla(185, 95%, 65%, 0.35) 0%, hsla(185, 95%, 65%, 0.18) 35%, hsla(185, 95%, 65%, 0.08) 60%, hsla(185, 95%, 65%, 0.03) 80%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -424,12 +424,12 @@ const MainPage = () => {
                 {/* HELMET: Small scattered flowers + radial indigo hue with smooth transitions (no helmets) */}
                 {theme === 'helmet' && (
                   <>
-                    {/* Extended radial hue - bleeds beyond section for smooth transition */}
+                    {/* Extended radial hue - intense center, bleeds beyond section for smooth transition */}
                     <div className="absolute inset-0 overflow-visible" style={{ margin: '-30vh 0' }}>
                       <div
-                        className="absolute inset-0 blur-[250px]"
+                        className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse at 50% 50%, hsla(239, 95%, 75%, 0.4) 0%, hsla(239, 95%, 75%, 0.25) 25%, hsla(239, 95%, 75%, 0.12) 45%, hsla(239, 95%, 75%, 0.05) 70%, transparent 100%)",
+                          background: "radial-gradient(circle at 50% 50%, hsla(239, 95%, 75%, 0.35) 0%, hsla(239, 95%, 75%, 0.18) 35%, hsla(239, 95%, 75%, 0.08) 60%, hsla(239, 95%, 75%, 0.03) 80%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -469,12 +469,12 @@ const MainPage = () => {
                 {/* LOVE'S GONE: Small scattered hearts + radial blue hue with smooth transitions (no butterflies) */}
                 {theme === 'fire' && (
                   <>
-                    {/* Extended radial blue hue - bleeds beyond section for smooth transition */}
+                    {/* Extended radial blue hue - intense center, bleeds beyond section for smooth transition */}
                     <div className="absolute inset-0 overflow-visible" style={{ margin: '-30vh 0' }}>
                       <div
-                        className="absolute inset-0 blur-[250px]"
+                        className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse at 50% 50%, hsla(217, 98%, 68%, 0.45) 0%, hsla(217, 98%, 68%, 0.28) 25%, hsla(217, 98%, 68%, 0.14) 45%, hsla(217, 98%, 68%, 0.06) 70%, transparent 100%)",
+                          background: "radial-gradient(circle at 50% 50%, hsla(217, 98%, 68%, 0.4) 0%, hsla(217, 98%, 68%, 0.22) 35%, hsla(217, 98%, 68%, 0.1) 60%, hsla(217, 98%, 68%, 0.04) 80%, transparent 100%)",
                         }}
                       />
                     </div>
