@@ -328,7 +328,8 @@ const MainPage = () => {
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
-                        background: "radial-gradient(circle, hsla(var(--foreground),0.25) 0%, hsla(var(--foreground),0.08) 40%, transparent 70%)",
+                        background:
+                          "radial-gradient(circle, hsl(var(--foreground) / 0.25) 0%, hsl(var(--foreground) / 0.08) 40%, transparent 70%)",
                       }}
                     />
                     <svg
@@ -349,7 +350,8 @@ const MainPage = () => {
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
-                        background: "radial-gradient(circle, hsla(var(--foreground),0.25) 0%, hsla(var(--foreground),0.08) 40%, transparent 70%)",
+                        background:
+                          "radial-gradient(circle, hsl(var(--foreground) / 0.25) 0%, hsl(var(--foreground) / 0.08) 40%, transparent 70%)",
                       }}
                     />
                     <Flower2 className="w-40 h-40 text-foreground/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.7)] animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
@@ -375,14 +377,16 @@ const MainPage = () => {
                     <div
                       className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
                       style={{
-                        background: "radial-gradient(circle, hsla(var(--primary),0.55) 0%, hsla(var(--primary),0.25) 40%, transparent 75%)",
+                        background:
+                          "radial-gradient(circle, hsl(var(--primary) / 0.55) 0%, hsl(var(--primary) / 0.25) 40%, transparent 75%)",
                         animationDuration: "3s",
                       }}
                     />
                     <div
                       className="absolute inset-0 rounded-full blur-[80px]"
                       style={{
-                        background: "radial-gradient(circle, hsla(var(--primary),0.35) 0%, transparent 65%)",
+                        background:
+                          "radial-gradient(circle, hsl(var(--primary) / 0.35) 0%, transparent 65%)",
                       }}
                     />
                     <div className="relative flex gap-8">
@@ -398,7 +402,8 @@ const MainPage = () => {
                   <div
                     className="w-[680px] h-[680px] rounded-full blur-[90px]"
                     style={{
-                      background: "radial-gradient(circle, hsla(var(--foreground),0.2) 0%, hsla(var(--foreground),0.06) 35%, transparent 70%)",
+                      background:
+                        "radial-gradient(circle, hsl(var(--foreground) / 0.2) 0%, hsl(var(--foreground) / 0.06) 35%, transparent 70%)",
                     }}
                   />
                 )}
