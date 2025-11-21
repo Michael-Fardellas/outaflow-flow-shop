@@ -263,7 +263,7 @@ const MainPage = () => {
   }
 
   return (
-    <div className="bg-background text-foreground min-h-screen relative">
+    <div className="bg-background text-foreground min-h-screen relative overflow-x-hidden">
 
       {/* Scroll Progress Bar - GPU-accelerated, buttery smooth */}
       <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none bg-black/20">
@@ -381,12 +381,12 @@ const MainPage = () => {
                 {/* BUTTERFLY: Small scattered butterflies + radial cyan hue with ultra-smooth gradual transitions */}
                 {theme === 'butterfly' && (
                   <>
-                    {/* Extended radial hue - matching fire theme settings for visibility */}
+                    {/* Extended radial hue - much stronger on mobile to match fire theme */}
                     <div className="absolute -top-[60vh] -bottom-[60vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[240px]"
+                        className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse 140% 110% at 50% 50%, hsla(185, 95%, 65%, 0.35) 0%, hsla(185, 95%, 65%, 0.22) 20%, hsla(185, 95%, 65%, 0.14) 35%, hsla(185, 95%, 65%, 0.08) 50%, hsla(185, 95%, 65%, 0.04) 65%, hsla(185, 95%, 65%, 0.02) 80%, transparent 100%)",
+                          background: "radial-gradient(ellipse 130% 100% at 50% 50%, hsla(185, 95%, 65%, 0.45) 0%, hsla(185, 95%, 65%, 0.32) 18%, hsla(185, 95%, 65%, 0.22) 32%, hsla(185, 95%, 65%, 0.14) 48%, hsla(185, 95%, 65%, 0.08) 65%, hsla(185, 95%, 65%, 0.03) 82%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -429,12 +429,12 @@ const MainPage = () => {
                 {/* HELMET: Small scattered flowers + radial indigo hue with ultra-smooth gradual transitions (no helmets) */}
                 {theme === 'helmet' && (
                   <>
-                    {/* Extended radial hue - matching fire theme settings for visibility */}
+                    {/* Extended radial hue - much stronger on mobile to match fire theme */}
                     <div className="absolute -top-[60vh] -bottom-[60vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[240px]"
+                        className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse 140% 110% at 50% 50%, hsla(239, 95%, 75%, 0.35) 0%, hsla(239, 95%, 75%, 0.22) 20%, hsla(239, 95%, 75%, 0.14) 35%, hsla(239, 95%, 75%, 0.08) 50%, hsla(239, 95%, 75%, 0.04) 65%, hsla(239, 95%, 75%, 0.02) 80%, transparent 100%)",
+                          background: "radial-gradient(ellipse 130% 100% at 50% 50%, hsla(239, 95%, 75%, 0.45) 0%, hsla(239, 95%, 75%, 0.32) 18%, hsla(239, 95%, 75%, 0.22) 32%, hsla(239, 95%, 75%, 0.14) 48%, hsla(239, 95%, 75%, 0.08) 65%, hsla(239, 95%, 75%, 0.03) 82%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -474,12 +474,12 @@ const MainPage = () => {
                 {/* LOVE'S GONE: Small scattered hearts + radial blue hue with ultra-smooth gradual transitions (no butterflies) */}
                 {theme === 'fire' && (
                   <>
-                    {/* Extended radial blue hue - visible on mobile, starts fading in very early and gradually */}
+                    {/* Extended radial blue hue - strong and visible on mobile */}
                     <div className="absolute -top-[60vh] -bottom-[60vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[240px]"
+                        className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse 140% 110% at 50% 50%, hsla(217, 95%, 68%, 0.35) 0%, hsla(217, 95%, 68%, 0.22) 20%, hsla(217, 95%, 68%, 0.14) 35%, hsla(217, 95%, 68%, 0.08) 50%, hsla(217, 95%, 68%, 0.04) 65%, hsla(217, 95%, 68%, 0.02) 80%, transparent 100%)",
+                          background: "radial-gradient(ellipse 130% 100% at 50% 50%, hsla(217, 95%, 68%, 0.45) 0%, hsla(217, 95%, 68%, 0.32) 18%, hsla(217, 95%, 68%, 0.22) 32%, hsla(217, 95%, 68%, 0.14) 48%, hsla(217, 95%, 68%, 0.08) 65%, hsla(217, 95%, 68%, 0.03) 82%, transparent 100%)",
                         }}
                       />
                     </div>
