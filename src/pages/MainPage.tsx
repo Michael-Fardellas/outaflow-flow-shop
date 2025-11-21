@@ -320,11 +320,12 @@ const MainPage = () => {
               >
                 {/* BUTTERFLY: Cyan 3D Nebula with layered depth */}
                 {handle.includes("butterfly") && (
-                  <div className="relative w-[750px] h-[750px] flex items-center justify-center perspective-1000">
+                  <div className="relative w-[900px] h-[900px] flex items-center justify-center perspective-1000">
                     <div
-                      className="absolute inset-0 rounded-full blur-[100px]"
+                      className="absolute inset-0 rounded-full blur-[140px]"
                       style={{
-                        background: "radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(10, 10, 10, 0) 70%)",
+                        background:
+                          "radial-gradient(circle, hsla(185, 84%, 56%, 0.35) 0%, hsla(0, 0%, 0%, 0) 70%)",
                       }}
                     />
                     {/* Layer 1: The Glow */}
@@ -353,26 +354,34 @@ const MainPage = () => {
 
                 {/* HELMET: Indigo 3D Nebula with layered depth */}
                 {handle.includes("helmet") && (
-                  <div className="relative w-[750px] h-[750px] flex items-center justify-center gap-16 perspective-1000">
+                  <div className="relative w-[900px] h-[900px] flex items-center justify-center gap-16 perspective-1000">
                     <div
-                      className="absolute inset-0 rounded-full blur-[100px]"
+                      className="absolute inset-0 rounded-full blur-[140px]"
                       style={{
-                        background: "radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(10, 10, 10, 0) 70%)",
+                        background:
+                          "radial-gradient(circle, hsla(239, 84%, 67%, 0.35) 0%, hsla(0, 0%, 0%, 0) 70%)",
                       }}
                     />
                     {/* Flower Glow Layer */}
-                    <Flower2 className="absolute left-[25%] text-indigo-500/50 blur-2xl w-48 h-48 animate-[float_14s_ease-in-out_infinite]" strokeWidth={2} style={{ transform: "scale(1.2)" }} />
+                    <Flower2
+                      className="absolute left-[25%] text-indigo-400/70 blur-2xl w-52 h-52 animate-[float_14s_ease-in-out_infinite]"
+                      strokeWidth={2}
+                      style={{ transform: "scale(1.3)" }}
+                    />
                     {/* Flower Object Layer */}
-                    <Flower2 className="relative text-indigo-400 brightness-110 w-40 h-40 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
-                    
+                    <Flower2
+                      className="relative text-indigo-300 brightness-125 w-44 h-44 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                      strokeWidth={2}
+                    />
+ 
                     {/* Helmet Glow Layer */}
                     <svg
-                      width="204"
-                      height="204"
+                      width="220"
+                      height="220"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="absolute right-[25%] text-indigo-500/50 blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
-                      style={{ transform: "scale(1.2)" }}
+                      className="absolute right-[25%] text-indigo-400/70 blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
+                      style={{ transform: "scale(1.35)" }}
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -382,11 +391,11 @@ const MainPage = () => {
                     </svg>
                     {/* Helmet Object Layer */}
                     <svg
-                      width="170"
-                      height="170"
+                      width="190"
+                      height="190"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="relative text-indigo-400 brightness-110 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
+                      className="relative text-indigo-300 brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -401,84 +410,83 @@ const MainPage = () => {
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <div className="absolute inset-0 perspective-1000 flex items-center justify-center overflow-visible">
                     {/* GIANT BLUE NEBULA - FILLS SCREEN */}
-                    <div className="absolute inset-0 w-[200vw] h-[200vh] -translate-x-1/4 -translate-y-1/4">
+                    <div className="absolute inset-0 w-[220vw] h-[220vh] -translate-x-1/4 -translate-y-1/4">
                       <div
-                        className="absolute inset-0 rounded-full blur-[250px] animate-pulse"
+                        className="absolute inset-0 rounded-full blur-[260px] animate-pulse"
                         style={{
-                          background: "radial-gradient(circle, rgb(59, 130, 246) 0%, rgba(59, 130, 246, 0.6) 25%, rgba(59, 130, 246, 0.3) 50%, transparent 70%)",
+                          background:
+                            "radial-gradient(circle, hsla(217, 91%, 60%, 0.9) 0%, hsla(217, 91%, 60%, 0.7) 25%, hsla(217, 91%, 60%, 0.4) 50%, transparent 72%)",
                           animationDuration: "4s",
                         }}
                       />
                       <div
-                        className="absolute inset-0 rounded-full blur-[180px]"
+                        className="absolute inset-0 rounded-full blur-[200px]"
                         style={{
-                          background: "radial-gradient(circle, rgba(96, 165, 250, 0.8) 0%, rgba(59, 130, 246, 0.5) 30%, rgba(37, 99, 235, 0.3) 60%, transparent 80%)",
+                          background:
+                            "radial-gradient(circle, hsla(213, 94%, 68%, 0.9) 0%, hsla(217, 91%, 60%, 0.6) 30%, hsla(220, 83%, 53%, 0.4) 60%, transparent 82%)",
                         }}
                       />
                     </div>
-
+ 
                     {/* MASSIVE BRIGHT HEARTS */}
                     <div className="relative flex gap-20 scale-150">
                       {/* Heart 1 - Glow Layer */}
-                      <Heart 
-                        className="absolute left-0 w-[400px] h-[400px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite] transform rotate-12" 
-                        strokeWidth={3} 
-                        style={{ 
-                          transform: "scale(1.5) rotate(12deg)",
-                          color: "rgb(96, 165, 250)"
-                        }} 
-                      />
-                      {/* Heart 1 - Object Layer */}
-                      <Heart 
-                        className="relative w-64 h-64 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] transform rotate-12" 
+                      <Heart
+                        className="absolute left-0 w-[400px] h-[400px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite] rotate-12"
                         strokeWidth={3}
                         style={{
-                          color: "rgb(147, 197, 253)",
-                          fill: "rgb(96, 165, 250)"
+                          color: "hsl(213, 94%, 68%)",
                         }}
                       />
-                      
+                      {/* Heart 1 - Object Layer */}
+                      <Heart
+                        className="relative w-64 h-64 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] rotate-12"
+                        strokeWidth={3}
+                        style={{
+                          color: "hsl(213, 92%, 79%)",
+                          fill: "hsl(213, 94%, 68%)",
+                        }}
+                      />
+ 
                       {/* Heart 2 - Glow Layer */}
-                      <Heart 
-                        className="absolute left-[33%] w-[480px] h-[480px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_0.8s] z-10" 
+                      <Heart
+                        className="absolute left-[33%] w-[480px] h-[480px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_0.8s] z-10"
                         strokeWidth={3.5}
-                        style={{ 
-                          transform: "scale(1.5)",
-                          color: "rgb(59, 130, 246)"
-                        }} 
+                        style={{
+                          color: "hsl(217, 91%, 60%)",
+                        }}
                       />
                       {/* Heart 2 - Object Layer */}
-                      <Heart 
-                        className="relative w-80 h-80 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10" 
+                      <Heart
+                        className="relative w-80 h-80 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10"
                         strokeWidth={3.5}
                         style={{
-                          color: "rgb(147, 197, 253)",
-                          fill: "rgb(59, 130, 246)"
+                          color: "hsl(213, 92%, 79%)",
+                          fill: "hsl(217, 91%, 60%)",
                         }}
                       />
-                      
+ 
                       {/* Heart 3 - Glow Layer */}
-                      <Heart 
-                        className="absolute right-0 w-[360px] h-[360px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_1.5s] transform -rotate-12" 
-                        strokeWidth={2.8}
-                        style={{ 
-                          transform: "scale(1.5) rotate(-12deg)",
-                          color: "rgb(96, 165, 250)"
-                        }} 
-                      />
-                      {/* Heart 3 - Object Layer */}
-                      <Heart 
-                        className="relative w-60 h-60 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" 
+                      <Heart
+                        className="absolute right-0 w-[360px] h-[360px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_1.5s] -rotate-12"
                         strokeWidth={2.8}
                         style={{
-                          color: "rgb(147, 197, 253)",
-                          fill: "rgb(96, 165, 250)"
+                          color: "hsl(213, 94%, 68%)",
+                        }}
+                      />
+                      {/* Heart 3 - Object Layer */}
+                      <Heart
+                        className="relative w-60 h-60 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] -rotate-12"
+                        strokeWidth={2.8}
+                        style={{
+                          color: "hsl(213, 92%, 79%)",
+                          fill: "hsl(213, 94%, 68%)",
                         }}
                       />
                     </div>
                   </div>
                 )}
-
+ 
                 {/* Fallback: neutral halo if handle doesn't match */}
                 {!handle.includes("butterfly") && !handle.includes("helmet") && !handle.includes("fire") && !handle.includes("love") && (
                   <div
