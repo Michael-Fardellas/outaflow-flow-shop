@@ -217,9 +217,10 @@ const MainPage = () => {
     <div className="bg-background text-foreground min-h-screen relative">
       {/* Personality Texture Overlay */}
       <div 
-        className="fixed inset-0 z-50 pointer-events-none opacity-[0.04] mix-blend-overlay"
+        className="fixed inset-0 z-40 pointer-events-none opacity-[0.015]"
         style={{
           backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")',
+          backgroundRepeat: 'repeat',
         }}
       />
 
