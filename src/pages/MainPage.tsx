@@ -215,6 +215,15 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
+      {/* Film Grain Noise Overlay */}
+      <div 
+        className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+        }}
+      />
+
       {/* Scroll Progress Bar - Color changes based on section */}
       <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
         <div 
@@ -322,14 +331,14 @@ const MainPage = () => {
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Visible gray halo with white butterfly */}
+                {/* BUTTERFLY: Faint atmospheric gray halo with white butterfly */}
                 {handle.includes("butterfly") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center">
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
                         background:
-                          "radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%)",
+                          "radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 40%, transparent 70%)",
                       }}
                     />
                     <svg
@@ -344,14 +353,14 @@ const MainPage = () => {
                   </div>
                 )}
 
-                {/* HELMET: Visible gray halo with white flower + helmet */}
+                {/* HELMET: Faint atmospheric gray halo with white flower + helmet */}
                 {handle.includes("helmet") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center gap-16">
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
                         background:
-                          "radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%)",
+                          "radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 40%, transparent 70%)",
                       }}
                     />
                     <Flower2 className="w-40 h-40 text-white/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.9)] animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
@@ -371,7 +380,7 @@ const MainPage = () => {
                   </div>
                 )}
 
-                {/* LOVE'S GONE: BRIGHT BLUE shining halo + animated 3D hearts */}
+                {/* LOVE'S GONE: Subtle blue atmospheric halo + animated 3D hearts */}
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <div
                     className="absolute"
@@ -388,7 +397,7 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
                         style={{
                           background:
-                            "radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(59, 130, 246, 0.45) 35%, transparent 80%)",
+                            "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 35%, transparent 80%)",
                           animationDuration: "3s",
                         }}
                       />
@@ -396,7 +405,7 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[80px]"
                         style={{
                           background:
-                            "radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, transparent 70%)",
+                            "radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)",
                         }}
                       />
                       <div className="relative flex gap-8">
