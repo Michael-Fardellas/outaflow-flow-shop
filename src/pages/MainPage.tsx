@@ -12,6 +12,14 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { useSoundEffect } from "@/hooks/use-sound-effect";
 import { ParticleEffect } from "@/components/ParticleEffect";
 
+// Helper function to determine product theme from tags
+const getProductTheme = (tags: string[]): 'butterfly' | 'helmet' | 'fire' | 'default' => {
+  if (tags.includes('theme-butterfly')) return 'butterfly';
+  if (tags.includes('theme-helmet')) return 'helmet';
+  if (tags.includes('theme-fire')) return 'fire';
+  return 'default';
+};
+
 // Simple size chart data (R00227 + RU0130)
 const sizeCharts = {
   R00227: {
@@ -114,8 +122,11 @@ const MainPage = () => {
           if (entry.isIntersecting) {
             setVisibleSections((prev) => new Set(prev).add(entry.target.id));
             // Track current section for progress bar color
-            const handle = products.find(p => `product-${p.node.id}` === entry.target.id)?.node.handle || "";
-            if (handle) setCurrentSection(handle);
+            const productInView = products.find(p => `product-${p.node.id}` === entry.target.id);
+            if (productInView) {
+              const theme = getProductTheme(productInView.node.tags);
+              setCurrentSection(theme);
+            }
           }
         });
       },
@@ -256,18 +267,18 @@ const MainPage = () => {
           style={{ 
             transform: `scaleX(${scrollProgress / 100})`,
             willChange: 'transform',
-            background: currentSection.includes("butterfly")
+            background: currentSection === "butterfly"
               ? "hsla(185, 95%, 65%, 1)"
-              : currentSection.includes("helmet") || currentSection.includes("flower")
+              : currentSection === "helmet"
               ? "hsla(239, 95%, 75%, 1)"
-              : currentSection.includes("love") || currentSection.includes("fire")
+              : currentSection === "fire"
               ? "hsla(217, 98%, 68%, 1)"
               : "hsl(0, 0%, 100%)",
-            boxShadow: currentSection.includes("butterfly")
+            boxShadow: currentSection === "butterfly"
               ? "0 0 30px hsla(185, 95%, 65%, 0.8), 0 0 60px hsla(185, 95%, 65%, 0.4)"
-              : currentSection.includes("helmet") || currentSection.includes("flower")
+              : currentSection === "helmet"
               ? "0 0 30px hsla(239, 95%, 75%, 0.8), 0 0 60px hsla(239, 95%, 75%, 0.4)"
-              : currentSection.includes("love") || currentSection.includes("fire")
+              : currentSection === "fire"
               ? "0 0 30px hsla(217, 98%, 68%, 0.8), 0 0 60px hsla(217, 98%, 68%, 0.4)"
               : "0 0 10px hsla(0, 0%, 100%, 0.3)",
             transition: 'background 1.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -325,6 +336,7 @@ const MainPage = () => {
       <main className="space-y-0" style={{ scrollBehavior: 'auto' }}>
         {products.map((product, index) => {
           const handle = product.node.handle;
+          const theme = getProductTheme(product.node.tags);
           const material = materialByHandle(handle);
           const currentView = selectedImageView[product.node.id] || "front";
           const imageIndex = currentView === "front" ? 0 : 1;
@@ -335,11 +347,11 @@ const MainPage = () => {
           // Scene personality - let CSS handle atmosphere
           let sceneClass = "";
           
-          if (handle.includes("butterfly")) {
+          if (theme === 'butterfly') {
             sceneClass = "butterfly-minimal-scene";
-          } else if (handle.includes("helmet")) {
+          } else if (theme === 'helmet') {
             sceneClass = "helmet-minimal-scene";
-          } else if (handle.includes("fire") || handle.includes("love")) {
+          } else if (theme === 'fire') {
             sceneClass = "love-minimal-scene";
           }
 
@@ -362,7 +374,7 @@ const MainPage = () => {
                 }}
               >
                 {/* BUTTERFLY: Cyan 3D Nebula with layered depth + Floating Butterflies */}
-                {handle.includes("butterfly") && (
+                {theme === 'butterfly' && (
                   <>
                     <div className="relative w-[900px] h-[900px] flex items-center justify-center perspective-1000">
                       <div
@@ -421,7 +433,7 @@ const MainPage = () => {
                 )}
 
                 {/* HELMET: Indigo 3D Nebula with layered depth + Floating Flowers */}
-                {handle.includes("helmet") && (
+                {theme === 'helmet' && (
                   <>
                     <div className="relative w-[900px] h-[900px] flex items-center justify-center gap-16 perspective-1000">
                       <div
@@ -497,7 +509,7 @@ const MainPage = () => {
                 )}
 
                 {/* LOVE'S GONE: MASSIVE BLUE NEBULA - COVERS ENTIRE SECTION */}
-                {(handle.includes("fire") || handle.includes("love")) && (
+                {theme === 'fire' && (
                   <div className="absolute inset-0 perspective-1000 flex items-center justify-center overflow-visible">
                     {/* GIANT BLUE NEBULA - FILLS SCREEN */}
                     <div className="absolute inset-0 w-[220vw] h-[220vh] -translate-x-1/4 -translate-y-1/4">
@@ -883,17 +895,17 @@ const MainPage = () => {
 
       {/* Particle Effects for each product */}
       {products.map((product) => {
-        const handle = product.node.handle.toLowerCase();
+        const theme = getProductTheme(product.node.tags);
         let particleType: 'heart' | 'butterfly' | 'flower' = 'heart';
         let particleColor = 'hsl(217, 98%, 68%)';
 
-        if (handle.includes("butterfly") || handle.includes("mask")) {
+        if (theme === 'butterfly') {
           particleType = 'butterfly';
           particleColor = 'hsla(185, 95%, 65%, 1)';
-        } else if (handle.includes("helmet") || handle.includes("flower")) {
+        } else if (theme === 'helmet') {
           particleType = 'flower';
           particleColor = 'hsla(239, 95%, 75%, 1)';
-        } else if (handle.includes("fits") || handle.includes("fire")) {
+        } else if (theme === 'fire') {
           particleType = 'heart';
           particleColor = 'hsla(217, 98%, 68%, 1)';
         }
