@@ -361,95 +361,139 @@ const MainPage = () => {
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Cyan 3D Nebula with layered depth */}
+                {/* BUTTERFLY: Cyan 3D Nebula with layered depth + Floating Butterflies */}
                 {handle.includes("butterfly") && (
-                  <div className="relative w-[900px] h-[900px] flex items-center justify-center perspective-1000">
-                    <div
-                      className="absolute inset-0 rounded-full blur-[140px]"
-                      style={{
-                        background:
-                          "radial-gradient(circle, hsla(185, 95%, 65%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
-                      }}
-                    />
-                    {/* Layer 1: The Glow */}
-                    <svg
-                      width="360"
-                      height="360"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="absolute blur-2xl animate-[float_14s_ease-in-out_infinite]"
-                      style={{ transform: "scale(1.2)", color: "hsla(185, 95%, 65%, 0.8)" }}
-                    >
-                      <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
-                    </svg>
-                    {/* Layer 2: The Object */}
-                    <svg
-                      width="300"
-                      height="300"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
-                      style={{ color: "hsla(185, 92%, 72%, 1)" }}
-                    >
-                      <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
-                    </svg>
-                  </div>
+                  <>
+                    <div className="relative w-[900px] h-[900px] flex items-center justify-center perspective-1000">
+                      <div
+                        className="absolute inset-0 rounded-full blur-[140px]"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsla(185, 95%, 65%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
+                        }}
+                      />
+                      {/* Layer 1: The Glow */}
+                      <svg
+                        width="360"
+                        height="360"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="absolute blur-2xl animate-[float_14s_ease-in-out_infinite]"
+                        style={{ transform: "scale(1.2)", color: "hsla(185, 95%, 65%, 0.8)" }}
+                      >
+                        <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
+                      </svg>
+                      {/* Layer 2: The Object */}
+                      <svg
+                        width="300"
+                        height="300"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                        style={{ color: "hsla(185, 92%, 72%, 1)" }}
+                      >
+                        <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
+                      </svg>
+                    </div>
+                    
+                    {/* Floating 3D Butterflies across screen */}
+                    <div className="absolute inset-0 overflow-visible pointer-events-none">
+                      {[...Array(8)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="absolute animate-[float-across_${15 + i * 2}s_linear_infinite]"
+                          style={{
+                            top: `${10 + i * 12}%`,
+                            left: '-10%',
+                            animationDelay: `${i * 2}s`,
+                            color: 'hsla(185, 95%, 65%, 0.6)',
+                          }}
+                          width={60 + i * 8}
+                          height={60 + i * 8}
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
+                        </svg>
+                      ))}
+                    </div>
+                  </>
                 )}
 
-                {/* HELMET: Indigo 3D Nebula with layered depth */}
+                {/* HELMET: Indigo 3D Nebula with layered depth + Floating Flowers */}
                 {handle.includes("helmet") && (
-                  <div className="relative w-[900px] h-[900px] flex items-center justify-center gap-16 perspective-1000">
-                    <div
-                      className="absolute inset-0 rounded-full blur-[140px]"
-                      style={{
-                        background:
-                          "radial-gradient(circle, hsla(239, 95%, 75%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
-                      }}
-                    />
-                    {/* Flower Glow Layer */}
-                    <Flower2
-                      className="absolute left-[25%] blur-2xl w-52 h-52 animate-[float_14s_ease-in-out_infinite]"
-                      strokeWidth={2}
-                      style={{ transform: "scale(1.3)", color: "hsla(239, 95%, 72%, 0.8)" }}
-                    />
-                    {/* Flower Object Layer */}
-                    <Flower2
-                      className="relative brightness-125 w-44 h-44 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
-                      strokeWidth={2}
-                      style={{ color: "hsla(239, 92%, 78%, 1)" }}
-                    />
- 
-                    {/* Helmet Glow Layer */}
-                    <svg
-                      width="220"
-                      height="220"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      className="absolute right-[25%] blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
-                      style={{ transform: "scale(1.35)", color: "hsla(239, 95%, 72%, 0.8)" }}
-                    >
-                      <path
-                        d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
+                  <>
+                    <div className="relative w-[900px] h-[900px] flex items-center justify-center gap-16 perspective-1000">
+                      <div
+                        className="absolute inset-0 rounded-full blur-[140px]"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsla(239, 95%, 75%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
+                        }}
                       />
-                    </svg>
-                    {/* Helmet Object Layer */}
-                    <svg
-                      width="190"
-                      height="190"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
-                      style={{ color: "hsla(239, 92%, 78%, 1)" }}
-                    >
-                      <path
-                        d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
+                      {/* Flower Glow Layer */}
+                      <Flower2
+                        className="absolute left-[25%] blur-2xl w-52 h-52 animate-[float_14s_ease-in-out_infinite]"
+                        strokeWidth={2}
+                        style={{ transform: "scale(1.3)", color: "hsla(239, 95%, 72%, 0.8)" }}
                       />
-                    </svg>
-                  </div>
+                      {/* Flower Object Layer */}
+                      <Flower2
+                        className="relative brightness-125 w-44 h-44 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                        strokeWidth={2}
+                        style={{ color: "hsla(239, 92%, 78%, 1)" }}
+                      />
+   
+                      {/* Helmet Glow Layer */}
+                      <svg
+                        width="220"
+                        height="220"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="absolute right-[25%] blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
+                        style={{ transform: "scale(1.35)", color: "hsla(239, 95%, 72%, 0.8)" }}
+                      >
+                        <path
+                          d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                        />
+                      </svg>
+                      {/* Helmet Object Layer */}
+                      <svg
+                        width="190"
+                        height="190"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
+                        style={{ color: "hsla(239, 92%, 78%, 1)" }}
+                      >
+                        <path
+                          d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
+                          stroke="currentColor"
+                          strokeWidth="2.2"
+                        />
+                      </svg>
+                    </div>
+                    
+                    {/* Floating 3D Flowers across screen */}
+                    <div className="absolute inset-0 overflow-visible pointer-events-none">
+                      {[...Array(8)].map((_, i) => (
+                        <Flower2
+                          key={i}
+                          className="absolute animate-[float-across_${15 + i * 2}s_linear_infinite]"
+                          style={{
+                            top: `${10 + i * 12}%`,
+                            left: '-10%',
+                            animationDelay: `${i * 2}s`,
+                            color: 'hsla(239, 95%, 75%, 0.6)',
+                          }}
+                          size={60 + i * 8}
+                          strokeWidth={2}
+                        />
+                      ))}
+                    </div>
+                  </>
                 )}
 
                 {/* LOVE'S GONE: MASSIVE BLUE NEBULA - COVERS ENTIRE SECTION */}
@@ -843,16 +887,13 @@ const MainPage = () => {
         let particleType: 'heart' | 'butterfly' | 'flower' = 'heart';
         let particleColor = 'hsl(217, 98%, 68%)';
 
-        // Debug: Check product handles
-        console.log('Product handle:', handle);
-
         if (handle.includes("butterfly") || handle.includes("mask")) {
           particleType = 'butterfly';
           particleColor = 'hsla(185, 95%, 65%, 1)';
         } else if (handle.includes("helmet") || handle.includes("flower")) {
           particleType = 'flower';
           particleColor = 'hsla(239, 95%, 75%, 1)';
-        } else if (handle.includes("love") || handle.includes("fire") || handle.includes("fit")) {
+        } else if (handle.includes("fits") || handle.includes("fire")) {
           particleType = 'heart';
           particleColor = 'hsla(217, 98%, 68%, 1)';
         }
