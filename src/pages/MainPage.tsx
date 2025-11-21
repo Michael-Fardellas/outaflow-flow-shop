@@ -124,16 +124,30 @@ const MainPage = () => {
     return () => observer.disconnect();
   }, [products]);
 
-  // Scroll progress tracking
+  // Scroll progress tracking - GPU-accelerated with requestAnimationFrame
   useEffect(() => {
-    const handleScroll = () => {
+    let rafId: number | null = null;
+    let ticking = false;
+
+    const updateProgress = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (window.scrollY / totalHeight) * 100;
       setScrollProgress(Math.min(progress, 100));
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        rafId = requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const handleAddToCart = (product: ShopifyProduct) => {
@@ -216,18 +230,28 @@ const MainPage = () => {
   return (
     <div className="bg-background text-foreground min-h-screen relative">
 
-      {/* Scroll Progress Bar - Color changes based on section */}
-      <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
+      {/* Scroll Progress Bar - GPU-accelerated, buttery smooth */}
+      <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none bg-black/20">
         <div 
-          className="h-full transition-all duration-300 ease-out"
+          className="h-full origin-left"
           style={{ 
-            width: `${scrollProgress}%`,
-            background: currentSection.includes("love") || currentSection.includes("fire")
-              ? "linear-gradient(90deg, hsl(217, 91%, 60%), hsl(207, 48%, 53%))"
+            transform: `scaleX(${scrollProgress / 100})`,
+            willChange: 'transform',
+            background: currentSection.includes("butterfly")
+              ? "hsla(185, 95%, 65%, 1)"
+              : currentSection.includes("helmet") || currentSection.includes("flower")
+              ? "hsla(239, 95%, 75%, 1)"
+              : currentSection.includes("love") || currentSection.includes("fire")
+              ? "hsla(217, 98%, 68%, 1)"
               : "hsl(0, 0%, 100%)",
-            boxShadow: currentSection.includes("love") || currentSection.includes("fire")
-              ? "0 0 20px hsla(217, 91%, 60%, 0.6)"
-              : "0 0 10px hsla(0, 0%, 100%, 0.3)"
+            boxShadow: currentSection.includes("butterfly")
+              ? "0 0 30px hsla(185, 95%, 65%, 0.8), 0 0 60px hsla(185, 95%, 65%, 0.4)"
+              : currentSection.includes("helmet") || currentSection.includes("flower")
+              ? "0 0 30px hsla(239, 95%, 75%, 0.8), 0 0 60px hsla(239, 95%, 75%, 0.4)"
+              : currentSection.includes("love") || currentSection.includes("fire")
+              ? "0 0 30px hsla(217, 98%, 68%, 0.8), 0 0 60px hsla(217, 98%, 68%, 0.4)"
+              : "0 0 10px hsla(0, 0%, 100%, 0.3)",
+            transition: 'background 1.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.2s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         />
       </div>
