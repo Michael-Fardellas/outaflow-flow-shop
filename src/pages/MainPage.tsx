@@ -9,8 +9,6 @@ import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from 
 import { Loader2, Heart, Flower2 } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
-import { ScrambleText } from "@/components/ScrambleText";
-import { Marquee } from "@/components/Marquee";
 
 // Simple size chart data (R00227 + RU0130)
 const sizeCharts = {
@@ -217,14 +215,9 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
-      
-      {/* Marquee Banner at the top */}
-      <div className="fixed top-0 left-0 w-full z-[70]">
-        <Marquee text="WORLDWIDE SHIPPING • LIMITED STOCK • OUTAFLOW SEASON 1 • MADE WITH PURPOSE" />
-      </div>
 
       {/* Scroll Progress Bar - Color changes based on section */}
-      <div className="fixed top-[42px] left-0 w-full h-1 z-[60] pointer-events-none">
+      <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
         <div 
           className="h-full transition-all duration-300 ease-out"
           style={{ 
@@ -519,16 +512,11 @@ const MainPage = () => {
                 <div className={`relative z-10 space-y-6 order-2 ${isEven ? "md:order-2" : "md:order-1"} ${
                   (handle.includes("fire") || handle.includes("love")) ? "tracking-wider text-primary" : ""
                 }`}>
-                  {/* Product title - larger but thinner with Scramble effect */}
+                  {/* Product title - larger but thinner */}
                   <h2 className={`text-4xl md:text-5xl font-extralight tracking-[0.08em] uppercase mb-3 transition-opacity duration-1000 ${
                     isVisible ? "opacity-100" : "opacity-0"
                   }`} style={{ transitionDelay: "400ms" }}>
-                    <ScrambleText 
-                      text={product.node.title}
-                      scrambleOnLoad={isVisible}
-                      scrambleOnHover={true}
-                      scrambleSpeed={25}
-                    />
+                    {product.node.title}
                   </h2>
                   
                   {/* Subtitle - smaller with increased letter spacing */}
