@@ -318,20 +318,19 @@ const MainPage = () => {
                 className="absolute inset-0 pointer-events-none flex items-center justify-center z-0"
                 style={{
                   transform: "scale(1)",
-                  opacity: 0.9,
+                  opacity: 0.95,
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
                 {/* BUTTERFLY: Giant butterfly cloud */}
                 {handle.includes("butterfly") && (
-                  <div className="relative w-[720px] h-[720px] flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-foreground/25 blur-[80px]" />
+                  <div className="relative w-[520px] h-[520px] flex items-center justify-center rounded-full bg-foreground/80">
                     <svg
-                      width="320"
-                      height="320"
+                      width="260"
+                      height="260"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="text-foreground/65 drop-shadow-[0_0_90px_rgba(255,255,255,1)]"
+                      className="text-background drop-shadow-[0_0_80px_rgba(0,0,0,0.9)]"
                     >
                       <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                     </svg>
@@ -340,15 +339,14 @@ const MainPage = () => {
 
                 {/* HELMET: Giant flower + helmet cluster */}
                 {handle.includes("helmet") && (
-                  <div className="relative w-[720px] h-[720px] flex items-center justify-center gap-20">
-                    <div className="absolute inset-0 rounded-full bg-foreground/25 blur-[80px]" />
-                    <Flower2 className="w-40 h-40 text-foreground/70 drop-shadow-[0_0_90px_rgba(255,255,255,1)]" strokeWidth={2} />
+                  <div className="relative w-[520px] h-[520px] flex items-center justify-center gap-10 rounded-full bg-foreground/80">
+                    <Flower2 className="w-40 h-40 text-background drop-shadow-[0_0_70px_rgba(0,0,0,0.9)]" strokeWidth={2} />
                     <svg
-                      width="180"
-                      height="180"
+                      width="170"
+                      height="170"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-foreground/80 drop-shadow-[0_0_90px_rgba(255,255,255,1)]"
+                      className="text-background drop-shadow-[0_0_70px_rgba(0,0,0,0.9)]"
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -361,13 +359,17 @@ const MainPage = () => {
 
                 {/* LOVE'S GONE: Giant blue halo + broken heart */}
                 {(handle.includes("fire") || handle.includes("love")) && (
-                  <div className="relative w-[780px] h-[780px] flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-primary/45 blur-[110px]" />
+                  <div className="relative w-[540px] h-[540px] flex items-center justify-center rounded-full bg-primary">
                     <div className="relative">
-                      <Heart className="w-52 h-52 text-primary/95 fill-primary/40 drop-shadow-[0_0_140px_rgba(59,130,246,1)]" strokeWidth={2.4} />
-                      <div className="absolute top-1/2 left-1/2 w-24 h-[3px] bg-background -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-[0_0_40px_rgba(0,0,0,1)]" />
+                      <Heart className="w-52 h-52 text-background fill-background drop-shadow-[0_0_120px_rgba(0,0,0,1)]" strokeWidth={2.4} />
+                      <div className="absolute top-1/2 left-1/2 w-24 h-[3px] bg-primary -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-[0_0_40px_rgba(0,0,0,1)]" />
                     </div>
                   </div>
+                )}
+
+                {/* Fallback: neutral circle if handle doesn’t match */}
+                {!handle.includes("butterfly") && !handle.includes("helmet") && !handle.includes("fire") && !handle.includes("love") && (
+                  <div className="w-[480px] h-[480px] rounded-full bg-foreground/70" />
                 )}
               </div>
 
