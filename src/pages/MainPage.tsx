@@ -646,44 +646,15 @@ const MainPage = () => {
                     </div>
                   </div>
 
-                  {/* Add to cart button - customized per product */}
+                  {/* Add to cart button - minimal design */}
                   <Button
                     onClick={(e) => handleAddToCart(product, e)}
-                    className={`w-full mb-6 transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light relative group ${
+                    className={`w-full mb-6 transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light bg-transparent border border-foreground/30 text-foreground hover:bg-foreground/5 hover:border-foreground/50 ${
                       isVisible ? "opacity-100" : "opacity-0"
-                    } ${
-                      handle.includes("love") || handle.includes("fire")
-                        ? "bg-[hsla(217,98%,68%,0.1)] border-2 border-[hsla(217,98%,68%,0.5)] text-[hsla(217,98%,68%,1)] hover:bg-[hsla(217,98%,68%,0.2)] hover:border-[hsla(217,98%,68%,0.8)] hover:shadow-[0_0_30px_hsla(217,98%,68%,0.3)]"
-                        : handle.includes("butterfly")
-                        ? "bg-[hsla(185,95%,65%,0.08)] border-2 border-[hsla(185,95%,65%,0.4)] text-[hsla(185,95%,65%,1)] hover:bg-[hsla(185,95%,65%,0.15)] hover:border-[hsla(185,95%,65%,0.7)] hover:shadow-[0_0_30px_hsla(185,95%,65%,0.3)]"
-                        : "bg-[hsla(239,95%,75%,0.08)] border-2 border-[hsla(239,95%,75%,0.4)] text-[hsla(239,95%,75%,1)] hover:bg-[hsla(239,95%,75%,0.15)] hover:border-[hsla(239,95%,75%,0.7)] hover:shadow-[0_0_30px_hsla(239,95%,75%,0.3)]"
                     }`}
                     style={{ transitionDelay: "1400ms" }}
                   >
-                    {/* Icon inside button - different for each product */}
-                    {handle.includes("love") || handle.includes("fire") ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Heart className="w-4 h-4" fill="hsla(217,98%,68%,0.6)" />
-                        <span>Add to Cart</span>
-                        <Heart className="w-4 h-4" fill="hsla(217,98%,68%,0.6)" />
-                      </span>
-                    ) : handle.includes("butterfly") ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="hsla(185,95%,65%,0.7)">
-                          <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
-                        </svg>
-                        <span>Add to Cart</span>
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="hsla(185,95%,65%,0.7)">
-                          <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
-                        </svg>
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        <Flower2 className="w-4 h-4" />
-                        <span>Add to Cart</span>
-                        <Flower2 className="w-4 h-4" />
-                      </span>
-                    )}
+                    Add to Cart
                   </Button>
 
                   {/* Fabric details - thin sliding sheet aesthetic */}
@@ -868,16 +839,22 @@ const MainPage = () => {
 
       {/* Particle Effects for each product */}
       {products.map((product) => {
-        const handle = product.node.handle;
+        const handle = product.node.handle.toLowerCase();
         let particleType: 'heart' | 'butterfly' | 'flower' = 'heart';
         let particleColor = 'hsl(217, 98%, 68%)';
 
-        if (handle.includes("butterfly")) {
+        // Debug: Check product handles
+        console.log('Product handle:', handle);
+
+        if (handle.includes("butterfly") || handle.includes("mask")) {
           particleType = 'butterfly';
           particleColor = 'hsla(185, 95%, 65%, 1)';
         } else if (handle.includes("helmet") || handle.includes("flower")) {
           particleType = 'flower';
           particleColor = 'hsla(239, 95%, 75%, 1)';
+        } else if (handle.includes("love") || handle.includes("fire") || handle.includes("fit")) {
+          particleType = 'heart';
+          particleColor = 'hsla(217, 98%, 68%, 1)';
         }
 
         const position = buttonPositions[product.node.id];

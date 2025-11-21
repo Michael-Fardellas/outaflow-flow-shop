@@ -1094,8 +1094,8 @@ All colors MUST be HSL.
   .love-minimal-scene::before {
     content: '';
     position: absolute;
-    inset: -10%;
-    background: radial-gradient(circle at center, hsla(217, 98%, 68%, 0.15) 0%, transparent 70%);
+    inset: -20%;
+    background: radial-gradient(circle at center, hsla(217, 98%, 68%, 0.25) 0%, hsla(217, 98%, 68%, 0.15) 40%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
@@ -1103,10 +1103,10 @@ All colors MUST be HSL.
   .love-minimal-scene::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, hsla(217, 98%, 68%, 0.08) 0%, transparent 60%);
+    inset: -10%;
+    background: radial-gradient(ellipse at center, hsla(217, 98%, 68%, 0.18) 0%, hsla(213, 98%, 75%, 0.12) 50%, transparent 70%);
     pointer-events: none;
     z-index: 0;
-    animation: blue-glow-pulse 8s ease-in-out infinite;
+    animation: blue-glow-pulse 6s ease-in-out infinite;
   }
 }
