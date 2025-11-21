@@ -223,15 +223,6 @@ const MainPage = () => {
         }}
       />
 
-      {/* Perspective Grid Floor */}
-      <div 
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          background: 'repeating-linear-gradient(transparent 0%, transparent 48%, rgba(60, 60, 100, 0.05) 50%, transparent 52%, transparent 100%), linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 100%)',
-          maskImage: 'linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)',
-        }}
-      />
-
       {/* Scroll Progress Bar - Color changes based on section */}
       <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
         <div 
@@ -434,31 +425,31 @@ const MainPage = () => {
                       <div
                         className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
                         style={{
-                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(10, 10, 10, 0) 70%)",
+                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(0, 0, 0, 1) 70%)",
                           animationDuration: "3s",
                         }}
                       />
                       <div
                         className="absolute inset-0 rounded-full blur-[80px]"
                         style={{
-                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(10, 10, 10, 0) 60%)",
+                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(0, 0, 0, 1) 60%)",
                         }}
                       />
                       <div className="relative flex gap-8">
                         {/* Heart 1 - Glow Layer */}
-                        <Heart className="absolute left-0 w-[230px] h-[230px] text-blue-500/50 fill-blue-500/30 blur-2xl animate-[float_14s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} style={{ transform: "scale(1.2) rotate(12deg)" }} />
+                        <Heart className="absolute left-0 w-[230px] h-[230px] text-blue-400 blur-2xl opacity-60 animate-[float_14s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} style={{ transform: "scale(1.2) rotate(12deg)" }} />
                         {/* Heart 1 - Object Layer */}
-                        <Heart className="relative w-48 h-48 text-blue-400 brightness-110 fill-blue-500/50 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
+                        <Heart className="relative w-48 h-48 text-blue-300 fill-blue-500/60 drop-shadow-2xl brightness-110 animate-[float_12s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
                         
                         {/* Heart 2 - Glow Layer */}
-                        <Heart className="absolute left-[33%] w-[269px] h-[269px] text-blue-500/50 fill-blue-500/40 blur-2xl animate-[float_14s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} style={{ transform: "scale(1.2)" }} />
+                        <Heart className="absolute left-[33%] w-[269px] h-[269px] text-blue-400 blur-2xl opacity-60 animate-[float_14s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} style={{ transform: "scale(1.2)" }} />
                         {/* Heart 2 - Object Layer */}
-                        <Heart className="relative w-56 h-56 text-blue-400 brightness-110 fill-blue-500/70 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
+                        <Heart className="relative w-56 h-56 text-blue-300 fill-blue-500/80 drop-shadow-2xl brightness-110 animate-[float_12s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
                         
                         {/* Heart 3 - Glow Layer */}
-                        <Heart className="absolute right-0 w-[211px] h-[211px] text-blue-500/50 fill-blue-500/25 blur-2xl animate-[float_14s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} style={{ transform: "scale(1.2) rotate(-12deg)" }} />
+                        <Heart className="absolute right-0 w-[211px] h-[211px] text-blue-400 blur-2xl opacity-60 animate-[float_14s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} style={{ transform: "scale(1.2) rotate(-12deg)" }} />
                         {/* Heart 3 - Object Layer */}
-                        <Heart className="relative w-44 h-44 text-blue-400 brightness-110 fill-blue-500/40 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
+                        <Heart className="relative w-44 h-44 text-blue-300 fill-blue-500/60 drop-shadow-2xl brightness-110 animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
                       </div>
                     </div>
                   </div>
