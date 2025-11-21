@@ -9,6 +9,8 @@ import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from 
 import { Loader2, Heart, Flower2 } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 
 // Simple size chart data (R00227 + RU0130)
 const sizeCharts = {
@@ -76,6 +78,25 @@ const MainPage = () => {
   const [currentSection, setCurrentSection] = useState<string>("");
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
+
+  // Lenis Smooth Scroll Setup
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
