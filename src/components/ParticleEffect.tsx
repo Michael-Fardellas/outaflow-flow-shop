@@ -13,9 +13,11 @@ interface ParticleEffectProps {
   type: 'heart' | 'butterfly' | 'flower';
   color: string;
   trigger: number;
+  originX?: number;
+  originY?: number;
 }
 
-export const ParticleEffect = ({ type, color, trigger }: ParticleEffectProps) => {
+export const ParticleEffect = ({ type, color, trigger, originX = window.innerWidth / 2, originY = window.innerHeight / 2 }: ParticleEffectProps) => {
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
@@ -70,8 +72,10 @@ export const ParticleEffect = ({ type, color, trigger }: ParticleEffectProps) =>
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className="absolute top-1/2 left-1/2"
+          className="absolute"
           style={{
+            left: `${originX}px`,
+            top: `${originY}px`,
             animation: `particle-pop 1.5s ease-out forwards`,
             animationDelay: `${particle.delay}ms`,
             '--particle-x': `${particle.x}px`,

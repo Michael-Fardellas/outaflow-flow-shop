@@ -77,6 +77,7 @@ const MainPage = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentSection, setCurrentSection] = useState<string>("");
   const [particleTriggers, setParticleTriggers] = useState<{ [key: string]: number }>({});
+  const [buttonPositions, setButtonPositions] = useState<{ [key: string]: { x: number; y: number } }>({});
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
   const { playClick } = useSoundEffect();
@@ -154,14 +155,20 @@ const MainPage = () => {
     };
   }, []);
 
-  const handleAddToCart = (product: ShopifyProduct) => {
+  const handleAddToCart = (product: ShopifyProduct, event: React.MouseEvent<HTMLButtonElement>) => {
     const variantIndex = selectedSizes[product.node.id] || 0;
     const variant = product.node.variants.edges[variantIndex]?.node;
     if (!variant) return;
 
+    // Capture button position
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
     playClick();
     
-    // Trigger particle effect
+    // Trigger particle effect and store position
+    setButtonPositions(prev => ({ ...prev, [product.node.id]: { x, y } }));
     setParticleTriggers(prev => ({
       ...prev,
       [product.node.id]: (prev[product.node.id] || 0) + 1
@@ -454,7 +461,7 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[260px] animate-pulse"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(217, 98%, 68%, 0.95) 0%, hsla(217, 98%, 68%, 0.75) 25%, hsla(217, 98%, 68%, 0.45) 50%, transparent 72%)",
+                            "radial-gradient(circle, hsla(217, 98%, 68%, 1) 0%, hsla(217, 98%, 68%, 0.85) 25%, hsla(217, 98%, 68%, 0.55) 50%, transparent 72%)",
                           animationDuration: "4s",
                         }}
                       />
@@ -462,7 +469,15 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[200px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(213, 98%, 75%, 0.95) 0%, hsla(217, 98%, 68%, 0.65) 30%, hsla(220, 95%, 65%, 0.45) 60%, transparent 82%)",
+                            "radial-gradient(circle, hsla(213, 98%, 75%, 1) 0%, hsla(217, 98%, 68%, 0.75) 30%, hsla(220, 95%, 65%, 0.55) 60%, transparent 82%)",
+                        }}
+                      />
+                      <div
+                        className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsla(217, 98%, 72%, 0.9) 0%, hsla(217, 98%, 68%, 0.6) 40%, transparent 70%)",
+                          animationDuration: "5s",
                         }}
                       />
                     </div>
@@ -631,16 +646,45 @@ const MainPage = () => {
                     </div>
                   </div>
 
-                  {/* Add to cart button */}
-                  <Button
-                    onClick={() => handleAddToCart(product)}
-                    className={`w-full mb-6 bg-transparent border border-foreground/30 text-foreground hover:bg-foreground/5 hover:border-foreground/50 transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light ${
-                      isVisible ? "opacity-100" : "opacity-0"
-                    }`}
-                    style={{ transitionDelay: "1400ms" }}
-                  >
-                    Add to Cart
-                  </Button>
+                  {/* Add to cart button with decorative icons */}
+                  <div className="relative">
+                    <Button
+                      onClick={(e) => handleAddToCart(product, e)}
+                      className={`w-full mb-6 bg-transparent border ${
+                        handle.includes("love") || handle.includes("fire")
+                          ? "border-[hsla(217,98%,68%,0.4)] text-[hsla(217,98%,68%,1)] hover:bg-[hsla(217,98%,68%,0.08)] hover:border-[hsla(217,98%,68%,0.6)]"
+                          : handle.includes("butterfly")
+                          ? "border-[hsla(185,95%,65%,0.3)] text-[hsla(185,95%,65%,0.9)] hover:bg-[hsla(185,95%,65%,0.05)] hover:border-[hsla(185,95%,65%,0.5)]"
+                          : "border-[hsla(239,95%,75%,0.3)] text-[hsla(239,95%,75%,0.9)] hover:bg-[hsla(239,95%,75%,0.05)] hover:border-[hsla(239,95%,75%,0.5)]"
+                      } transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light relative overflow-visible ${
+                        isVisible ? "opacity-100" : "opacity-0"
+                      }`}
+                      style={{ transitionDelay: "1400ms" }}
+                    >
+                      <span className="relative z-10">Add to Cart</span>
+                      {/* Decorative floating icons next to button */}
+                      {handle.includes("love") || handle.includes("fire") ? (
+                        <>
+                          <Heart className="absolute -right-8 top-1/2 -translate-y-1/2 w-4 h-4 opacity-60 animate-[float_3s_ease-in-out_infinite]" fill="hsla(217,98%,68%,0.5)" style={{ color: "hsla(217,98%,68%,1)" }} />
+                          <Heart className="absolute -left-8 top-1/2 -translate-y-1/2 w-3 h-3 opacity-40 animate-[float_4s_ease-in-out_infinite_0.5s]" fill="hsla(217,98%,68%,0.3)" style={{ color: "hsla(217,98%,68%,0.8)" }} />
+                        </>
+                      ) : handle.includes("butterfly") ? (
+                        <>
+                          <svg className="absolute -right-8 top-1/2 -translate-y-1/2 w-4 h-4 opacity-60 animate-[float_3s_ease-in-out_infinite]" viewBox="0 0 24 24" fill="hsla(185,95%,65%,0.6)" style={{ color: "hsla(185,95%,65%,1)" }}>
+                            <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
+                          </svg>
+                          <svg className="absolute -left-8 top-1/2 -translate-y-1/2 w-3 h-3 opacity-40 animate-[float_4s_ease-in-out_infinite_0.5s]" viewBox="0 0 24 24" fill="hsla(185,95%,65%,0.4)" style={{ color: "hsla(185,95%,65%,0.8)" }}>
+                            <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          <Flower2 className="absolute -right-8 top-1/2 -translate-y-1/2 w-4 h-4 opacity-60 animate-[float_3s_ease-in-out_infinite]" style={{ color: "hsla(239,95%,75%,1)" }} />
+                          <Flower2 className="absolute -left-8 top-1/2 -translate-y-1/2 w-3 h-3 opacity-40 animate-[float_4s_ease-in-out_infinite_0.5s]" style={{ color: "hsla(239,95%,75%,0.8)" }} />
+                        </>
+                      )}
+                    </Button>
+                  </div>
 
                   {/* Fabric details - thin sliding sheet aesthetic */}
                   <details className={`mt-6 border-t border-foreground/10 transition-opacity duration-1000 ${
@@ -836,12 +880,16 @@ const MainPage = () => {
           particleColor = 'hsla(239, 95%, 75%, 1)';
         }
 
+        const position = buttonPositions[product.node.id];
+
         return (
           <ParticleEffect
             key={product.node.id}
             type={particleType}
             color={particleColor}
             trigger={particleTriggers[product.node.id] || 0}
+            originX={position?.x}
+            originY={position?.y}
           />
         );
       })}
