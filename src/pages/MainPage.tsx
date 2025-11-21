@@ -305,19 +305,19 @@ const MainPage = () => {
           const sectionId = `product-${product.node.id}`;
           const isVisible = visibleSections.has(sectionId);
 
-          // Scene personality with minimal tonal shifts
+          // Scene personality with cyan/indigo nebula backgrounds
           let sceneClass = "";
           let sceneStyles: React.CSSProperties = {};
           
           if (handle.includes("butterfly")) {
             sceneClass = "butterfly-minimal-scene";
-            sceneStyles = { background: "linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%)" };
+            sceneStyles = { background: "radial-gradient(circle at center, rgba(6, 182, 212, 0.15) 0%, rgba(0, 0, 0, 1) 70%)" };
           } else if (handle.includes("helmet")) {
             sceneClass = "helmet-minimal-scene";
-            sceneStyles = { background: "linear-gradient(180deg, #000 0%, #0d0d0d 50%, #000 100%)" };
+            sceneStyles = { background: "radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 1) 70%)" };
           } else if (handle.includes("fire") || handle.includes("love")) {
             sceneClass = "love-minimal-scene";
-            sceneStyles = { background: "radial-gradient(ellipse at center, #0a1628 0%, #050a14 50%, #000 100%)" };
+            sceneStyles = { background: "radial-gradient(ellipse at center, rgba(59, 130, 246, 0.2) 0%, rgba(0, 0, 0, 1) 70%)" };
           }
 
           return (
