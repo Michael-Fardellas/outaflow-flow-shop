@@ -373,15 +373,15 @@ const MainPage = () => {
                   transition: "all 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Small scattered butterflies + radial cyan hue with smooth transitions */}
+                {/* BUTTERFLY: Small scattered butterflies + radial cyan hue with ultra-smooth gradual transitions */}
                 {theme === 'butterfly' && (
                   <>
-                    {/* Extended radial hue - very gradual, bleeds far beyond section for ultra-smooth transition */}
-                    <div className="absolute -top-[50vh] -bottom-[50vh] left-0 right-0 overflow-visible pointer-events-none">
+                    {/* Massively extended radial hue - starts fading in very early and gradually */}
+                    <div className="absolute -top-[80vh] -bottom-[80vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[250px]"
+                        className="absolute inset-0 blur-[280px]"
                         style={{
-                          background: "radial-gradient(ellipse 120% 100% at 50% 50%, hsla(185, 95%, 65%, 0.32) 0%, hsla(185, 95%, 65%, 0.20) 25%, hsla(185, 95%, 65%, 0.12) 40%, hsla(185, 95%, 65%, 0.06) 60%, hsla(185, 95%, 65%, 0.03) 80%, transparent 100%)",
+                          background: "radial-gradient(ellipse 150% 120% at 50% 50%, hsla(185, 95%, 65%, 0.28) 0%, hsla(185, 95%, 65%, 0.18) 20%, hsla(185, 95%, 65%, 0.11) 35%, hsla(185, 95%, 65%, 0.06) 50%, hsla(185, 95%, 65%, 0.03) 65%, hsla(185, 95%, 65%, 0.015) 80%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -421,15 +421,15 @@ const MainPage = () => {
                   </>
                 )}
 
-                {/* HELMET: Small scattered flowers + radial indigo hue with smooth transitions (no helmets) */}
+                {/* HELMET: Small scattered flowers + radial indigo hue with ultra-smooth gradual transitions (no helmets) */}
                 {theme === 'helmet' && (
                   <>
-                    {/* Extended radial hue - very gradual, bleeds far beyond section for ultra-smooth transition */}
-                    <div className="absolute -top-[50vh] -bottom-[50vh] left-0 right-0 overflow-visible pointer-events-none">
+                    {/* Massively extended radial hue - starts fading in very early and gradually */}
+                    <div className="absolute -top-[80vh] -bottom-[80vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[250px]"
+                        className="absolute inset-0 blur-[280px]"
                         style={{
-                          background: "radial-gradient(ellipse 120% 100% at 50% 50%, hsla(239, 95%, 75%, 0.32) 0%, hsla(239, 95%, 75%, 0.20) 25%, hsla(239, 95%, 75%, 0.12) 40%, hsla(239, 95%, 75%, 0.06) 60%, hsla(239, 95%, 75%, 0.03) 80%, transparent 100%)",
+                          background: "radial-gradient(ellipse 150% 120% at 50% 50%, hsla(239, 95%, 75%, 0.28) 0%, hsla(239, 95%, 75%, 0.18) 20%, hsla(239, 95%, 75%, 0.11) 35%, hsla(239, 95%, 75%, 0.06) 50%, hsla(239, 95%, 75%, 0.03) 65%, hsla(239, 95%, 75%, 0.015) 80%, transparent 100%)",
                         }}
                       />
                     </div>
@@ -466,15 +466,15 @@ const MainPage = () => {
                   </>
                 )}
 
-                {/* LOVE'S GONE: Small scattered hearts + radial blue hue with smooth transitions (no butterflies) */}
+                {/* LOVE'S GONE: Small scattered hearts + radial blue hue with ultra-smooth gradual transitions (no butterflies) */}
                 {theme === 'fire' && (
                   <>
-                    {/* Extended radial blue hue - very gradual, bleeds far beyond section for ultra-smooth transition */}
-                    <div className="absolute -top-[50vh] -bottom-[50vh] left-0 right-0 overflow-visible pointer-events-none">
+                    {/* Massively extended radial blue hue - starts fading in very early and gradually */}
+                    <div className="absolute -top-[80vh] -bottom-[80vh] left-0 right-0 overflow-visible pointer-events-none">
                       <div
-                        className="absolute inset-0 blur-[250px]"
+                        className="absolute inset-0 blur-[280px]"
                         style={{
-                          background: "radial-gradient(ellipse 120% 100% at 50% 50%, hsla(217, 95%, 68%, 0.32) 0%, hsla(217, 95%, 68%, 0.20) 25%, hsla(217, 95%, 68%, 0.12) 40%, hsla(217, 95%, 68%, 0.06) 60%, hsla(217, 95%, 68%, 0.03) 80%, transparent 100%)",
+                          background: "radial-gradient(ellipse 150% 120% at 50% 50%, hsla(217, 95%, 68%, 0.28) 0%, hsla(217, 95%, 68%, 0.18) 20%, hsla(217, 95%, 68%, 0.11) 35%, hsla(217, 95%, 68%, 0.06) 50%, hsla(217, 95%, 68%, 0.03) 65%, hsla(217, 95%, 68%, 0.015) 80%, transparent 100%)",
                         }}
                       />
                     </div>
