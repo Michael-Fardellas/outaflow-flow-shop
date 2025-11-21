@@ -325,15 +325,18 @@ const MainPage = () => {
                 {char === " " ? "\u00A0" : char}
               </span>
             ))}
-            {"purpose".split("").map((char, i) => (
-              <span
-                key={`purpose-${i}`}
-                className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards] bg-gradient-to-r from-white via-primary to-white bg-[length:200%_100%] bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]"
-                style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
-              >
-                {char}
-              </span>
-            ))}
+            <span className="relative inline-block">
+              {"purpose".split("").map((char, i) => (
+                <span
+                  key={`purpose-${i}`}
+                  className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
+                  style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
+                >
+                  {char}
+                </span>
+              ))}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent bg-[length:200%_100%] animate-[shimmer_3s_ease-in-out_infinite] pointer-events-none" />
+            </span>
             {".".split("").map((char, i) => (
               <span
                 key={`period-${i}`}
