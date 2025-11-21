@@ -77,14 +77,6 @@ const MainPage = () => {
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
 
-  // Simple buttery smooth scroll setup
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth';
-    return () => {
-      document.documentElement.style.scrollBehavior = 'auto';
-    };
-  }, []);
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
