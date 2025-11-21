@@ -397,48 +397,84 @@ const MainPage = () => {
                   </div>
                 )}
 
-                {/* LOVE'S GONE: Enhanced blue nebula with proper 3D depth */}
+                {/* LOVE'S GONE: MASSIVE BLUE NEBULA - COVERS ENTIRE SECTION */}
                 {(handle.includes("fire") || handle.includes("love")) && (
-                  <div
-                    className="absolute perspective-1000"
-                    style={{
-                      top: "52%",
-                      left: "62%",
-                      transform: "translate(-50%, -50%)",
-                    }}
-                  >
-                    <div
-                      className="relative w-[900px] h-[900px] flex items-center justify-center"
-                    >
+                  <div className="absolute inset-0 perspective-1000 flex items-center justify-center overflow-visible">
+                    {/* GIANT BLUE NEBULA - FILLS SCREEN */}
+                    <div className="absolute inset-0 w-[200vw] h-[200vh] -translate-x-1/4 -translate-y-1/4">
                       <div
-                        className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
+                        className="absolute inset-0 rounded-full blur-[250px] animate-pulse"
                         style={{
-                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(0, 0, 0, 1) 70%)",
-                          animationDuration: "3s",
+                          background: "radial-gradient(circle, rgb(59, 130, 246) 0%, rgba(59, 130, 246, 0.6) 25%, rgba(59, 130, 246, 0.3) 50%, transparent 70%)",
+                          animationDuration: "4s",
                         }}
                       />
                       <div
-                        className="absolute inset-0 rounded-full blur-[80px]"
+                        className="absolute inset-0 rounded-full blur-[180px]"
                         style={{
-                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, rgba(0, 0, 0, 1) 60%)",
+                          background: "radial-gradient(circle, rgba(96, 165, 250, 0.8) 0%, rgba(59, 130, 246, 0.5) 30%, rgba(37, 99, 235, 0.3) 60%, transparent 80%)",
                         }}
                       />
-                      <div className="relative flex gap-8">
-                        {/* Heart 1 - Glow Layer */}
-                        <Heart className="absolute left-0 w-[230px] h-[230px] text-blue-400 blur-2xl opacity-60 animate-[float_14s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} style={{ transform: "scale(1.2) rotate(12deg)" }} />
-                        {/* Heart 1 - Object Layer */}
-                        <Heart className="relative w-48 h-48 text-blue-300 fill-blue-500/60 drop-shadow-2xl brightness-110 animate-[float_12s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
-                        
-                        {/* Heart 2 - Glow Layer */}
-                        <Heart className="absolute left-[33%] w-[269px] h-[269px] text-blue-400 blur-2xl opacity-60 animate-[float_14s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} style={{ transform: "scale(1.2)" }} />
-                        {/* Heart 2 - Object Layer */}
-                        <Heart className="relative w-56 h-56 text-blue-300 fill-blue-500/80 drop-shadow-2xl brightness-110 animate-[float_12s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
-                        
-                        {/* Heart 3 - Glow Layer */}
-                        <Heart className="absolute right-0 w-[211px] h-[211px] text-blue-400 blur-2xl opacity-60 animate-[float_14s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} style={{ transform: "scale(1.2) rotate(-12deg)" }} />
-                        {/* Heart 3 - Object Layer */}
-                        <Heart className="relative w-44 h-44 text-blue-300 fill-blue-500/60 drop-shadow-2xl brightness-110 animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
-                      </div>
+                    </div>
+
+                    {/* MASSIVE BRIGHT HEARTS */}
+                    <div className="relative flex gap-20 scale-150">
+                      {/* Heart 1 - Glow Layer */}
+                      <Heart 
+                        className="absolute left-0 w-[400px] h-[400px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite] transform rotate-12" 
+                        strokeWidth={3} 
+                        style={{ 
+                          transform: "scale(1.5) rotate(12deg)",
+                          color: "rgb(96, 165, 250)"
+                        }} 
+                      />
+                      {/* Heart 1 - Object Layer */}
+                      <Heart 
+                        className="relative w-64 h-64 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] transform rotate-12" 
+                        strokeWidth={3}
+                        style={{
+                          color: "rgb(147, 197, 253)",
+                          fill: "rgb(96, 165, 250)"
+                        }}
+                      />
+                      
+                      {/* Heart 2 - Glow Layer */}
+                      <Heart 
+                        className="absolute left-[33%] w-[480px] h-[480px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_0.8s] z-10" 
+                        strokeWidth={3.5}
+                        style={{ 
+                          transform: "scale(1.5)",
+                          color: "rgb(59, 130, 246)"
+                        }} 
+                      />
+                      {/* Heart 2 - Object Layer */}
+                      <Heart 
+                        className="relative w-80 h-80 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10" 
+                        strokeWidth={3.5}
+                        style={{
+                          color: "rgb(147, 197, 253)",
+                          fill: "rgb(59, 130, 246)"
+                        }}
+                      />
+                      
+                      {/* Heart 3 - Glow Layer */}
+                      <Heart 
+                        className="absolute right-0 w-[360px] h-[360px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_1.5s] transform -rotate-12" 
+                        strokeWidth={2.8}
+                        style={{ 
+                          transform: "scale(1.5) rotate(-12deg)",
+                          color: "rgb(96, 165, 250)"
+                        }} 
+                      />
+                      {/* Heart 3 - Object Layer */}
+                      <Heart 
+                        className="relative w-60 h-60 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" 
+                        strokeWidth={2.8}
+                        style={{
+                          color: "rgb(147, 197, 253)",
+                          fill: "rgb(96, 165, 250)"
+                        }}
+                      />
                     </div>
                   </div>
                 )}
