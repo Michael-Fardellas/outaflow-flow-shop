@@ -373,26 +373,37 @@ const MainPage = () => {
 
                 {/* LOVE'S GONE: Bold blue shining halo + animated 3D hearts */}
                 {(handle.includes("fire") || handle.includes("love")) && (
-                  <div className="relative w-[900px] h-[900px] flex items-center justify-center">
+                  <div
+                    className="absolute"
+                    style={{
+                      top: "52%",
+                      left: "62%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
                     <div
-                      className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
-                      style={{
-                        background:
-                          "radial-gradient(circle, hsl(var(--primary) / 0.55) 0%, hsl(var(--primary) / 0.25) 40%, transparent 75%)",
-                        animationDuration: "3s",
-                      }}
-                    />
-                    <div
-                      className="absolute inset-0 rounded-full blur-[80px]"
-                      style={{
-                        background:
-                          "radial-gradient(circle, hsl(var(--primary) / 0.35) 0%, transparent 65%)",
-                      }}
-                    />
-                    <div className="relative flex gap-8">
-                      <Heart className="w-48 h-48 text-primary fill-primary/40 drop-shadow-[0_0_140px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
-                      <Heart className="w-56 h-56 text-primary fill-primary/50 drop-shadow-[0_0_160px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
-                      <Heart className="w-44 h-44 text-primary fill-primary/35 drop-shadow-[0_0_130px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
+                      className="relative w-[900px] h-[900px] flex items-center justify-center"
+                    >
+                      <div
+                        className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsl(var(--primary) / 0.8) 0%, hsl(var(--primary) / 0.45) 35%, transparent 80%)",
+                          animationDuration: "3s",
+                        }}
+                      />
+                      <div
+                        className="absolute inset-0 rounded-full blur-[80px]"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsl(var(--primary) / 0.55) 0%, transparent 70%)",
+                        }}
+                      />
+                      <div className="relative flex gap-8">
+                        <Heart className="w-48 h-48 text-primary fill-primary/40 drop-shadow-[0_0_180px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
+                        <Heart className="w-56 h-56 text-primary fill-primary/60 drop-shadow-[0_0_200px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
+                        <Heart className="w-44 h-44 text-primary fill-primary/35 drop-shadow-[0_0_160px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
+                      </div>
                     </div>
                   </div>
                 )}
