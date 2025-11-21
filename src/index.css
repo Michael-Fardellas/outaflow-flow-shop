@@ -17,8 +17,8 @@ All colors MUST be HSL.
     --popover: 0 0% 0%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 100%;
@@ -51,7 +51,7 @@ All colors MUST be HSL.
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
   
   @supports (scroll-behavior: smooth) {
@@ -60,8 +60,13 @@ All colors MUST be HSL.
     }
   }
 
+  * {
+    scroll-behavior: auto;
+  }
+
   body {
     @apply bg-background text-foreground overflow-x-hidden;
+    scroll-behavior: auto;
   }
 
   .glow {
