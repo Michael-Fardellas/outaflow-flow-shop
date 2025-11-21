@@ -326,16 +326,28 @@ const MainPage = () => {
               </span>
             ))}
             <span className="relative inline-block">
-              {"purpose".split("").map((char, i) => (
-                <span
-                  key={`purpose-${i}`}
-                  className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
-                  style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
-                >
-                  {char}
-                </span>
-              ))}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent bg-[length:200%_100%] animate-[shimmer_3s_ease-in-out_infinite] pointer-events-none" />
+              <span className="relative z-10 bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]">
+                {"purpose".split("").map((char, i) => (
+                  <span
+                    key={`purpose-${i}`}
+                    className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
+                    style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </span>
+              <span className="absolute inset-0 blur-sm bg-gradient-to-r from-white/50 via-white/30 to-white/50 bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]" aria-hidden="true">
+                {"purpose".split("").map((char, i) => (
+                  <span
+                    key={`purpose-blur-${i}`}
+                    className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
+                    style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </span>
             </span>
             {".".split("").map((char, i) => (
               <span
