@@ -9,8 +9,6 @@ import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from 
 import { Loader2, Heart, Flower2 } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
 
 // Simple size chart data (R00227 + RU0130)
 const sizeCharts = {
@@ -79,24 +77,11 @@ const MainPage = () => {
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
 
-  // Lenis Smooth Scroll Setup - Buttery Smooth
+  // Simple buttery smooth scroll setup
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 2.0,
-      easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 0.8,
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
+    document.documentElement.style.scrollBehavior = 'smooth';
     return () => {
-      lenis.destroy();
+      document.documentElement.style.scrollBehavior = 'auto';
     };
   }, []);
 
