@@ -325,27 +325,28 @@ const MainPage = () => {
                       className="absolute inset-0 rounded-full blur-[140px]"
                       style={{
                         background:
-                          "radial-gradient(circle, hsla(185, 84%, 56%, 0.35) 0%, hsla(0, 0%, 0%, 0) 70%)",
+                          "radial-gradient(circle, hsla(185, 95%, 65%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
                       }}
                     />
                     {/* Layer 1: The Glow */}
                     <svg
-                      width="336"
-                      height="336"
+                      width="360"
+                      height="360"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="absolute text-cyan-500/50 blur-2xl animate-[float_14s_ease-in-out_infinite]"
-                      style={{ transform: "scale(1.2)" }}
+                      className="absolute blur-2xl animate-[float_14s_ease-in-out_infinite]"
+                      style={{ transform: "scale(1.2)", color: "hsla(185, 95%, 65%, 0.8)" }}
                     >
                       <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                     </svg>
                     {/* Layer 2: The Object */}
                     <svg
-                      width="280"
-                      height="280"
+                      width="300"
+                      height="300"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="relative text-cyan-400 brightness-110 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                      className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                      style={{ color: "hsla(185, 92%, 72%, 1)" }}
                     >
                       <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                     </svg>
@@ -359,19 +360,20 @@ const MainPage = () => {
                       className="absolute inset-0 rounded-full blur-[140px]"
                       style={{
                         background:
-                          "radial-gradient(circle, hsla(239, 84%, 67%, 0.35) 0%, hsla(0, 0%, 0%, 0) 70%)",
+                          "radial-gradient(circle, hsla(239, 95%, 75%, 0.5) 0%, hsla(0, 0%, 0%, 0) 70%)",
                       }}
                     />
                     {/* Flower Glow Layer */}
                     <Flower2
-                      className="absolute left-[25%] text-indigo-400/70 blur-2xl w-52 h-52 animate-[float_14s_ease-in-out_infinite]"
+                      className="absolute left-[25%] blur-2xl w-52 h-52 animate-[float_14s_ease-in-out_infinite]"
                       strokeWidth={2}
-                      style={{ transform: "scale(1.3)" }}
+                      style={{ transform: "scale(1.3)", color: "hsla(239, 95%, 72%, 0.8)" }}
                     />
                     {/* Flower Object Layer */}
                     <Flower2
-                      className="relative text-indigo-300 brightness-125 w-44 h-44 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
+                      className="relative brightness-125 w-44 h-44 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
                       strokeWidth={2}
+                      style={{ color: "hsla(239, 92%, 78%, 1)" }}
                     />
  
                     {/* Helmet Glow Layer */}
@@ -380,8 +382,8 @@ const MainPage = () => {
                       height="220"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="absolute right-[25%] text-indigo-400/70 blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
-                      style={{ transform: "scale(1.35)" }}
+                      className="absolute right-[25%] blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
+                      style={{ transform: "scale(1.35)", color: "hsla(239, 95%, 72%, 0.8)" }}
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -395,7 +397,8 @@ const MainPage = () => {
                       height="190"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="relative text-indigo-300 brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
+                      className="relative brightness-125 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
+                      style={{ color: "hsla(239, 92%, 78%, 1)" }}
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -415,7 +418,7 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[260px] animate-pulse"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(217, 91%, 60%, 0.9) 0%, hsla(217, 91%, 60%, 0.7) 25%, hsla(217, 91%, 60%, 0.4) 50%, transparent 72%)",
+                            "radial-gradient(circle, hsla(217, 98%, 68%, 0.95) 0%, hsla(217, 98%, 68%, 0.75) 25%, hsla(217, 98%, 68%, 0.45) 50%, transparent 72%)",
                           animationDuration: "4s",
                         }}
                       />
@@ -423,7 +426,7 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[200px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(213, 94%, 68%, 0.9) 0%, hsla(217, 91%, 60%, 0.6) 30%, hsla(220, 83%, 53%, 0.4) 60%, transparent 82%)",
+                            "radial-gradient(circle, hsla(213, 98%, 75%, 0.95) 0%, hsla(217, 98%, 68%, 0.65) 30%, hsla(220, 95%, 65%, 0.45) 60%, transparent 82%)",
                         }}
                       />
                     </div>
@@ -432,10 +435,11 @@ const MainPage = () => {
                     <div className="relative flex gap-20 scale-150">
                       {/* Heart 1 - Glow Layer */}
                       <Heart
-                        className="absolute left-0 w-[400px] h-[400px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite] rotate-12"
+                        className="absolute left-0 w-[400px] h-[400px] blur-3xl animate-[float_14s_ease-in-out_infinite] rotate-12"
                         strokeWidth={3}
                         style={{
-                          color: "hsl(213, 94%, 68%)",
+                          color: "hsl(213, 98%, 75%)",
+                          opacity: 0.95,
                         }}
                       />
                       {/* Heart 1 - Object Layer */}
@@ -443,17 +447,18 @@ const MainPage = () => {
                         className="relative w-64 h-64 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] rotate-12"
                         strokeWidth={3}
                         style={{
-                          color: "hsl(213, 92%, 79%)",
-                          fill: "hsl(213, 94%, 68%)",
+                          color: "hsl(213, 95%, 82%)",
+                          fill: "hsl(213, 98%, 75%)",
                         }}
                       />
  
                       {/* Heart 2 - Glow Layer */}
                       <Heart
-                        className="absolute left-[33%] w-[480px] h-[480px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_0.8s] z-10"
+                        className="absolute left-[33%] w-[480px] h-[480px] blur-3xl animate-[float_14s_ease-in-out_infinite_0.8s] z-10"
                         strokeWidth={3.5}
                         style={{
-                          color: "hsl(217, 91%, 60%)",
+                          color: "hsl(217, 98%, 68%)",
+                          opacity: 0.95,
                         }}
                       />
                       {/* Heart 2 - Object Layer */}
@@ -461,17 +466,18 @@ const MainPage = () => {
                         className="relative w-80 h-80 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10"
                         strokeWidth={3.5}
                         style={{
-                          color: "hsl(213, 92%, 79%)",
-                          fill: "hsl(217, 91%, 60%)",
+                          color: "hsl(213, 95%, 82%)",
+                          fill: "hsl(217, 98%, 68%)",
                         }}
                       />
  
                       {/* Heart 3 - Glow Layer */}
                       <Heart
-                        className="absolute right-0 w-[360px] h-[360px] blur-3xl opacity-90 animate-[float_14s_ease-in-out_infinite_1.5s] -rotate-12"
+                        className="absolute right-0 w-[360px] h-[360px] blur-3xl animate-[float_14s_ease-in-out_infinite_1.5s] -rotate-12"
                         strokeWidth={2.8}
                         style={{
-                          color: "hsl(213, 94%, 68%)",
+                          color: "hsl(213, 98%, 75%)",
+                          opacity: 0.95,
                         }}
                       />
                       {/* Heart 3 - Object Layer */}
@@ -479,8 +485,8 @@ const MainPage = () => {
                         className="relative w-60 h-60 brightness-150 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] -rotate-12"
                         strokeWidth={2.8}
                         style={{
-                          color: "hsl(213, 92%, 79%)",
-                          fill: "hsl(213, 94%, 68%)",
+                          color: "hsl(213, 95%, 82%)",
+                          fill: "hsl(213, 98%, 75%)",
                         }}
                       />
                     </div>
