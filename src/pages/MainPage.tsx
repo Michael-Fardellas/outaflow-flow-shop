@@ -761,7 +761,7 @@ const MainPage = () => {
               playClick();
               if ('vibrate' in navigator) navigator.vibrate(30);
             }}
-            className="fixed bottom-6 right-6 z-50 group flex items-center gap-2 text-[9px] tracking-[0.25em] uppercase font-light opacity-30 hover:opacity-80 transition-all duration-500"
+            className="fixed bottom-6 right-6 z-[100] group flex items-center gap-2 text-[9px] tracking-[0.25em] uppercase font-light opacity-30 hover:opacity-80 transition-all duration-500"
           >
             <span className="relative">
               Made by @mixalis_fardellas
