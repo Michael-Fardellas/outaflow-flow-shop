@@ -327,26 +327,13 @@ const MainPage = () => {
             ))}
             <span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]">
-                {"purpose".split("").map((char, i) => (
-                  <span
-                    key={`purpose-${i}`}
-                    className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
-                    style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
-                  >
-                    {char}
-                  </span>
-                ))}
+                purpose
               </span>
-              <span className="absolute inset-0 blur-sm bg-gradient-to-r from-white/50 via-white/30 to-white/50 bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]" aria-hidden="true">
-                {"purpose".split("").map((char, i) => (
-                  <span
-                    key={`purpose-blur-${i}`}
-                    className="inline-block opacity-0 animate-[letter-appear_0.03s_ease-out_forwards]"
-                    style={{ animationDelay: `${1.3 + 10 * 0.04 + i * 0.04}s` }}
-                  >
-                    {char}
-                  </span>
-                ))}
+              <span
+                className="absolute inset-0 blur-sm bg-gradient-to-r from-white/50 via-white/30 to-white/50 bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]"
+                aria-hidden="true"
+              >
+                purpose
               </span>
             </span>
             {".".split("").map((char, i) => (
@@ -785,16 +772,16 @@ const MainPage = () => {
             </form>
           </div>
           
-          {/* Instagram credit - bottom right */}
+          {/* Instagram credit - bottom right, always visible */}
           <a
             href="https://instagram.com/mixalis_fardellas"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
               playClick();
-              if ('vibrate' in navigator) navigator.vibrate(30);
+              if ("vibrate" in navigator) navigator.vibrate(30);
             }}
-            className="fixed bottom-6 right-6 z-[100] group flex items-center gap-2 text-[9px] tracking-[0.25em] uppercase font-light opacity-30 hover:opacity-80 transition-all duration-500"
+            className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[9999] group flex items-center gap-2 text-[9px] tracking-[0.25em] uppercase font-light opacity-30 hover:opacity-80 transition-all duration-500"
           >
             <span className="relative">
               Made by @mixalis_fardellas
