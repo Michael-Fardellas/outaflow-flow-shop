@@ -1057,29 +1057,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* FORCE ATMOSPHERE & PERSONALITY */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background:
-      radial-gradient(circle at 15% 50%, rgba(70, 130, 250, 0.08), transparent 40%),
-      radial-gradient(circle at 85% 30%, rgba(120, 50, 255, 0.08), transparent 40%);
-    pointer-events: none;
-    mix-blend-mode: screen;
-  }
-
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-    opacity: 0.015;
-    mix-blend-mode: normal;
-  }
 
   /* FORCE NEON DEPTH ON DECORATIONS */
   .butterfly-minimal-scene svg {
