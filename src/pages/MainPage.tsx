@@ -322,14 +322,14 @@ const MainPage = () => {
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Subtle gray halo with butterfly */}
+                {/* BUTTERFLY: Visible gray halo with white butterfly */}
                 {handle.includes("butterfly") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center">
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
                         background:
-                          "radial-gradient(circle, hsl(var(--foreground) / 0.25) 0%, hsl(var(--foreground) / 0.08) 40%, transparent 70%)",
+                          "radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%)",
                       }}
                     />
                     <svg
@@ -337,30 +337,30 @@ const MainPage = () => {
                       height="280"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="text-foreground/70 drop-shadow-[0_0_90px_rgba(255,255,255,0.7)] animate-[float_12s_ease-in-out_infinite]"
+                      className="text-white/70 drop-shadow-[0_0_90px_rgba(255,255,255,0.9)] animate-[float_12s_ease-in-out_infinite]"
                     >
                       <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                     </svg>
                   </div>
                 )}
 
-                {/* HELMET: Subtle gray halo with flower + helmet */}
+                {/* HELMET: Visible gray halo with white flower + helmet */}
                 {handle.includes("helmet") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center gap-16">
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
                         background:
-                          "radial-gradient(circle, hsl(var(--foreground) / 0.25) 0%, hsl(var(--foreground) / 0.08) 40%, transparent 70%)",
+                          "radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 40%, transparent 70%)",
                       }}
                     />
-                    <Flower2 className="w-40 h-40 text-foreground/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.7)] animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
+                    <Flower2 className="w-40 h-40 text-white/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.9)] animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
                     <svg
                       width="170"
                       height="170"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="text-foreground/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.7)] animate-[float_12s_ease-in-out_infinite_1.8s]"
+                      className="text-white/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.9)] animate-[float_12s_ease-in-out_infinite_1.8s]"
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -371,7 +371,7 @@ const MainPage = () => {
                   </div>
                 )}
 
-                {/* LOVE'S GONE: Bold blue shining halo + animated 3D hearts */}
+                {/* LOVE'S GONE: BRIGHT BLUE shining halo + animated 3D hearts */}
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <div
                     className="absolute"
@@ -388,7 +388,7 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
                         style={{
                           background:
-                            "radial-gradient(circle, hsl(var(--primary) / 0.8) 0%, hsl(var(--primary) / 0.45) 35%, transparent 80%)",
+                            "radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(59, 130, 246, 0.45) 35%, transparent 80%)",
                           animationDuration: "3s",
                         }}
                       />
@@ -396,13 +396,13 @@ const MainPage = () => {
                         className="absolute inset-0 rounded-full blur-[80px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsl(var(--primary) / 0.55) 0%, transparent 70%)",
+                            "radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, transparent 70%)",
                         }}
                       />
                       <div className="relative flex gap-8">
-                        <Heart className="w-48 h-48 text-primary fill-primary/40 drop-shadow-[0_0_180px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
-                        <Heart className="w-56 h-56 text-primary fill-primary/60 drop-shadow-[0_0_200px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
-                        <Heart className="w-44 h-44 text-primary fill-primary/35 drop-shadow-[0_0_160px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
+                        <Heart className="w-48 h-48 text-blue-500 fill-blue-500/50 drop-shadow-[0_0_180px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
+                        <Heart className="w-56 h-56 text-blue-500 fill-blue-500/70 drop-shadow-[0_0_200px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
+                        <Heart className="w-44 h-44 text-blue-500 fill-blue-500/40 drop-shadow-[0_0_160px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
                       </div>
                     </div>
                   </div>

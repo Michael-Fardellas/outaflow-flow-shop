@@ -179,6 +179,60 @@ export default {
           "50%": {
             transform: "translateY(-20px) rotateY(180deg)"
           }
+        },
+        "ambient-pulse": {
+          "0%, 100%": {
+            opacity: "0.8",
+            transform: "scale(1)"
+          },
+          "50%": {
+            opacity: "1",
+            transform: "scale(1.1)"
+          }
+        },
+        "logo-3d-enter": {
+          "0%": {
+            opacity: "0",
+            transform: "translateZ(-50px) rotateX(10deg)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateZ(0) rotateX(0deg)"
+          }
+        },
+        "letter-appear": {
+          "0%": {
+            opacity: "0"
+          },
+          "100%": {
+            opacity: "1"
+          }
+        },
+        "hero-fade-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)"
+          }
+        },
+        "bounce-arrow": {
+          "0%, 100%": {
+            transform: "translateY(0)"
+          },
+          "50%": {
+            transform: "translateY(20px)"
+          }
+        },
+        "image-sweep": {
+          "0%": {
+            transform: "translateY(-100%)"
+          },
+          "100%": {
+            transform: "translateY(100%)"
+          }
         }
       },
       animation: {
