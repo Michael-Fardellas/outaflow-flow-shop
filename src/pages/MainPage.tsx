@@ -325,7 +325,12 @@ const MainPage = () => {
                 {/* BUTTERFLY: Subtle gray halo with butterfly */}
                 {handle.includes("butterfly") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-radial from-foreground/25 via-foreground/8 to-transparent rounded-full blur-[100px]" />
+                    <div
+                      className="absolute inset-0 rounded-full blur-[100px]"
+                      style={{
+                        background: "radial-gradient(circle, hsla(var(--foreground),0.25) 0%, hsla(var(--foreground),0.08) 40%, transparent 70%)",
+                      }}
+                    />
                     <svg
                       width="280"
                       height="280"
@@ -341,7 +346,12 @@ const MainPage = () => {
                 {/* HELMET: Subtle gray halo with flower + helmet */}
                 {handle.includes("helmet") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center gap-16">
-                    <div className="absolute inset-0 bg-gradient-radial from-foreground/25 via-foreground/8 to-transparent rounded-full blur-[100px]" />
+                    <div
+                      className="absolute inset-0 rounded-full blur-[100px]"
+                      style={{
+                        background: "radial-gradient(circle, hsla(var(--foreground),0.25) 0%, hsla(var(--foreground),0.08) 40%, transparent 70%)",
+                      }}
+                    />
                     <Flower2 className="w-40 h-40 text-foreground/75 drop-shadow-[0_0_90px_rgba(255,255,255,0.7)] animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
                     <svg
                       width="170"
@@ -362,8 +372,19 @@ const MainPage = () => {
                 {/* LOVE'S GONE: Bold blue shining halo + animated 3D hearts */}
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <div className="relative w-[900px] h-[900px] flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-radial from-primary/50 via-primary/20 to-transparent rounded-full blur-[140px] animate-pulse" style={{ animationDuration: '3s' }} />
-                    <div className="absolute inset-0 bg-gradient-radial from-primary/30 via-transparent to-transparent rounded-full blur-[80px]" />
+                    <div
+                      className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
+                      style={{
+                        background: "radial-gradient(circle, hsla(var(--primary),0.55) 0%, hsla(var(--primary),0.25) 40%, transparent 75%)",
+                        animationDuration: "3s",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full blur-[80px]"
+                      style={{
+                        background: "radial-gradient(circle, hsla(var(--primary),0.35) 0%, transparent 65%)",
+                      }}
+                    />
                     <div className="relative flex gap-8">
                       <Heart className="w-48 h-48 text-primary fill-primary/40 drop-shadow-[0_0_140px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
                       <Heart className="w-56 h-56 text-primary fill-primary/50 drop-shadow-[0_0_160px_rgba(59,130,246,1)] animate-[float_10s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
@@ -374,7 +395,12 @@ const MainPage = () => {
 
                 {/* Fallback: neutral halo if handle doesn't match */}
                 {!handle.includes("butterfly") && !handle.includes("helmet") && !handle.includes("fire") && !handle.includes("love") && (
-                  <div className="w-[680px] h-[680px] rounded-full bg-gradient-radial from-foreground/20 via-foreground/5 to-transparent blur-[90px]" />
+                  <div
+                    className="w-[680px] h-[680px] rounded-full blur-[90px]"
+                    style={{
+                      background: "radial-gradient(circle, hsla(var(--foreground),0.2) 0%, hsla(var(--foreground),0.06) 35%, transparent 70%)",
+                    }}
+                  />
                 )}
               </div>
 
