@@ -1074,11 +1074,11 @@ All colors MUST be HSL.
     content: "";
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: -2;
     pointer-events: none;
     background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-    opacity: 0.035;
-    mix-blend-mode: overlay;
+    opacity: 0.015;
+    mix-blend-mode: normal;
   }
 
   /* FORCE NEON DEPTH ON DECORATIONS */
