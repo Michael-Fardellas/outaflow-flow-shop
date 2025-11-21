@@ -313,110 +313,61 @@ const MainPage = () => {
                 isVisible ? "opacity-100" : "opacity-0"
               }`}
             >
-              {/* Micro-parallax background layer */}
+              {/* SINGLE BOLD DECORATION PER PRODUCT */}
               <div 
-                className="absolute inset-0 pointer-events-none"
+                className="absolute inset-0 pointer-events-none flex items-center justify-center"
                 style={{
-                  transform: isVisible ? "translateY(0)" : "translateY(-20px)",
-                  transition: "transform 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transform: isVisible ? "scale(1)" : "scale(0.9)",
+                  opacity: isVisible ? 1 : 0,
+                  transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* Minimal scene-specific background effects */}
+                {/* BUTTERFLY: Giant gray butterfly cloud */}
                 {handle.includes("butterfly") && (
-                  <>
-                    {/* Vertical soft-light strip */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[70%] bg-white/5 blur-[80px] pointer-events-none" />
-                    {/* Multiple butterflies scattered - increased visibility with glow */}
-                    <div className="absolute left-[12%] top-[18%] opacity-[0.45] pointer-events-none animate-[butterfly-float_20s_ease-in-out_infinite] drop-shadow-[0_0_15px_rgba(200,200,200,0.4)]">
-                      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
-                        <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                      </svg>
-                    </div>
-                    <div className="absolute left-[25%] top-[35%] opacity-[0.50] pointer-events-none animate-[butterfly-float_24s_ease-in-out_infinite_1s] drop-shadow-[0_0_18px_rgba(200,200,200,0.5)]">
-                      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
-                        <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                      </svg>
-                    </div>
-                    <div className="absolute right-[15%] top-[28%] opacity-[0.55] pointer-events-none animate-[butterfly-float_28s_ease-in-out_infinite_2s] drop-shadow-[0_0_20px_rgba(200,200,200,0.5)]">
-                      <svg width="75" height="75" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
-                        <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                      </svg>
-                    </div>
-                    <div className="absolute left-[65%] top-[45%] opacity-[0.42] pointer-events-none animate-[butterfly-float_22s_ease-in-out_infinite_3s] drop-shadow-[0_0_12px_rgba(200,200,200,0.4)]">
-                      <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
-                        <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                      </svg>
-                    </div>
-                    <div className="absolute right-[30%] top-[60%] opacity-[0.48] pointer-events-none animate-[butterfly-float_26s_ease-in-out_infinite_4s] drop-shadow-[0_0_16px_rgba(200,200,200,0.4)]">
-                      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-200">
-                        <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                      </svg>
-                    </div>
-                    {/* Long-duration light sweep */}
-                    <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[40%] h-32 bg-gradient-to-b from-white/8 to-transparent blur-[100px] animate-[sweep-slow_18s_ease-in-out_infinite] pointer-events-none" />
-                  </>
+                  <div className="relative w-[600px] h-[600px] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-radial from-white/20 via-white/5 to-transparent rounded-full blur-3xl" />
+                    <svg
+                      width="250"
+                      height="250"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="2"
+                      className="drop-shadow-[0_0_60px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite]"
+                    >
+                      <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
+                    </svg>
+                  </div>
                 )}
 
+                {/* HELMET: Giant gray flower + helmet cluster */}
                 {handle.includes("helmet") && (
-                  <>
-                    {/* Horizontal diffused band */}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-24 bg-gradient-to-r from-transparent via-white/4 to-transparent blur-[60px] pointer-events-none" />
-                    {/* Big flashy flowers scattered - increased visibility with glow */}
-                    <div className="absolute left-[15%] top-[20%] opacity-[0.50] pointer-events-none animate-[float-minimal_18s_ease-in-out_infinite] drop-shadow-[0_0_25px_rgba(180,180,180,0.5)]">
-                      <Flower2 className="w-28 h-28 md:w-32 md:h-32 text-gray-300" strokeWidth={1.8} />
-                    </div>
-                    <div className="absolute right-[20%] top-[30%] opacity-[0.55] pointer-events-none animate-[float-minimal_22s_ease-in-out_infinite_1s] drop-shadow-[0_0_30px_rgba(180,180,180,0.6)]">
-                      <Flower2 className="w-32 h-32 md:w-36 md:h-36 text-gray-300" strokeWidth={1.8} />
-                    </div>
-                    <div className="absolute left-[60%] top-[55%] opacity-[0.45] pointer-events-none animate-[float-minimal_20s_ease-in-out_infinite_2s] drop-shadow-[0_0_20px_rgba(180,180,180,0.5)]">
-                      <Flower2 className="w-24 h-24 md:w-28 md:h-28 text-gray-300" strokeWidth={1.8} />
-                    </div>
-                    {/* Helmet shapes - increased visibility with glow */}
-                    <div className="absolute left-[25%] top-[65%] opacity-[0.48] pointer-events-none animate-[float-minimal_24s_ease-in-out_infinite_3s] drop-shadow-[0_0_20px_rgba(180,180,180,0.5)]">
-                      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
-                        <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
-                      </svg>
-                    </div>
-                    <div className="absolute right-[15%] top-[50%] opacity-[0.52] pointer-events-none animate-[float-minimal_26s_ease-in-out_infinite_4s] drop-shadow-[0_0_22px_rgba(180,180,180,0.5)]">
-                      <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
-                        <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
-                      </svg>
-                    </div>
-                    {/* Slow gradient shift */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent opacity-50 animate-[gradient-shift_16s_ease-in-out_infinite] pointer-events-none" />
-                  </>
+                  <div className="relative w-[600px] h-[600px] flex items-center justify-center gap-12">
+                    <div className="absolute inset-0 bg-gradient-radial from-white/20 via-white/5 to-transparent rounded-full blur-3xl" />
+                    <Flower2 className="w-32 h-32 text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite]" strokeWidth={2} />
+                    <svg
+                      width="140"
+                      height="140"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="2"
+                      className="drop-shadow-[0_0_50px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite_1s]"
+                    >
+                      <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
+                    </svg>
+                  </div>
                 )}
 
+                {/* LOVE'S GONE: Giant blue halo + broken heart */}
                 {(handle.includes("fire") || handle.includes("love")) && (
-                  <>
-                    {/* Big bright blue hue with enhanced visibility */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] bg-blue-500/25 rounded-full blur-[160px] animate-[glow-pulse-minimal_10s_ease-in-out_infinite] pointer-events-none" />
-                    {/* Additional blue layer for brightness */}
-                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-[50%] bg-blue-400/30 rounded-full blur-[120px] opacity-60 pointer-events-none" />
-                    {/* Outer blue glow layer */}
-                    <div className="absolute inset-0 bg-blue-600/5 pointer-events-none" />
-                    {/* Broken hearts scattered - highly visible with blue glow */}
-                    <div className="absolute left-[18%] top-[22%] opacity-[0.65] pointer-events-none animate-[broken-heart-float_20s_ease-in-out_infinite] drop-shadow-[0_0_30px_rgba(96,165,250,0.8)]">
-                      <Heart className="w-20 h-20 md:w-24 md:h-24 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
-                      <div className="absolute top-4 left-5 w-10 h-[4px] bg-background rotate-45 shadow-lg" />
+                  <div className="relative w-[700px] h-[700px] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-radial from-blue-400/30 via-blue-500/10 to-transparent rounded-full blur-3xl" />
+                    <div className="relative">
+                      <Heart className="w-40 h-40 md:w-48 md:h-48 text-blue-300 fill-blue-400/30 drop-shadow-[0_0_80px_rgba(96,165,250,1)] animate-[float_8s_ease-in-out_infinite]" strokeWidth={2} />
+                      <div className="absolute top-1/2 left-1/2 w-16 h-1 bg-black -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-2xl" />
                     </div>
-                    <div className="absolute right-[22%] top-[35%] opacity-[0.70] pointer-events-none animate-[broken-heart-float_24s_ease-in-out_infinite_1s] drop-shadow-[0_0_35px_rgba(96,165,250,0.9)]">
-                      <Heart className="w-24 h-24 md:w-28 md:h-28 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
-                      <div className="absolute top-5 left-6 w-12 h-[4px] bg-background rotate-45 shadow-lg" />
-                    </div>
-                    <div className="absolute left-[65%] top-[48%] opacity-[0.60] pointer-events-none animate-[broken-heart-float_22s_ease-in-out_infinite_2s] drop-shadow-[0_0_25px_rgba(96,165,250,0.7)]">
-                      <Heart className="w-18 h-18 md:w-22 md:h-22 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
-                      <div className="absolute top-4 left-4.5 w-9 h-[4px] bg-background rotate-45 shadow-lg" />
-                    </div>
-                    <div className="absolute left-[30%] top-[60%] opacity-[0.68] pointer-events-none animate-[broken-heart-float_26s_ease-in-out_infinite_3s] drop-shadow-[0_0_32px_rgba(96,165,250,0.8)]">
-                      <Heart className="w-22 h-22 md:w-26 md:h-26 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
-                      <div className="absolute top-4.5 left-5 w-11 h-[4px] bg-background rotate-45 shadow-lg" />
-                    </div>
-                    <div className="absolute right-[15%] top-[25%] opacity-[0.58] pointer-events-none animate-[broken-heart-float_28s_ease-in-out_infinite_4s] drop-shadow-[0_0_28px_rgba(96,165,250,0.7)]">
-                      <Heart className="w-16 h-16 md:w-20 md:h-20 text-blue-300 fill-blue-400/50" strokeWidth={2.5} />
-                      <div className="absolute top-3.5 left-4 w-8 h-[4px] bg-background rotate-45 shadow-lg" />
-                    </div>
-                  </>
+                  </div>
                 )}
               </div>
 
@@ -558,91 +509,8 @@ const MainPage = () => {
                     </button>
                   </div>
 
-                  {/* Product image container with decorations */}
+                  {/* Product image container */}
                   <div className="relative">
-                    {/* Product-specific decorative elements extending beyond image */}
-                    <div className="absolute -inset-[20%] pointer-events-none">
-                      {(handle.includes("fire") || handle.includes("love")) && (
-                        <>
-                          {/* Blue hue background for Love's Gone */}
-                          <div className="absolute inset-0 bg-gradient-radial from-blue-500/40 via-blue-600/20 to-transparent blur-3xl scale-150" />
-                          <div className="absolute inset-0 bg-blue-400/15 scale-125" />
-                          {/* Broken hearts around product */}
-                          <div className="absolute left-[5%] top-[15%] opacity-80 animate-[float-minimal_18s_ease-in-out_infinite] drop-shadow-[0_0_20px_rgba(96,165,250,0.8)]">
-                            <Heart className="w-16 h-16 md:w-20 md:h-20 text-blue-300 fill-blue-500/70" strokeWidth={3} />
-                            <div className="absolute top-4 left-4 w-8 h-[4px] bg-black rotate-45 shadow-lg" />
-                          </div>
-                          <div className="absolute right-[8%] top-[30%] opacity-85 animate-[float-minimal_22s_ease-in-out_infinite_1s] drop-shadow-[0_0_25px_rgba(96,165,250,0.9)]">
-                            <Heart className="w-18 h-18 md:w-24 md:h-24 text-blue-300 fill-blue-500/70" strokeWidth={3} />
-                            <div className="absolute top-5 left-5 w-10 h-[4px] bg-black rotate-45 shadow-lg" />
-                          </div>
-                          <div className="absolute left-[70%] top-[60%] opacity-75 animate-[float-minimal_20s_ease-in-out_infinite_2s] drop-shadow-[0_0_18px_rgba(96,165,250,0.7)]">
-                            <Heart className="w-14 h-14 md:w-16 md:h-16 text-blue-300 fill-blue-500/70" strokeWidth={3} />
-                            <div className="absolute top-3 left-3 w-7 h-[4px] bg-black rotate-45 shadow-lg" />
-                          </div>
-                        </>
-                      )}
-                      
-                      {handle.includes("butterfly") && (
-                        <>
-                          {/* Gray hue background for Butterfly */}
-                          <div className="absolute inset-0 bg-gradient-radial from-gray-400/35 via-gray-500/18 to-transparent blur-3xl scale-150" />
-                          <div className="absolute inset-0 bg-gray-400/12 scale-125" />
-                          {/* 3D Gray butterflies around product */}
-                          <div className="absolute left-[2%] top-[10%] opacity-75 animate-[butterfly-3d_20s_ease-in-out_infinite] drop-shadow-[0_6px_12px_rgba(150,150,150,0.8)]">
-                            <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gray-200">
-                              <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                            </svg>
-                          </div>
-                          <div className="absolute right-[5%] top-[20%] opacity-80 animate-[butterfly-3d_24s_ease-in-out_infinite_1s] drop-shadow-[0_7px_14px_rgba(150,150,150,0.9)]">
-                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gray-200">
-                              <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                            </svg>
-                          </div>
-                          <div className="absolute left-[60%] top-[45%] opacity-70 animate-[butterfly-3d_22s_ease-in-out_infinite_2s] drop-shadow-[0_5px_10px_rgba(150,150,150,0.7)]">
-                            <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gray-200">
-                              <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                            </svg>
-                          </div>
-                          <div className="absolute left-[15%] top-[65%] opacity-78 animate-[butterfly-3d_26s_ease-in-out_infinite_3s] drop-shadow-[0_6px_11px_rgba(150,150,150,0.8)]">
-                            <svg width="75" height="75" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gray-200">
-                              <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
-                            </svg>
-                          </div>
-                        </>
-                      )}
-                      
-                      {handle.includes("helmet") && (
-                        <>
-                          {/* Gray hue background for Helmet */}
-                          <div className="absolute inset-0 bg-gradient-radial from-gray-400/35 via-gray-500/18 to-transparent blur-3xl scale-150" />
-                          <div className="absolute inset-0 bg-gray-400/12 scale-125" />
-                          {/* 3D Gray flowers around product */}
-                          <div className="absolute left-[5%] top-[12%] opacity-78 animate-[float-3d_18s_ease-in-out_infinite] drop-shadow-[0_8px_16px_rgba(150,150,150,0.9)]">
-                            <Flower2 className="w-20 h-20 md:w-24 md:h-24 text-gray-200" strokeWidth={2.5} />
-                          </div>
-                          <div className="absolute right-[8%] top-[25%] opacity-85 animate-[float-3d_22s_ease-in-out_infinite_1s] drop-shadow-[0_10px_20px_rgba(150,150,150,1)]">
-                            <Flower2 className="w-24 h-24 md:w-28 md:h-28 text-gray-200" strokeWidth={2.5} />
-                          </div>
-                          <div className="absolute left-[65%] top-[52%] opacity-72 animate-[float-3d_20s_ease-in-out_infinite_2s] drop-shadow-[0_7px_14px_rgba(150,150,150,0.8)]">
-                            <Flower2 className="w-18 h-18 md:w-20 md:h-20 text-gray-200" strokeWidth={2.5} />
-                          </div>
-                          {/* 3D Gray helmets around product */}
-                          <div className="absolute left-[12%] top-[62%] opacity-75 animate-[float-3d_24s_ease-in-out_infinite_3s] drop-shadow-[0_7px_14px_rgba(150,150,150,0.9)]">
-                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gray-200">
-                              <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
-                            </svg>
-                          </div>
-                          <div className="absolute right-[18%] top-[42%] opacity-80 animate-[float-3d_26s_ease-in-out_infinite_4s] drop-shadow-[0_8px_16px_rgba(150,150,150,0.9)]">
-                            <svg width="65" height="65" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-gray-200">
-                              <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
-                            </svg>
-                          </div>
-                        </>
-                      )}
-                    </div>
-
-                    {/* Product image with hover effects */}
                     <Link 
                       to={`/product/${product.node.handle}`} 
                       className="block relative group"
