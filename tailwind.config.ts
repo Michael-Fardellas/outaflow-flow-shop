@@ -174,10 +174,10 @@ export default {
         },
         "float": {
           "0%, 100%": {
-            transform: "translateY(0) rotateY(0deg)"
+            transform: "translateY(0)"
           },
           "50%": {
-            transform: "translateY(-20px) rotateY(180deg)"
+            transform: "translateY(-20px)"
           }
         },
         "ambient-pulse": {
