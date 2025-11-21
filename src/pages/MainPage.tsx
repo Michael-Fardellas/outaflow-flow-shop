@@ -9,6 +9,7 @@ import { storefrontApiRequest, STOREFRONT_PRODUCTS_QUERY, ShopifyProduct } from 
 import { Loader2, Heart, Flower2 } from "lucide-react";
 import logo from "@/assets/outaflow-logo.png";
 import { CartDrawer } from "@/components/CartDrawer";
+import { useSoundEffect } from "@/hooks/use-sound-effect";
 
 // Simple size chart data (R00227 + RU0130)
 const sizeCharts = {
@@ -76,6 +77,7 @@ const MainPage = () => {
   const [currentSection, setCurrentSection] = useState<string>("");
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
+  const { playClick } = useSoundEffect();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -155,6 +157,7 @@ const MainPage = () => {
     const variant = product.node.variants.edges[variantIndex]?.node;
     if (!variant) return;
 
+    playClick();
     addItem({
       product,
       variantId: variant.id,

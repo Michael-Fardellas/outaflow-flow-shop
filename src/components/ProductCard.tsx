@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { useSoundEffect } from "@/hooks/use-sound-effect";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -11,6 +12,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product }: ProductCardProps) => {
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
+  const { playClick } = useSoundEffect();
 
   const handleAddToCart = () => {
     const firstVariant = node.variants.edges[0].node;
@@ -24,6 +26,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       selectedOptions: firstVariant.selectedOptions || []
     };
     
+    playClick();
     addItem(cartItem);
     toast.success("Added to cart");
   };
