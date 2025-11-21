@@ -474,7 +474,7 @@ const MainPage = () => {
                       <div
                         className="absolute inset-0 blur-[200px]"
                         style={{
-                          background: "radial-gradient(ellipse 100% 80% at 50% 50%, hsla(217, 98%, 68%, 0.38) 0%, hsla(217, 98%, 68%, 0.22) 30%, hsla(217, 98%, 68%, 0.12) 50%, hsla(217, 98%, 68%, 0.05) 70%, transparent 100%)",
+                          background: "radial-gradient(ellipse 100% 80% at 50% 50%, hsla(217, 95%, 68%, 0.35) 0%, hsla(217, 95%, 68%, 0.20) 30%, hsla(217, 95%, 68%, 0.11) 50%, hsla(217, 95%, 68%, 0.05) 70%, transparent 100%)",
                         }}
                       />
                     </div>
