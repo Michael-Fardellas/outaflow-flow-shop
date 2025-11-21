@@ -360,7 +360,7 @@ const MainPage = () => {
               key={product.node.id}
               id={sectionId}
               ref={(el) => (sectionRefs.current[sectionId] = el)}
-              className={`${sceneClass} min-h-screen flex items-center py-16 md:py-20 px-8 relative overflow-hidden transition-opacity duration-700 ${
+              className={`${sceneClass} min-h-screen flex items-center py-16 md:py-20 px-8 relative overflow-visible transition-opacity duration-700 ${
                 isVisible ? "opacity-100" : "opacity-0"
               }`}
             >
