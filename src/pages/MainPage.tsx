@@ -215,12 +215,20 @@ const MainPage = () => {
 
   return (
     <div className="bg-background text-foreground min-h-screen relative">
-      {/* Film Grain Noise Overlay */}
+      {/* Personality Texture Overlay */}
       <div 
-        className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-overlay"
+        className="fixed inset-0 z-50 pointer-events-none opacity-[0.04] mix-blend-overlay"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
+          backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")',
+        }}
+      />
+
+      {/* Perspective Grid Floor */}
+      <div 
+        className="fixed inset-0 z-0 pointer-events-none"
+        style={{
+          background: 'repeating-linear-gradient(transparent 0%, transparent 48%, rgba(60, 60, 100, 0.05) 50%, transparent 52%, transparent 100%), linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 100%)',
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)',
         }}
       />
 
@@ -331,63 +339,61 @@ const MainPage = () => {
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Volumetric Cyan Nebula with 3D butterfly */}
+                {/* BUTTERFLY: Cyan 3D Nebula with layered depth */}
                 {handle.includes("butterfly") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center perspective-1000">
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
-                        background:
-                          "radial-gradient(circle at center, rgba(14, 165, 233, 0.15) 0%, rgba(15, 23, 42, 0.4) 40%, transparent 70%)",
+                        background: "radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, rgba(10, 10, 10, 0) 70%)",
                       }}
                     />
-                    {/* Back Layer - Volumetric Shadow */}
+                    {/* Layer 1: The Glow */}
                     <svg
-                      width="308"
-                      height="308"
+                      width="336"
+                      height="336"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="absolute text-cyan-500/50 blur-xl animate-[float_14s_ease-in-out_infinite]"
-                      style={{ transform: "scale(1.1)" }}
+                      className="absolute text-cyan-500/50 blur-2xl animate-[float_14s_ease-in-out_infinite]"
+                      style={{ transform: "scale(1.2)" }}
                     >
                       <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                     </svg>
-                    {/* Front Layer - Sharp Icon */}
+                    {/* Layer 2: The Object */}
                     <svg
                       width="280"
                       height="280"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="relative text-cyan-400/80 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_12s_ease-in-out_infinite]"
+                      className="relative text-cyan-400 brightness-110 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]"
                     >
                       <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                     </svg>
                   </div>
                 )}
 
-                {/* HELMET: Volumetric Indigo Nebula with 3D flower + helmet */}
+                {/* HELMET: Indigo 3D Nebula with layered depth */}
                 {handle.includes("helmet") && (
                   <div className="relative w-[750px] h-[750px] flex items-center justify-center gap-16 perspective-1000">
                     <div
                       className="absolute inset-0 rounded-full blur-[100px]"
                       style={{
-                        background:
-                          "radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(15, 23, 42, 0.4) 40%, transparent 70%)",
+                        background: "radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(10, 10, 10, 0) 70%)",
                       }}
                     />
-                    {/* Flower - Back Layer */}
-                    <Flower2 className="absolute left-[25%] text-indigo-500/50 blur-xl w-44 h-44 animate-[float_14s_ease-in-out_infinite]" strokeWidth={2} style={{ transform: "scale(1.1)" }} />
-                    {/* Flower - Front Layer */}
-                    <Flower2 className="relative text-indigo-400/80 w-40 h-40 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
+                    {/* Flower Glow Layer */}
+                    <Flower2 className="absolute left-[25%] text-indigo-500/50 blur-2xl w-48 h-48 animate-[float_14s_ease-in-out_infinite]" strokeWidth={2} style={{ transform: "scale(1.2)" }} />
+                    {/* Flower Object Layer */}
+                    <Flower2 className="relative text-indigo-400 brightness-110 w-40 h-40 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite]" strokeWidth={2} />
                     
-                    {/* Helmet - Back Layer */}
+                    {/* Helmet Glow Layer */}
                     <svg
-                      width="187"
-                      height="187"
+                      width="204"
+                      height="204"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="absolute right-[25%] text-indigo-500/50 blur-xl animate-[float_14s_ease-in-out_infinite_1.8s]"
-                      style={{ transform: "scale(1.1)" }}
+                      className="absolute right-[25%] text-indigo-500/50 blur-2xl animate-[float_14s_ease-in-out_infinite_1.8s]"
+                      style={{ transform: "scale(1.2)" }}
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -395,13 +401,13 @@ const MainPage = () => {
                         strokeWidth="2.2"
                       />
                     </svg>
-                    {/* Helmet - Front Layer */}
+                    {/* Helmet Object Layer */}
                     <svg
                       width="170"
                       height="170"
                       viewBox="0 0 24 24"
                       fill="none"
-                      className="relative text-indigo-400/80 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_12s_ease-in-out_infinite_1.8s]"
+                      className="relative text-indigo-400 brightness-110 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.8s]"
                     >
                       <path
                         d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
@@ -412,7 +418,7 @@ const MainPage = () => {
                   </div>
                 )}
 
-                {/* LOVE'S GONE: Enhanced blue nebula with 3D layered hearts */}
+                {/* LOVE'S GONE: Enhanced blue nebula with proper 3D depth */}
                 {(handle.includes("fire") || handle.includes("love")) && (
                   <div
                     className="absolute perspective-1000"
@@ -428,33 +434,31 @@ const MainPage = () => {
                       <div
                         className="absolute inset-0 rounded-full blur-[140px] animate-pulse"
                         style={{
-                          background:
-                            "radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 35%, transparent 80%)",
+                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(10, 10, 10, 0) 70%)",
                           animationDuration: "3s",
                         }}
                       />
                       <div
                         className="absolute inset-0 rounded-full blur-[80px]"
                         style={{
-                          background:
-                            "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)",
+                          background: "radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(10, 10, 10, 0) 60%)",
                         }}
                       />
                       <div className="relative flex gap-8">
-                        {/* Heart 1 - Back Layer */}
-                        <Heart className="absolute left-0 w-[211px] h-[211px] text-blue-500/50 fill-blue-500/30 blur-xl animate-[float_12s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} style={{ transform: "scale(1.1) rotate(12deg)" }} />
-                        {/* Heart 1 - Front Layer */}
-                        <Heart className="relative w-48 h-48 text-blue-400/80 fill-blue-500/50 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_10s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
+                        {/* Heart 1 - Glow Layer */}
+                        <Heart className="absolute left-0 w-[230px] h-[230px] text-blue-500/50 fill-blue-500/30 blur-2xl animate-[float_14s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} style={{ transform: "scale(1.2) rotate(12deg)" }} />
+                        {/* Heart 1 - Object Layer */}
+                        <Heart className="relative w-48 h-48 text-blue-400 brightness-110 fill-blue-500/50 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite] transform rotate-12" strokeWidth={2.2} />
                         
-                        {/* Heart 2 - Back Layer */}
-                        <Heart className="absolute left-[33%] w-[246px] h-[246px] text-blue-500/50 fill-blue-500/40 blur-xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} style={{ transform: "scale(1.1)" }} />
-                        {/* Heart 2 - Front Layer */}
-                        <Heart className="relative w-56 h-56 text-blue-400/90 fill-blue-500/70 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_10s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
+                        {/* Heart 2 - Glow Layer */}
+                        <Heart className="absolute left-[33%] w-[269px] h-[269px] text-blue-500/50 fill-blue-500/40 blur-2xl animate-[float_14s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} style={{ transform: "scale(1.2)" }} />
+                        {/* Heart 2 - Object Layer */}
+                        <Heart className="relative w-56 h-56 text-blue-400 brightness-110 fill-blue-500/70 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_0.8s] z-10" strokeWidth={2.4} />
                         
-                        {/* Heart 3 - Back Layer */}
-                        <Heart className="absolute right-0 w-[193px] h-[193px] text-blue-500/50 fill-blue-500/25 blur-xl animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} style={{ transform: "scale(1.1) rotate(-12deg)" }} />
-                        {/* Heart 3 - Front Layer */}
-                        <Heart className="relative w-44 h-44 text-blue-400/75 fill-blue-500/40 drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-[float_10s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
+                        {/* Heart 3 - Glow Layer */}
+                        <Heart className="absolute right-0 w-[211px] h-[211px] text-blue-500/50 fill-blue-500/25 blur-2xl animate-[float_14s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} style={{ transform: "scale(1.2) rotate(-12deg)" }} />
+                        {/* Heart 3 - Object Layer */}
+                        <Heart className="relative w-44 h-44 text-blue-400 brightness-110 fill-blue-500/40 drop-shadow-2xl animate-[float_12s_ease-in-out_infinite_1.5s] transform -rotate-12" strokeWidth={2} />
                       </div>
                     </div>
                   </div>
