@@ -315,57 +315,61 @@ const MainPage = () => {
             >
               {/* SINGLE BOLD DECORATION PER PRODUCT */}
               <div 
-                className="absolute inset-0 pointer-events-none flex items-center justify-center"
+                className="absolute inset-0 pointer-events-none flex items-center justify-center z-0"
                 style={{
                   transform: isVisible ? "scale(1)" : "scale(0.9)",
                   opacity: isVisible ? 1 : 0,
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Giant gray butterfly cloud */}
+                {/* BUTTERFLY: Giant butterfly cloud */}
                 {handle.includes("butterfly") && (
-                  <div className="relative w-[600px] h-[600px] flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-radial from-white/20 via-white/5 to-transparent rounded-full blur-3xl" />
+                  <div className="relative w-[680px] h-[680px] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-radial from-foreground/35 via-foreground/10 to-transparent rounded-full blur-[90px]" />
                     <svg
-                      width="250"
-                      height="250"
+                      width="260"
+                      height="260"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="white"
-                      strokeWidth="2"
-                      className="drop-shadow-[0_0_60px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite]"
+                      className="text-foreground/80 drop-shadow-[0_0_80px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite]"
                     >
-                      <path d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9" />
+                      <path
+                        d="M12 5c-1.5-2.5-4-4-7-4 0 0 0 9 7 9m0-5c1.5-2.5 4-4 7-4 0 0 0 9-7 9m0 0v5m0 0c-1.5 2.5-4 4-7 4 0 0 0-9 7-9m0 0c1.5 2.5 4 4 7 4 0 0 0-9-7-9"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
                     </svg>
                   </div>
                 )}
 
-                {/* HELMET: Giant gray flower + helmet cluster */}
+                {/* HELMET: Giant flower + helmet cluster */}
                 {handle.includes("helmet") && (
-                  <div className="relative w-[600px] h-[600px] flex items-center justify-center gap-12">
-                    <div className="absolute inset-0 bg-gradient-radial from-white/20 via-white/5 to-transparent rounded-full blur-3xl" />
-                    <Flower2 className="w-32 h-32 text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite]" strokeWidth={2} />
+                  <div className="relative w-[680px] h-[680px] flex items-center justify-center gap-16">
+                    <div className="absolute inset-0 bg-gradient-radial from-foreground/35 via-foreground/10 to-transparent rounded-full blur-[90px]" />
+                    <Flower2 className="w-36 h-36 text-foreground/85 drop-shadow-[0_0_70px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite]" strokeWidth={2} />
                     <svg
-                      width="140"
-                      height="140"
+                      width="150"
+                      height="150"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="white"
-                      strokeWidth="2"
-                      className="drop-shadow-[0_0_50px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite_1s]"
+                      className="text-foreground/85 drop-shadow-[0_0_70px_rgba(255,255,255,0.9)] animate-[float_8s_ease-in-out_infinite_1s]"
                     >
-                      <path d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3" />
+                      <path
+                        d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
                     </svg>
                   </div>
                 )}
 
                 {/* LOVE'S GONE: Giant blue halo + broken heart */}
                 {(handle.includes("fire") || handle.includes("love")) && (
-                  <div className="relative w-[700px] h-[700px] flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-radial from-blue-400/30 via-blue-500/10 to-transparent rounded-full blur-3xl" />
+                  <div className="relative w-[760px] h-[760px] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-radial from-primary/50 via-primary/20 to-transparent rounded-full blur-[110px]" />
                     <div className="relative">
-                      <Heart className="w-40 h-40 md:w-48 md:h-48 text-blue-300 fill-blue-400/30 drop-shadow-[0_0_80px_rgba(96,165,250,1)] animate-[float_8s_ease-in-out_infinite]" strokeWidth={2} />
-                      <div className="absolute top-1/2 left-1/2 w-16 h-1 bg-black -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-2xl" />
+                      <Heart className="w-44 h-44 md:w-52 md:h-52 text-primary/90 fill-primary/30 drop-shadow-[0_0_120px_rgba(59,130,246,1)] animate-[float_8s_ease-in-out_infinite]" strokeWidth={2} />
+                      <div className="absolute top-1/2 left-1/2 w-20 h-[3px] bg-background -translate-x-1/2 -translate-y-1/2 rotate-45 shadow-[0_0_40px_rgba(0,0,0,0.9)]" />
                     </div>
                   </div>
                 )}
