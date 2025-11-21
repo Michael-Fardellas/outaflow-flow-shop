@@ -79,11 +79,13 @@ const MainPage = () => {
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   const addItem = useCartStore((s) => s.addItem);
 
-  // Lenis Smooth Scroll Setup
+  // Lenis Smooth Scroll Setup - Buttery Smooth
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 2.0,
+      easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.8,
     });
 
     function raf(time: number) {
