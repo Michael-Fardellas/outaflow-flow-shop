@@ -373,72 +373,60 @@ const MainPage = () => {
                   transition: "all 1s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {/* BUTTERFLY: Subtle cyan halo with minimal floating butterflies */}
+                {/* BUTTERFLY: Subtle cyan halo with small 3D butterflies */}
                 {theme === 'butterfly' && (
                   <>
-                    <div className="relative w-[700px] h-[700px] flex items-center justify-center perspective-1000">
-                      {/* Subtle background glow */}
+                    {/* Subtle background hue for entire section */}
+                    <div className="absolute inset-0 pointer-events-none">
                       <div
-                        className="absolute inset-0 rounded-full blur-[120px]"
+                        className="absolute inset-0 opacity-40"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(185, 95%, 65%, 0.25) 0%, hsla(0, 0%, 0%, 0) 65%)",
+                            "radial-gradient(ellipse at center, hsla(185, 85%, 65%, 0.12) 0%, hsla(185, 85%, 65%, 0.06) 40%, transparent 70%)",
                         }}
                       />
+                    </div>
+                    
+                    <div className="relative w-[600px] h-[600px] flex items-center justify-center perspective-1000">
                       {/* Subtle outer halo */}
                       <div
-                        className="absolute inset-0 rounded-full blur-[80px]"
+                        className="absolute inset-0 rounded-full blur-[100px]"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(185, 95%, 65%, 0.15) 0%, transparent 60%)",
+                            "radial-gradient(circle, hsla(185, 90%, 65%, 0.15) 0%, transparent 55%)",
                         }}
                       />
-                      {/* Glow layer with subtle halo */}
+                      {/* Central small butterfly with subtle halo */}
                       <svg
-                        width="280"
-                        height="280"
+                        width="140"
+                        height="140"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="absolute blur-xl animate-[float_14s_ease-in-out_infinite]"
+                        className="relative brightness-105 animate-[float_12s_ease-in-out_infinite]"
                         style={{ 
-                          transform: "scale(1.15)", 
-                          color: "hsla(185, 95%, 65%, 0.4)",
-                          filter: "drop-shadow(0 0 40px hsla(185, 95%, 65%, 0.6))"
-                        }}
-                      >
-                        <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
-                      </svg>
-                      {/* Main butterfly with halo */}
-                      <svg
-                        width="220"
-                        height="220"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="relative brightness-110 animate-[float_12s_ease-in-out_infinite]"
-                        style={{ 
-                          color: "hsla(185, 92%, 72%, 1)",
-                          filter: "drop-shadow(0 0 30px hsla(185, 95%, 65%, 0.8)) drop-shadow(0 0 60px hsla(185, 95%, 65%, 0.4))"
+                          color: "hsla(185, 88%, 70%, 1)",
+                          filter: "drop-shadow(0 0 20px hsla(185, 90%, 65%, 0.5)) drop-shadow(0 0 40px hsla(185, 90%, 65%, 0.25))"
                         }}
                       >
                         <path d="M12 4C10.5 1.5 7.5 0 4 0c0 0 0 9 8 9m0-5C13.5 1.5 16.5 0 20 0c0 0 0 9-8 9m0 0v6m0 0C10.5 17.5 7.5 19 4 19c0 0 0-9 8-9m0 0c1.5 2.5 4.5 4 8 4 0 0 0-9-8-9" />
                       </svg>
                     </div>
                     
-                    {/* Subtle floating butterflies - reduced to 3 */}
+                    {/* Small floating butterflies - 3 subtle ones */}
                     <div className="absolute inset-0 overflow-visible pointer-events-none">
                       {[...Array(3)].map((_, i) => (
                         <svg
                           key={i}
-                          className="absolute animate-[float-across_${20 + i * 3}s_linear_infinite]"
+                          className="absolute animate-[float-across_${22 + i * 4}s_linear_infinite]"
                           style={{
-                            top: `${20 + i * 25}%`,
-                            left: '-10%',
-                            animationDelay: `${i * 3}s`,
-                            color: 'hsla(185, 95%, 65%, 0.3)',
-                            filter: 'drop-shadow(0 0 10px hsla(185, 95%, 65%, 0.5))',
+                            top: `${25 + i * 20}%`,
+                            left: '-8%',
+                            animationDelay: `${i * 4}s`,
+                            color: 'hsla(185, 90%, 65%, 0.25)',
+                            filter: 'drop-shadow(0 0 8px hsla(185, 90%, 65%, 0.4))',
                           }}
-                          width={40 + i * 6}
-                          height={40 + i * 6}
+                          width={30 + i * 4}
+                          height={30 + i * 4}
                           viewBox="0 0 24 24"
                           fill="currentColor"
                         >
@@ -449,70 +437,64 @@ const MainPage = () => {
                   </>
                 )}
 
-                {/* HELMET: Subtle indigo halo with minimal floating flowers */}
+                {/* HELMET: Subtle indigo halo with small floating flowers only */}
                 {theme === 'helmet' && (
                   <>
-                    <div className="relative w-[700px] h-[700px] flex items-center justify-center gap-12 perspective-1000">
-                      {/* Subtle background glow */}
+                    {/* Subtle background hue for entire section */}
+                    <div className="absolute inset-0 pointer-events-none">
                       <div
-                        className="absolute inset-0 rounded-full blur-[120px]"
+                        className="absolute inset-0 opacity-40"
                         style={{
                           background:
-                            "radial-gradient(circle, hsla(239, 95%, 75%, 0.25) 0%, hsla(0, 0%, 0%, 0) 65%)",
+                            "radial-gradient(ellipse at center, hsla(239, 85%, 75%, 0.12) 0%, hsla(239, 85%, 75%, 0.06) 40%, transparent 70%)",
                         }}
                       />
-                      {/* Subtle outer halo */}
-                      <div
-                        className="absolute inset-0 rounded-full blur-[80px]"
-                        style={{
-                          background:
-                            "radial-gradient(circle, hsla(239, 95%, 75%, 0.15) 0%, transparent 60%)",
-                        }}
-                      />
-                      {/* Flower with subtle halo */}
-                      <Flower2
-                        className="relative brightness-110 w-32 h-32 animate-[float_12s_ease-in-out_infinite]"
-                        strokeWidth={2}
-                        style={{ 
-                          color: "hsla(239, 92%, 78%, 1)",
-                          filter: "drop-shadow(0 0 30px hsla(239, 95%, 75%, 0.8)) drop-shadow(0 0 60px hsla(239, 95%, 75%, 0.4))"
-                        }}
-                      />
-   
-                      {/* Helmet with subtle halo */}
-                      <svg
-                        width="140"
-                        height="140"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        className="relative brightness-110 animate-[float_12s_ease-in-out_infinite_1.8s]"
-                        style={{ 
-                          color: "hsla(239, 92%, 78%, 1)",
-                          filter: "drop-shadow(0 0 30px hsla(239, 95%, 75%, 0.8)) drop-shadow(0 0 60px hsla(239, 95%, 75%, 0.4))"
-                        }}
-                      >
-                        <path
-                          d="M4 12a8 8 0 0116 0v4a2 2 0 01-2 2h-2m-8 0H6a2 2 0 01-2-2v-4zm0 0h12M9 18v3m6-3v3"
-                          stroke="currentColor"
-                          strokeWidth="2.2"
-                        />
-                      </svg>
                     </div>
                     
-                    {/* Subtle floating flowers - reduced to 3 */}
+                    <div className="relative w-[600px] h-[600px] flex items-center justify-center perspective-1000">
+                      {/* Subtle outer halo */}
+                      <div
+                        className="absolute inset-0 rounded-full blur-[100px]"
+                        style={{
+                          background:
+                            "radial-gradient(circle, hsla(239, 90%, 75%, 0.15) 0%, transparent 55%)",
+                        }}
+                      />
+                      {/* Central small flowers with subtle halo */}
+                      <div className="flex gap-6">
+                        <Flower2
+                          className="relative brightness-105 w-24 h-24 animate-[float_12s_ease-in-out_infinite]"
+                          strokeWidth={2}
+                          style={{ 
+                            color: "hsla(239, 88%, 78%, 1)",
+                            filter: "drop-shadow(0 0 20px hsla(239, 90%, 75%, 0.5)) drop-shadow(0 0 40px hsla(239, 90%, 75%, 0.25))"
+                          }}
+                        />
+                        <Flower2
+                          className="relative brightness-105 w-28 h-28 animate-[float_12s_ease-in-out_infinite_0.8s]"
+                          strokeWidth={2}
+                          style={{ 
+                            color: "hsla(239, 88%, 78%, 1)",
+                            filter: "drop-shadow(0 0 20px hsla(239, 90%, 75%, 0.5)) drop-shadow(0 0 40px hsla(239, 90%, 75%, 0.25))"
+                          }}
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Small floating flowers - 3 subtle ones */}
                     <div className="absolute inset-0 overflow-visible pointer-events-none">
                       {[...Array(3)].map((_, i) => (
                         <Flower2
                           key={i}
-                          className="absolute animate-[float-across_${20 + i * 3}s_linear_infinite]"
+                          className="absolute animate-[float-across_${22 + i * 4}s_linear_infinite]"
                           style={{
-                            top: `${20 + i * 25}%`,
-                            left: '-10%',
-                            animationDelay: `${i * 3}s`,
-                            color: 'hsla(239, 95%, 75%, 0.3)',
-                            filter: 'drop-shadow(0 0 10px hsla(239, 95%, 75%, 0.5))',
+                            top: `${25 + i * 20}%`,
+                            left: '-8%',
+                            animationDelay: `${i * 4}s`,
+                            color: 'hsla(239, 90%, 75%, 0.25)',
+                            filter: 'drop-shadow(0 0 8px hsla(239, 90%, 75%, 0.4))',
                           }}
-                          size={40 + i * 6}
+                          size={30 + i * 4}
                           strokeWidth={2}
                         />
                       ))}
