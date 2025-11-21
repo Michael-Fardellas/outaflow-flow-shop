@@ -233,6 +233,14 @@ export default {
           "100%": {
             transform: "translateY(100%)"
           }
+        },
+        "shimmer": {
+          "0%, 100%": {
+            backgroundPosition: "200% center"
+          },
+          "50%": {
+            backgroundPosition: "-200% center"
+          }
         }
       },
       animation: {
@@ -246,7 +254,8 @@ export default {
         "glitch": "glitch 0.3s ease-in-out",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
         "smoke": "smoke 8s ease-in-out infinite",
-        "float": "float 6s ease-in-out infinite"
+        "float": "float 6s ease-in-out infinite",
+        "shimmer": "shimmer 3s ease-in-out infinite"
       },
     },
   },
