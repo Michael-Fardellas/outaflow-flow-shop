@@ -178,6 +178,11 @@ const MainPage = () => {
 
     playClick();
     
+    // Haptic feedback
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+    
     // Trigger particle effect and store position
     setButtonPositions(prev => ({ ...prev, [product.node.id]: { x, y } }));
     setParticleTriggers(prev => ({
@@ -585,9 +590,11 @@ const MainPage = () => {
                       {product.node.variants.edges.map((variant, idx) => (
                         <button
                           key={variant.node.id}
-                          onClick={() =>
-                            setSelectedSizes((prev) => ({ ...prev, [product.node.id]: idx }))
-                          }
+                          onClick={() => {
+                            playClick();
+                            if ('vibrate' in navigator) navigator.vibrate(30);
+                            setSelectedSizes((prev) => ({ ...prev, [product.node.id]: idx }));
+                          }}
                           className={`px-6 py-2.5 text-xs font-light tracking-[0.2em] border transition-all duration-300 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-offset-background focus:ring-foreground/20
                             ${selectedSizes[product.node.id] === idx
                               ? "bg-foreground/5 text-foreground border-foreground/40"
@@ -624,9 +631,11 @@ const MainPage = () => {
                         The printed size-chart graphic is an art element, not a measurement guide.
                       </p>
                       <button
-                        onClick={() =>
-                          setSizeChartModalOpen(material.id as "R00227" | "RU0130")
-                        }
+                        onClick={() => {
+                          playClick();
+                          if ('vibrate' in navigator) navigator.vibrate(30);
+                          setSizeChartModalOpen(material.id as "R00227" | "RU0130");
+                        }}
                         className="text-[10px] tracking-[0.2em] uppercase underline decoration-foreground/20 hover:decoration-foreground/60 transition-all mt-2 opacity-60 hover:opacity-100"
                       >
                         View numeric size chart ({material.id})
@@ -640,9 +649,11 @@ const MainPage = () => {
                   {/* Minimal front/back toggle with refined underline */}
                   <div className="mb-6 flex gap-8 text-[10px] uppercase tracking-[0.35em] font-light">
                     <button
-                      onClick={() =>
-                        setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "front" }))
-                      }
+                      onClick={() => {
+                        playClick();
+                        if ('vibrate' in navigator) navigator.vibrate(30);
+                        setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "front" }));
+                      }}
                       className={`pb-2 relative transition-all duration-300
                         ${currentView === "front"
                           ? "text-foreground opacity-100"
@@ -655,9 +666,11 @@ const MainPage = () => {
                       }`} />
                     </button>
                     <button
-                      onClick={() =>
-                        setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "back" }))
-                      }
+                      onClick={() => {
+                        playClick();
+                        if ('vibrate' in navigator) navigator.vibrate(30);
+                        setSelectedImageView((prev) => ({ ...prev, [product.node.id]: "back" }));
+                      }}
                       className={`pb-2 relative transition-all duration-300
                         ${currentView === "back"
                           ? "text-foreground opacity-100"
@@ -704,10 +717,20 @@ const MainPage = () => {
           );
         })}
 
-        {/* Email capture - refined minimal layout */}
-        <section className="min-h-[60vh] flex items-center justify-center py-[20vh] px-8 border-t border-foreground/5">
-          <div className="max-w-lg mx-auto text-center space-y-8">
-            <h2 className="text-2xl font-extralight tracking-[0.35em] uppercase opacity-80">Stay in Flow</h2>
+        {/* Email capture - refined minimal layout with flow effect */}
+        <section className="min-h-[60vh] flex items-center justify-center py-[20vh] px-8 border-t border-foreground/5 relative">
+          <div className="max-w-lg mx-auto text-center space-y-8 relative z-10">
+            <h2 className="text-2xl font-extralight tracking-[0.35em] uppercase opacity-80">
+              Stay in{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10 bg-gradient-to-r from-white via-white/90 to-white bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]">
+                  Flow
+                </span>
+                <span className="absolute inset-0 blur-sm bg-gradient-to-r from-white/50 via-white/30 to-white/50 bg-clip-text text-transparent animate-[shimmer_3s_ease-in-out_infinite]" aria-hidden="true">
+                  Flow
+                </span>
+              </span>
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <Input
                 type="email"
@@ -718,12 +741,33 @@ const MainPage = () => {
               />
               <Button
                 type="submit"
+                onClick={() => {
+                  playClick();
+                  if ('vibrate' in navigator) navigator.vibrate(50);
+                }}
                 className="w-full bg-transparent border border-foreground/30 text-foreground hover:bg-foreground/5 hover:border-foreground/50 transition-all duration-500 h-12 text-xs tracking-[0.25em] font-light"
               >
                 Notify Me
               </Button>
             </form>
           </div>
+          
+          {/* Instagram credit - bottom right */}
+          <a
+            href="https://instagram.com/mixalis_fardellas"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              playClick();
+              if ('vibrate' in navigator) navigator.vibrate(30);
+            }}
+            className="fixed bottom-6 right-6 z-50 group flex items-center gap-2 text-[9px] tracking-[0.25em] uppercase font-light opacity-30 hover:opacity-80 transition-all duration-500"
+          >
+            <span className="relative">
+              Made by @mixalis_fardellas
+              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-foreground transition-all duration-500 group-hover:w-full" />
+            </span>
+          </a>
         </section>
       </main>
 
